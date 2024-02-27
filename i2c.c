@@ -9,9 +9,9 @@ void I2C_2_Master_Init(void)
   SSP2ADD = (_XTAL_FREQ/(4*_I2C_CLOCK))-1; //Baud rate divider bits (in master mode)
   
   //pin configuration for i2c  
-  TRISDbits.TRISD5 = 1;                   //Disable output driver
+  TRISDbits.TRISD5 = 1;                   //Disable output driver, set for input
   TRISDbits.TRISD6 = 1;                   //Disable output driver
-  ANSELDbits.ANSELD5=0;
+  ANSELDbits.ANSELD5=0;                   //Disable analogue circuitry
   ANSELDbits.ANSELD6=0;
   SSP2DATPPS=0x1D;      //pin RD5
   SSP2CLKPPS=0x1E;      //pin RD6
@@ -27,7 +27,7 @@ void I2C_2_Master_Idle(void)
 void I2C_2_Master_Start(void)
 {
   I2C_2_Master_Idle();    
-  SSP2CON2bits.SEN = 1;             //Initiate start condition
+  SSP2CON2bits.SEN = 1;             //Initiate start  (Datasheet P.574)
 }
 
 void I2C_2_Master_RepStart(void)
@@ -52,11 +52,11 @@ unsigned char I2C_2_Master_Read(unsigned char ack)
 {
   unsigned char tmp;
   I2C_2_Master_Idle();
-  SSP2CON2bits.RCEN = 1;        // put the module into receive mode
+  SSP2CON2bits.RCEN = 1;        // put the module into receive mode (Datasheet P.573)
   I2C_2_Master_Idle();
   tmp = SSP2BUF;                //Read data from SS2PBUF
   I2C_2_Master_Idle();
-  SSP2CON2bits.ACKDT = !ack;     // 0 turns on acknowledge data bit
+  SSP2CON2bits.ACKDT = !ack;     // 0 turns on master acknowledge data bit
   SSP2CON2bits.ACKEN = 1;        //start acknowledge sequence
   return tmp;
 }
