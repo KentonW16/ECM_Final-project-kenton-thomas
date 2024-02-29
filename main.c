@@ -38,15 +38,27 @@ void main(void) {
     
     unsigned char reverseDuration=10;  //adjust to length of one square
     
-    char turnSpeed=22;              //maximum power
-    unsigned char turnDuration=2;   //time between ramp up and ramp down
+    char turnSpeed=21;              //maximum power
+    unsigned char turnDuration=10;   //time between ramp up and ramp down
     unsigned char turnRamp=4;       //time between each power step 
     
-    //wait for button press
+    // initialise LEDs
+    LATDbits.LATD7=0;   //set initial output state
+    TRISDbits.TRISD7=0; //set TRIS value for pin (output)
+    LATHbits.LATH3=0;   //set initial output state
+    TRISHbits.TRISH3=0; //set TRIS value for pin (output)
+    
+    //initialise buttons
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin  
+    TRISFbits.TRISF3=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF3=0; //turn off analogue input on pin
+    
+    //wait for button press
     while (PORTFbits.RF2);
     __delay_ms(500);
+    
+    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
     
     while(1) {

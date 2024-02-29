@@ -24184,11 +24184,11 @@ void main(void) {
         _delay((unsigned long)((50)*(64000000/4000.0)));
         turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        stop(&motorL, &motorR, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
     }
 

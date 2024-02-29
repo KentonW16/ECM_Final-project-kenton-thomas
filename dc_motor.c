@@ -219,3 +219,53 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
     mR->power = 0;
 }
 
+void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp)
+{
+    // run unadjusted
+    turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
+    __delay_ms(50);
+    turnRight(mL, mR, turnSpeed, *turnDuration, turnRamp);
+    __delay_ms(50);
+    turnRight(mL, mR, turnSpeed, *turnDuration, turnRamp);
+    
+    while (1) {   
+        while (PORTFbits.RF2 && PORTFbits.RF3); //wait for button press
+        
+        if (!PORTFbits.RF2 && *turnDuration>0) { // button 1 press decreases turning angle
+            *turnDuration--;
+            LATDbits.LATD7 = 1; // LED 1 on
+        } 
+        
+        else if (!PORTFbits.RF3) {              // button 2 press increases turning angle
+            *turnDuration++;
+            LATHbits.LATH3 = 1; // LED 2 on
+        } 
+        
+        __delay_ms(500); // delay to check for long press
+        
+        if (!PORTFbits.RF3) { // long press on button 2 to continue
+            *turnDuration--;   // no effect on calibration from a long press
+            break;            // leave while loop
+        }
+        
+        LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off
+        
+        // run to assess improvement
+        turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, *turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, *turnDuration, turnRamp);
+        
+    }
+    
+    // flash both to indicate continue
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on
+    __delay_ms(100);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off
+}
+

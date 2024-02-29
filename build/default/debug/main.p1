@@ -137,6 +137,15 @@ Version 4.0 HI-TECH Software Intermediate Code
 "23
 [; ;./dc_motor.h: 23: void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 [v _turnRight `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`uc`uc ]
+"24
+[; ;./dc_motor.h: 24: void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+[v _fullSpeedAhead `(v ~T0 @X0 0 ef4`*S2015`*S2015`uc`uc ]
+"21
+[; ;./dc_motor.h: 21: void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
+[v _stop `(v ~T0 @X0 0 ef3`*S2015`*S2015`uc ]
+"25
+[; ;./dc_motor.h: 25: void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
+[v _reverseOneSquare `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`uc`uc ]
 "2 main.c
 [p x FEXTOSC  =  HS      ]
 "3
@@ -2254,12 +2263,21 @@ Version 4.0 HI-TECH Software Intermediate Code
 "68
 [; ;main.c: 68:         _delay((unsigned long)((50)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"69
+[; ;main.c: 69:         fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+[e ( _fullSpeedAhead (4 , , , &U _motorL &U _motorR _straightSpeed _straightRamp ]
 "70
 [; ;main.c: 70:         _delay((unsigned long)((50)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"71
+[; ;main.c: 71:         stop(&motorL, &motorR, straightRamp);
+[e ( _stop (3 , , &U _motorL &U _motorR _straightRamp ]
 "72
 [; ;main.c: 72:         _delay((unsigned long)((50)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"73
+[; ;main.c: 73:         reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
+[e ( _reverseOneSquare (4 , , , , &U _motorL &U _motorR _straightSpeed _reverseDuration _straightRamp ]
 "74
 [; ;main.c: 74:         _delay((unsigned long)((50)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
