@@ -3,9 +3,19 @@ Version 4.0 HI-TECH Software Intermediate Code
 "9 ./buggysetup.h
 [; ;./buggysetup.h: 9: void Buggy_init(void);
 [v _Buggy_init `(v ~T0 @X0 0 ef ]
-"19 ./color.h
-[; ;./color.h: 19: void color_click_init(void);
+"20 ./color.h
+[; ;./color.h: 20: void color_click_init(void);
 [v _color_click_init `(v ~T0 @X0 0 ef ]
+"23 ./serial.h
+[; ;./serial.h: 23: void initUSART4(void);
+[v _initUSART4 `(v ~T0 @X0 0 ef ]
+"8 ./interrupts.h
+[; ;./interrupts.h: 8: void Interrupts_init(void);
+[v _Interrupts_init `(v ~T0 @X0 0 ef ]
+"9 ./color.h
+[; ;./color.h: 9: struct RGBC_val {
+[s S2017 `ui 1 `ui 1 `ui 1 `ui 1 ]
+[n S2017 RGBC_val R G B C ]
 "28912 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28912:     struct {
 [s S1361 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -52,12 +62,43 @@ Version 4.0 HI-TECH Software Intermediate Code
 "28508
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28508: extern volatile LATDbits_t LATDbits __attribute__((address(0xF7C)));
 [v _LATDbits `VS1348 ~T0 @X0 0 e@3964 ]
-"47 ./color.h
-[; ;./color.h: 47: void white_Light(char state);
+"33 ./color.h
+[; ;./color.h: 33: void white_Light(char state);
 [v _white_Light `(v ~T0 @X0 0 ef1`uc ]
-"44
-[; ;./color.h: 44: unsigned int color_read_Blue(void);
-[v _color_read_Blue `(ui ~T0 @X0 0 ef ]
+"30262 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 30262:     struct {
+[s S1412 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S1412 . RF0 RF1 RF2 RF3 RF4 RF5 RF6 RF7 ]
+"30272
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 30272:     struct {
+[s S1413 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S1413 . . C2OUTF C1OUTF ]
+"30261
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 30261: typedef union {
+[u S1411 `S1412 1 `S1413 1 ]
+[n S1411 . . . ]
+"30278
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 30278: extern volatile PORTFbits_t PORTFbits __attribute__((address(0xF8E)));
+[v _PORTFbits `VS1411 ~T0 @X0 0 e@3982 ]
+"39 ./color.h
+[; ;./color.h: 39: void color_read(struct RGBC_val *RGBC);
+[v _color_read `(v ~T0 @X0 0 ef1`*S2017 ]
+"45
+[; ;./color.h: 45: void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
+[v _color_normalise `(v ~T0 @X0 0 ef2`S2017`*S2017 ]
+"121 C:\Program Files\Microchip\xc8\v2.45\pic\include\c99\stdio.h
+[; ;C:\Program Files\Microchip\xc8\v2.45\pic\include\c99\stdio.h: 121: int sprintf(char *restrict, const char *restrict, ...);
+[v _sprintf `(i ~T0 @X0 0 e1v`*uc`*Cuc ]
+"38 ./serial.h
+[; ;./serial.h: 38: void sendTxBuf(void);
+[v _sendTxBuf `(v ~T0 @X0 0 ef ]
+"37
+[; ;./serial.h: 37: void TxBufferedString(char *string);
+[v _TxBufferedString `(v ~T0 @X0 0 ef1`*uc ]
+[v F205 `(v ~T0 @X0 1 tf1`ul ]
+"20 C:\Program Files\Microchip\xc8\v2.45\pic\include\builtins.h
+[v __delay `JF205 ~T0 @X0 0 e ]
+[p i __delay ]
 "2 main.c
 [p x FEXTOSC  =  HS      ]
 "3
@@ -2040,44 +2081,120 @@ Version 4.0 HI-TECH Software Intermediate Code
 "40592
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 40592: __asm("TOSU equ 0FFFh");
 [; <" TOSU equ 0FFFh ;# ">
+"13 ./serial.h
+[; ;./serial.h: 13: volatile char EUSART4RXbuf[20];
+[v _EUSART4RXbuf `Vuc ~T0 @X0 -> 20 `i e ]
+"14
+[; ;./serial.h: 14: volatile char RxBufWriteCnt=0;
+[v _RxBufWriteCnt `Vuc ~T0 @X0 1 e ]
+[i _RxBufWriteCnt
+-> -> 0 `i `uc
+]
+"15
+[; ;./serial.h: 15: volatile char RxBufReadCnt=0;
+[v _RxBufReadCnt `Vuc ~T0 @X0 1 e ]
+[i _RxBufReadCnt
+-> -> 0 `i `uc
+]
+"17
+[; ;./serial.h: 17: volatile char EUSART4TXbuf[60];
+[v _EUSART4TXbuf `Vuc ~T0 @X0 -> 60 `i e ]
+"18
+[; ;./serial.h: 18: volatile char TxBufWriteCnt=0;
+[v _TxBufWriteCnt `Vuc ~T0 @X0 1 e ]
+[i _TxBufWriteCnt
+-> -> 0 `i `uc
+]
+"19
+[; ;./serial.h: 19: volatile char TxBufReadCnt=0;
+[v _TxBufReadCnt `Vuc ~T0 @X0 1 e ]
+[i _TxBufReadCnt
+-> -> 0 `i `uc
+]
 [v $root$_main `(v ~T0 @X0 0 e ]
-"19 main.c
-[; ;main.c: 19: void main(void){
+"22 main.c
+[; ;main.c: 22: void main(void){
 [v _main `(v ~T0 @X0 1 ef ]
 {
 [e :U _main ]
 [f ]
-"20
-[; ;main.c: 20:     Buggy_init();
+"23
+[; ;main.c: 23:     Buggy_init();
 [e ( _Buggy_init ..  ]
-"21
-[; ;main.c: 21:     color_click_init();
+"24
+[; ;main.c: 24:     color_click_init();
 [e ( _color_click_init ..  ]
 "25
-[; ;main.c: 25:     LATHbits.LATH1=1;
-[e = . . _LATHbits 0 1 -> -> 1 `i `uc ]
+[; ;main.c: 25:     initUSART4();
+[e ( _initUSART4 ..  ]
 "26
-[; ;main.c: 26:     LATDbits.LATD3=1;
-[e = . . _LATDbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 26:     Interrupts_init();
+[e ( _Interrupts_init ..  ]
+[v F14504 `uc ~T0 @X0 -> 40 `i s ]
+[i F14504
+:U ..
+"27
+[; ;main.c: 27:     char buf[40] = {0};
+-> -> 0 `i `uc
+..
+]
+[v _buf `uc ~T0 @X0 -> 40 `i a ]
+[e = _buf F14504 ]
 "29
-[; ;main.c: 29:     white_Light(1);
-[e ( _white_Light (1 -> -> 1 `i `uc ]
+[; ;main.c: 29:     struct RGBC_val RGBC, RGBC_n;
+[v _RGBC `S2017 ~T0 @X0 1 a ]
+[v _RGBC_n `S2017 ~T0 @X0 1 a ]
 "32
-[; ;main.c: 32:     unsigned int red;
-[v _red `ui ~T0 @X0 1 a ]
-"33
-[; ;main.c: 33:     unsigned int green;
-[v _green `ui ~T0 @X0 1 a ]
-"34
-[; ;main.c: 34:     unsigned int blue;
-[v _blue `ui ~T0 @X0 1 a ]
+[; ;main.c: 32:     LATHbits.LATH1=LATDbits.LATD3=1;
+[e = . . _LATHbits 0 1 = . . _LATDbits 0 3 -> -> 1 `i `uc ]
+"35
+[; ;main.c: 35:     white_Light(1);
+[e ( _white_Light (1 -> -> 1 `i `uc ]
+"37
+[; ;main.c: 37:     while(1) {
+[e :U 2020 ]
+{
 "38
-[; ;main.c: 38:     blue=color_read_Blue();
-[e = _blue ( _color_read_Blue ..  ]
+[; ;main.c: 38:         while (PORTFbits.RF2);
+[e $U 2022  ]
+[e :U 2023 ]
+[e :U 2022 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2023  ]
+[e :U 2024 ]
 "40
-[; ;main.c: 40:     LATDbits.LATD7=1;
-[e = . . _LATDbits 0 7 -> -> 1 `i `uc ]
+[; ;main.c: 40:         color_read(&RGBC);
+[e ( _color_read (1 &U _RGBC ]
+"41
+[; ;main.c: 41:         color_normalise(RGBC, &RGBC_n);
+[e ( _color_normalise (2 , _RGBC &U _RGBC_n ]
+"43
+[; ;main.c: 43:         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+[e ( _sprintf (1 , , , , , , , (. , &U _buf :s 1C . _RGBC 0 . _RGBC 1 . _RGBC 2 . _RGBC 3 . _RGBC_n 0 . _RGBC_n 1 . _RGBC_n 2 ]
 "44
-[; ;main.c: 44: }
-[e :UE 2016 ]
+[; ;main.c: 44:         sendTxBuf();
+[e ( _sendTxBuf ..  ]
+"45
+[; ;main.c: 45:         TxBufferedString(buf);
+[e ( _TxBufferedString (1 &U _buf ]
+"46
+[; ;main.c: 46:         sendTxBuf();
+[e ( _sendTxBuf ..  ]
+"47
+[; ;main.c: 47:         TxBufferedString("");
+[e ( _TxBufferedString (1 :s 2C ]
+"48
+[; ;main.c: 48:         _delay((unsigned long)((300)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 300 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"50
+[; ;main.c: 50:     }
 }
+[e :U 2019 ]
+[e $U 2020  ]
+[e :U 2021 ]
+"54
+[; ;main.c: 54: }
+[e :UE 2018 ]
+}
+[p f _sprintf 8388736 ]
+[a 1C 114 61 37 100 32 103 61 37 100 32 98 61 37 100 32 99 61 37 100 32 32 32 110 58 32 114 61 37 100 32 103 61 37 100 32 98 61 37 100 13 10 0 ]
+[a 2C 0 ]

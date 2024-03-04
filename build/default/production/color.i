@@ -24097,10 +24097,11 @@ unsigned char __t3rd16on(void);
 
 
 
-struct RGB_val {
+struct RGBC_val {
  unsigned int R;
  unsigned int G;
  unsigned int B;
+    unsigned int C;
 };
 
 
@@ -24120,22 +24121,19 @@ void color_writetoaddr(char address, char value);
 
 
 
-unsigned int color_read_Red(void);
-
-
-
-
-
-unsigned int color_read_Green(void);
-
-
-
-
-
-unsigned int color_read_Blue(void);
-
-
 void white_Light(char state);
+
+
+
+
+
+void color_read(struct RGBC_val *RGBC);
+
+
+
+
+
+void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
 # 2 "color.c" 2
 
 # 1 "./i2c.h" 1
@@ -24191,54 +24189,13 @@ void color_click_init(void)
 
 }
 
+
 void color_writetoaddr(char address, char value){
     I2C_2_Master_Start();
     I2C_2_Master_Write(0x52 | 0x00);
     I2C_2_Master_Write(0x80 | address);
     I2C_2_Master_Write(value);
     I2C_2_Master_Stop();
-}
-
-unsigned int color_read_Red(void)
-{
- unsigned int tmp;
- I2C_2_Master_Start();
- I2C_2_Master_Write(0x52 | 0x00);
- I2C_2_Master_Write(0xA0 | 0x16);
- I2C_2_Master_RepStart();
- I2C_2_Master_Write(0x52 | 0x01);
- tmp=I2C_2_Master_Read(1);
- tmp=tmp | (I2C_2_Master_Read(0)<<8);
- I2C_2_Master_Stop();
- return tmp;
-}
-
-unsigned int color_read_Green(void)
-{
- unsigned int tmp;
- I2C_2_Master_Start();
- I2C_2_Master_Write(0x52 | 0x00);
- I2C_2_Master_Write(0xA0 | 0x18);
- I2C_2_Master_RepStart();
- I2C_2_Master_Write(0x52 | 0x01);
- tmp=I2C_2_Master_Read(1);
- tmp=tmp | (I2C_2_Master_Read(0)<<8);
- I2C_2_Master_Stop();
- return tmp;
-}
-
-unsigned int color_read_Blue(void)
-{
- unsigned int tmp;
- I2C_2_Master_Start();
- I2C_2_Master_Write(0x52 | 0x00);
- I2C_2_Master_Write(0xA0 | 0x1A);
- I2C_2_Master_RepStart();
- I2C_2_Master_Write(0x52 | 0x01);
- tmp=I2C_2_Master_Read(1);
- tmp=tmp | (I2C_2_Master_Read(0)<<8);
- I2C_2_Master_Stop();
- return tmp;
 }
 
 
@@ -24254,4 +24211,53 @@ void white_Light(char state)
         LATEbits.LATE7 = 0;
         LATAbits.LATA3 = 0;
     }
+}
+
+
+void color_read(struct RGBC_val *RGBC)
+{
+ I2C_2_Master_Start();
+ I2C_2_Master_Write(0x52 | 0x00);
+ I2C_2_Master_Write(0xA0 | 0x16);
+ I2C_2_Master_RepStart();
+ I2C_2_Master_Write(0x52 | 0x01);
+ RGBC->R=I2C_2_Master_Read(1);
+ RGBC->R=RGBC->R | (I2C_2_Master_Read(0)<<8);
+ I2C_2_Master_Stop();
+
+    I2C_2_Master_Start();
+ I2C_2_Master_Write(0x52 | 0x00);
+ I2C_2_Master_Write(0xA0 | 0x18);
+ I2C_2_Master_RepStart();
+ I2C_2_Master_Write(0x52 | 0x01);
+ RGBC->G=I2C_2_Master_Read(1);
+ RGBC->G=RGBC->G | (I2C_2_Master_Read(0)<<8);
+ I2C_2_Master_Stop();
+
+    I2C_2_Master_Start();
+ I2C_2_Master_Write(0x52 | 0x00);
+ I2C_2_Master_Write(0xA0 | 0x1A);
+ I2C_2_Master_RepStart();
+ I2C_2_Master_Write(0x52 | 0x01);
+ RGBC->B=I2C_2_Master_Read(1);
+ RGBC->B=RGBC->B | (I2C_2_Master_Read(0)<<8);
+ I2C_2_Master_Stop();
+
+    I2C_2_Master_Start();
+ I2C_2_Master_Write(0x52 | 0x00);
+ I2C_2_Master_Write(0xA0 | 0x14);
+ I2C_2_Master_RepStart();
+ I2C_2_Master_Write(0x52 | 0x01);
+ RGBC->C=I2C_2_Master_Read(1);
+ RGBC->C=RGBC->C | (I2C_2_Master_Read(0)<<8);
+ I2C_2_Master_Stop();
+}
+
+
+void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n) {
+# 105 "color.c"
+    RGBC_n->C = RGBC.C;
+    RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
+    RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
+    RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }

@@ -19,14 +19,97 @@ void color_click_init(void) // See Colour click datasheet P.13
    
 }
 
+
 void color_writetoaddr(char address, char value){
-    I2C_2_Master_Start();         //Start condition
+    I2C_2_Master_Start();                //Start condition
     I2C_2_Master_Write(0x52 | 0x00);     //7 bit color device address + Write mode
     I2C_2_Master_Write(0x80 | address);  //command + register address
     I2C_2_Master_Write(value);    
-    I2C_2_Master_Stop();          //Stop condition
+    I2C_2_Master_Stop();                 //Stop condition
 }
 
+
+void white_Light(char state)
+{
+    if (state){
+        LATGbits.LATG0 = 1;
+        LATEbits.LATE7 = 1;
+        LATAbits.LATA3 = 1;
+    }
+    else {
+        LATGbits.LATG0 = 0;
+        LATEbits.LATE7 = 0;
+        LATAbits.LATA3 = 0;
+    }
+}
+
+
+void color_read(struct RGBC_val *RGBC)
+{
+	I2C_2_Master_Start();                        //Start condition
+	I2C_2_Master_Write(0x52 | 0x00);             //7 bit address + Write mode
+	I2C_2_Master_Write(0xA0 | 0x16);             //command (P.12) (auto-increment protocol transaction) + start at RED low register
+	I2C_2_Master_RepStart();			         // start a repeated transmission
+	I2C_2_Master_Write(0x52 | 0x01);             //7 bit address + Read (1) mode
+	RGBC->R=I2C_2_Master_Read(1);	             //read the Red Low Byte
+	RGBC->R=RGBC->R | (I2C_2_Master_Read(0)<<8); //read the Red MSB (don't acknowledge as this is the last read, hence send it 0)
+	I2C_2_Master_Stop();                         //Stop condition
+    
+    I2C_2_Master_Start();                        //Start condition
+	I2C_2_Master_Write(0x52 | 0x00);             //7 bit address + Write mode
+	I2C_2_Master_Write(0xA0 | 0x18);             //command (P.12) (auto-increment protocol transaction) + start at Green low register
+	I2C_2_Master_RepStart();                     // start a repeated transmission
+	I2C_2_Master_Write(0x52 | 0x01);             //7 bit address + Read (1) mode
+	RGBC->G=I2C_2_Master_Read(1);                //read the Green Low Byte
+	RGBC->G=RGBC->G | (I2C_2_Master_Read(0)<<8); //read the Green MSB (don't acknowledge as this is the last read, hence send it 0)
+	I2C_2_Master_Stop();                         //Stop condition
+    
+    I2C_2_Master_Start();                        //Start condition
+	I2C_2_Master_Write(0x52 | 0x00);             //7 bit address + Write mode
+	I2C_2_Master_Write(0xA0 | 0x1A);             //command (P.12) (auto-increment protocol transaction) + start at Blue low register
+	I2C_2_Master_RepStart();                     // start a repeated transmission
+	I2C_2_Master_Write(0x52 | 0x01);             //7 bit address + Read (1) mode
+	RGBC->B=I2C_2_Master_Read(1);                //read the Blue Low Byte
+	RGBC->B=RGBC->B | (I2C_2_Master_Read(0)<<8); //read the Blue MSB (don't acknowledge as this is the last read, hence send it 0)
+	I2C_2_Master_Stop();                         //Stop condition
+    
+    I2C_2_Master_Start();                        //Start condition
+	I2C_2_Master_Write(0x52 | 0x00);             //7 bit address + Write mode
+	I2C_2_Master_Write(0xA0 | 0x14);             //command (P.12) (auto-increment protocol transaction) + start at Clear low register
+	I2C_2_Master_RepStart();                     // start a repeated transmission
+	I2C_2_Master_Write(0x52 | 0x01);             //7 bit address + Read (1) mode
+	RGBC->C=I2C_2_Master_Read(1);                //read the Clear Low Byte
+	RGBC->C=RGBC->C | (I2C_2_Master_Read(0)<<8); //read the Clear MSB (don't acknowledge as this is the last read, hence send it 0)
+	I2C_2_Master_Stop();                         //Stop condition
+}
+
+
+void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n) {
+    /*method 1 - normalising against C*/
+    /*
+    RGBC_n->C = RGBC.C/100;
+    RGBC_n->R = RGBC.R/RGBC_n->C;
+    RGBC_n->G = RGBC.G/RGBC_n->C;
+    RGBC_n->B = RGBC.B/RGBC_n->C;
+    */
+    
+    /*method 2 - normalising against C, increased precision by converting to longs*/
+    /*
+    RGBC_n->C = RGBC.C;
+    RGBC_n->R = 1000L*RGBC.R/RGBC.C;
+    RGBC_n->G = 1000L*RGBC.G/RGBC.C;
+    RGBC_n->B = 1000L*RGBC.B/RGBC.C;
+    */
+    
+    /*method 3 - normalising against sum of RGB*/
+    RGBC_n->C = RGBC.C;
+    RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
+    RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
+    RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
+}
+
+
+/*
 unsigned int color_read_Red(void)
 {
 	unsigned int tmp;
@@ -49,8 +132,8 @@ unsigned int color_read_Green(void)
 	I2C_2_Master_Write(0xA0 | 0x18);    //command (P.12) (auto-increment protocol transaction) + start at Green low register
 	I2C_2_Master_RepStart();			// start a repeated transmission
 	I2C_2_Master_Write(0x52 | 0x01);    //7 bit address + Read (1) mode
-	tmp=I2C_2_Master_Read(1);			//read the Red Low Byte
-	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Red MSB (don't acknowledge as this is the last read, hence send it 0)
+	tmp=I2C_2_Master_Read(1);			//read the Green Low Byte
+	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Green MSB (don't acknowledge as this is the last read, hence send it 0)
 	I2C_2_Master_Stop();          //Stop condition
 	return tmp;
 }
@@ -63,24 +146,8 @@ unsigned int color_read_Blue(void)
 	I2C_2_Master_Write(0xA0 | 0x1A);    //command (P.12) (auto-increment protocol transaction) + start at Blue low register
 	I2C_2_Master_RepStart();			// start a repeated transmission
 	I2C_2_Master_Write(0x52 | 0x01);    //7 bit address + Read (1) mode
-	tmp=I2C_2_Master_Read(1);			//read the Red Low Byte
-	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Red MSB (don't acknowledge as this is the last read, hence send it 0)
+	tmp=I2C_2_Master_Read(1);			//read the Blue Low Byte
+	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Blue MSB (don't acknowledge as this is the last read, hence send it 0)
 	I2C_2_Master_Stop();          //Stop condition
 	return tmp;
-}
-    
-    
-void white_Light(char state)
-{
-    if (state){
-        LATGbits.LATG0 = 1;
-        LATEbits.LATE7 = 1;
-        LATAbits.LATA3 = 1;
-    }
-    else {
-        LATGbits.LATG0 = 0;
-        LATEbits.LATE7 = 0;
-        LATAbits.LATA3 = 0;
-    }
-}
-
+}*/
