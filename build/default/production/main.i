@@ -24125,6 +24125,18 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 9 "main.c" 2
 
+# 1 "./battery.h" 1
+
+
+
+
+
+
+
+
+void batteryLevel(void);
+# 10 "main.c" 2
+
 
 
 
@@ -24173,7 +24185,11 @@ void main(void) {
     ANSELFbits.ANSELF3=0;
 
 
+    batteryLevel();
+
+
     while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
@@ -24184,11 +24200,11 @@ void main(void) {
         _delay((unsigned long)((50)*(64000000/4000.0)));
         turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        stop(&motorL, &motorR, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
-
+        reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
         _delay((unsigned long)((50)*(64000000/4000.0)));
     }
 

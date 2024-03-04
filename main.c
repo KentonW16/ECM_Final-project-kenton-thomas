@@ -7,6 +7,7 @@
 
 #include <xc.h>
 #include "dc_motor.h"
+#include "battery.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
@@ -54,8 +55,12 @@ void main(void) {
     TRISFbits.TRISF3=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF3=0; //turn off analogue input on pin
     
+    //display battery voltage in binary on LEDs (before button press)
+    batteryLevel();
+    
     //wait for button press
     while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off
     __delay_ms(500);
     
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);

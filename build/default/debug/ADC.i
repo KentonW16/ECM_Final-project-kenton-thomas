@@ -1,4 +1,4 @@
-# 1 "main.c"
+# 1 "ADC.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,15 +6,7 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "main.c" 2
-
-#pragma config FEXTOSC = HS
-#pragma config RSTOSC = EXTOSC_4PLL
-
-
-#pragma config WDTE = OFF
-
-
+# 1 "ADC.c" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -24094,38 +24086,9 @@ __attribute__((__unsupported__("The READTIMER" "0" "() macro is not available wi
 unsigned char __t1rd16on(void);
 unsigned char __t3rd16on(void);
 # 33 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 2 3
-# 8 "main.c" 2
+# 1 "ADC.c" 2
 
-# 1 "./dc_motor.h" 1
-
-
-
-
-
-
-
-typedef struct DC_motor {
-    char power;
-    char direction;
-    char brakemode;
-    unsigned int PWMperiod;
-    unsigned char *posDutyHighByte;
-    unsigned char *negDutyHighByte;
-    char compensation;
-} DC_motor;
-
-
-void initDCmotorsPWM(unsigned int PWMperiod);
-void setMotorPWM(DC_motor *m);
-void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
-void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
-void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
-void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
-# 9 "main.c" 2
-
-# 1 "./battery.h" 1
+# 1 "./ADC.h" 1
 
 
 
@@ -24133,80 +24096,41 @@ void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turn
 
 
 
-
-void batteryLevel(void);
-# 10 "main.c" 2
-
-
+void ADC_init(void);
+unsigned char ADC_getval(void);
+# 2 "ADC.c" 2
 
 
-void main(void) {
-    unsigned int PWMcycle = 199;
-    initDCmotorsPWM(PWMcycle);
-
-    struct DC_motor motorL, motorR;
-
-    motorL.power=0;
-    motorL.direction=1;
-    motorL.brakemode=1;
-    motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
-    motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
-    motorL.PWMperiod=PWMcycle;
-    motorL.compensation=3;
-
-    motorR.power=0;
-    motorR.direction=1;
-    motorR.brakemode=1;
-    motorR.posDutyHighByte=(unsigned char *)(&CCPR3H);
-    motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);
-    motorR.PWMperiod=PWMcycle;
-    motorR.compensation=0;
 
 
-    char straightSpeed=60;
-    unsigned char straightRamp=2;
-
-    unsigned char reverseDuration=10;
-
-    char turnSpeed=21;
-    unsigned char turnDuration=10;
-    unsigned char turnRamp=4;
 
 
-    LATDbits.LATD7=0;
-    TRISDbits.TRISD7=0;
-    LATHbits.LATH3=0;
-    TRISHbits.TRISH3=0;
+
+void ADC_init(void)
+{
+    TRISFbits.TRISF6=1;
+    ANSELFbits.ANSELF6=1;
 
 
-    TRISFbits.TRISF2=1;
-    ANSELFbits.ANSELF2=0;
-    TRISFbits.TRISF3=1;
-    ANSELFbits.ANSELF3=0;
+    ADREFbits.ADNREF = 0;
+    ADREFbits.ADPREF = 0b00;
+    ADPCH=0b101110;
+    ADCON0bits.ADFM = 0;
+    ADCON0bits.ADCS = 1;
+    ADCON0bits.ADON = 1;
+}
+
+unsigned char ADC_getval(void)
+{
+    unsigned char tmpval;
+
+    ADCON0bits.GO = 1;
+
+    while (ADCON0bits.GO);
+
+    tmpval = ADRESH;
 
 
-    batteryLevel();
 
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-
-    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
-
-
-    while(1) {
-        turnLeft(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        stop(&motorL, &motorR, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-    }
-
-
+    return tmpval;
 }
