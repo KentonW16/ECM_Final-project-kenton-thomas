@@ -24117,6 +24117,7 @@ typedef struct DC_motor {
 
 void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
+void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
@@ -24194,18 +24195,11 @@ void main(void) {
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
 
+    char color = 7;
+    move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
     while(1) {
-        turnLeft(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        stop(&motorL, &motorR, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
-        reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
-        _delay((unsigned long)((50)*(64000000/4000.0)));
+# 86 "main.c"
     }
 
 

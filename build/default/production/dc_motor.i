@@ -24109,6 +24109,7 @@ typedef struct DC_motor {
 
 void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
+void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
@@ -24201,6 +24202,80 @@ void setMotorPWM(DC_motor *m)
     }
 }
 
+void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+{
+    if (color == 1) {
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 2) {
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 3) {
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 4) {
+        reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 5) {
+        reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 6) {
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 7) {
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+
+    else if (color == 8) {
+
+    }
+}
 
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp)
 {

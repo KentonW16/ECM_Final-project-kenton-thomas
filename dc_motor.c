@@ -84,6 +84,80 @@ void setMotorPWM(DC_motor *m)
     }
 }
 
+void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+{
+    if (color == 1) { //red - right 90
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 2) { //green - left 90
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 3) { //blue - 180
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 4) { //yellow - reverse right 90
+        reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 5) { //pink - reverse left 90
+        reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 6) { //orange - right 135
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 7) { //light blue - left 135
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+        __delay_ms(50);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    }
+    
+    else if (color == 8) { //white - return home
+        /*return home code*/
+    }
+}
 //function to stop the robot gradually 
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp)
 {

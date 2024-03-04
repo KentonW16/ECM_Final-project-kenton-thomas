@@ -131,24 +131,12 @@ Version 4.0 HI-TECH Software Intermediate Code
 "20 C:\Program Files\Microchip\xc8\v2.45\pic\include\builtins.h
 [v __delay `JF205 ~T0 @X0 0 e ]
 [p i __delay ]
-"26 ./dc_motor.h
-[; ;./dc_motor.h: 26: void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
+"27 ./dc_motor.h
+[; ;./dc_motor.h: 27: void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 [v _calibration `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`*uc`uc ]
-"22
-[; ;./dc_motor.h: 22: void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-[v _turnLeft `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`uc`uc ]
-"23
-[; ;./dc_motor.h: 23: void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-[v _turnRight `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`uc`uc ]
-"24
-[; ;./dc_motor.h: 24: void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
-[v _fullSpeedAhead `(v ~T0 @X0 0 ef4`*S2015`*S2015`uc`uc ]
 "21
-[; ;./dc_motor.h: 21: void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
-[v _stop `(v ~T0 @X0 0 ef3`*S2015`*S2015`uc ]
-"25
-[; ;./dc_motor.h: 25: void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
-[v _reverseOneSquare `(v ~T0 @X0 0 ef5`*S2015`*S2015`uc`uc`uc ]
+[; ;./dc_motor.h: 21: void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+[v _move `(v ~T0 @X0 0 ef9`*S2015`*S2015`uc`uc`uc`uc`uc`uc`uc ]
 "2 main.c
 [p x FEXTOSC  =  HS      ]
 "3
@@ -2256,47 +2244,24 @@ Version 4.0 HI-TECH Software Intermediate Code
 "66
 [; ;main.c: 66:     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
 [e ( _calibration (4 , , , , &U _motorL &U _motorR _turnSpeed &U _turnDuration _turnRamp ]
+"68
+[; ;main.c: 68:     char color = 1;
+[v _color `uc ~T0 @X0 1 a ]
+[e = _color -> -> 1 `i `uc ]
 "69
-[; ;main.c: 69:     while(1) {
+[; ;main.c: 69:     move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+[e ( _move (4 , , , , , , , , &U _motorL &U _motorR _color _straightSpeed _reverseDuration _straightRamp _turnSpeed _turnDuration _turnRamp ]
+"71
+[; ;main.c: 71:     while(1) {
 [e :U 2021 ]
 {
-"70
-[; ;main.c: 70:         turnLeft(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-[e ( _turnLeft (4 , , , , &U _motorL &U _motorR _turnSpeed _turnDuration _turnRamp ]
-"71
-[; ;main.c: 71:         _delay((unsigned long)((50)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"72
-[; ;main.c: 72:         turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
-[e ( _turnRight (4 , , , , &U _motorL &U _motorR _turnSpeed _turnDuration _turnRamp ]
-"73
-[; ;main.c: 73:         _delay((unsigned long)((50)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"74
-[; ;main.c: 74:         fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
-[e ( _fullSpeedAhead (4 , , , &U _motorL &U _motorR _straightSpeed _straightRamp ]
-"75
-[; ;main.c: 75:         _delay((unsigned long)((50)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"76
-[; ;main.c: 76:         stop(&motorL, &motorR, straightRamp);
-[e ( _stop (3 , , &U _motorL &U _motorR _straightRamp ]
-"77
-[; ;main.c: 77:         _delay((unsigned long)((50)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"78
-[; ;main.c: 78:         reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
-[e ( _reverseOneSquare (4 , , , , &U _motorL &U _motorR _straightSpeed _reverseDuration _straightRamp ]
-"79
-[; ;main.c: 79:         _delay((unsigned long)((50)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 50 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"80
-[; ;main.c: 80:     }
+"86
+[; ;main.c: 86:     }
 }
 [e :U 2020 ]
 [e $U 2021  ]
 [e :U 2022 ]
-"83
-[; ;main.c: 83: }
+"89
+[; ;main.c: 89: }
 [e :UE 2016 ]
 }

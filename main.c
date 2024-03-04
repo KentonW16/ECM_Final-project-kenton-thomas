@@ -65,8 +65,13 @@ void main(void) {
     
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
+    char color = 7; //to test
+    move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     
     while(1) {
+        //move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+        
+        /*
         turnLeft(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnRight(&motorL, &motorR, turnSpeed, turnDuration, turnRamp);
@@ -77,6 +82,7 @@ void main(void) {
         __delay_ms(50);
         reverseOneSquare(&motorL, &motorR, straightSpeed, reverseDuration, straightRamp);
         __delay_ms(50);
+        */
     }
     
     
