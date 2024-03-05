@@ -13,7 +13,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;./interrupts.h: 8: void Interrupts_init(void);
 [v _Interrupts_init `(v ~T0 @X0 0 ef ]
 "9 ./color.h
-[; ;./color.h: 9: struct RGBC_val {
+[; ;./color.h: 9: typedef struct RGBC_val {
 [s S2017 `ui 1 `ui 1 `ui 1 `ui 1 ]
 [n S2017 RGBC_val R G B C ]
 "28912 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
@@ -81,11 +81,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 30278: extern volatile PORTFbits_t PORTFbits __attribute__((address(0xF8E)));
 [v _PORTFbits `VS1411 ~T0 @X0 0 e@3982 ]
 "39 ./color.h
-[; ;./color.h: 39: void color_read(struct RGBC_val *RGBC);
+[; ;./color.h: 39: void color_read(RGBC_val *RGBC);
 [v _color_read `(v ~T0 @X0 0 ef1`*S2017 ]
 "45
-[; ;./color.h: 45: void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
+[; ;./color.h: 45: void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 [v _color_normalise `(v ~T0 @X0 0 ef2`S2017`*S2017 ]
+"52
+[; ;./color.h: 52: unsigned char color_detect(RGBC_val RGBC_n);
+[v _color_detect `(uc ~T0 @X0 0 ef1`S2017 ]
 "121 C:\Program Files\Microchip\xc8\v2.45\pic\include\c99\stdio.h
 [; ;C:\Program Files\Microchip\xc8\v2.45\pic\include\c99\stdio.h: 121: int sprintf(char *restrict, const char *restrict, ...);
 [v _sprintf `(i ~T0 @X0 0 e1v`*uc`*Cuc ]
@@ -2130,69 +2133,75 @@ Version 4.0 HI-TECH Software Intermediate Code
 "26
 [; ;main.c: 26:     Interrupts_init();
 [e ( _Interrupts_init ..  ]
-[v F14504 `uc ~T0 @X0 -> 40 `i s ]
-[i F14504
-:U ..
 "27
-[; ;main.c: 27:     char buf[40] = {0};
+[; ;main.c: 27:     unsigned char color;
+[v _color `uc ~T0 @X0 1 a ]
+[v F14508 `uc ~T0 @X0 -> 40 `i s ]
+[i F14508
+:U ..
+"28
+[; ;main.c: 28:     char buf[40] = {0};
 -> -> 0 `i `uc
 ..
 ]
 [v _buf `uc ~T0 @X0 -> 40 `i a ]
-[e = _buf F14504 ]
-"29
-[; ;main.c: 29:     struct RGBC_val RGBC, RGBC_n;
+[e = _buf F14508 ]
+"30
+[; ;main.c: 30:     struct RGBC_val RGBC, RGBC_n;
 [v _RGBC `S2017 ~T0 @X0 1 a ]
 [v _RGBC_n `S2017 ~T0 @X0 1 a ]
-"32
-[; ;main.c: 32:     LATHbits.LATH1=LATDbits.LATD3=1;
+"33
+[; ;main.c: 33:     LATHbits.LATH1=LATDbits.LATD3=1;
 [e = . . _LATHbits 0 1 = . . _LATDbits 0 3 -> -> 1 `i `uc ]
-"35
-[; ;main.c: 35:     white_Light(1);
+"36
+[; ;main.c: 36:     white_Light(1);
 [e ( _white_Light (1 -> -> 1 `i `uc ]
-"37
-[; ;main.c: 37:     while(1) {
+"38
+[; ;main.c: 38:     while(1) {
 [e :U 2020 ]
 {
-"38
-[; ;main.c: 38:         while (PORTFbits.RF2);
+"39
+[; ;main.c: 39:         while (PORTFbits.RF2);
 [e $U 2022  ]
 [e :U 2023 ]
 [e :U 2022 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2023  ]
 [e :U 2024 ]
-"40
-[; ;main.c: 40:         color_read(&RGBC);
-[e ( _color_read (1 &U _RGBC ]
 "41
-[; ;main.c: 41:         color_normalise(RGBC, &RGBC_n);
+[; ;main.c: 41:         color_read(&RGBC);
+[e ( _color_read (1 &U _RGBC ]
+"42
+[; ;main.c: 42:         color_normalise(RGBC, &RGBC_n);
 [e ( _color_normalise (2 , _RGBC &U _RGBC_n ]
 "43
-[; ;main.c: 43:         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
-[e ( _sprintf (1 , , , , , , , (. , &U _buf :s 1C . _RGBC 0 . _RGBC 1 . _RGBC 2 . _RGBC 3 . _RGBC_n 0 . _RGBC_n 1 . _RGBC_n 2 ]
-"44
-[; ;main.c: 44:         sendTxBuf();
-[e ( _sendTxBuf ..  ]
+[; ;main.c: 43:         color = color_detect(RGBC_n);
+[e = _color ( _color_detect (1 _RGBC_n ]
 "45
-[; ;main.c: 45:         TxBufferedString(buf);
-[e ( _TxBufferedString (1 &U _buf ]
+[; ;main.c: 45:         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+[e ( _sprintf (1 , , , , , , , (. , &U _buf :s 1C . _RGBC 0 . _RGBC 1 . _RGBC 2 . _RGBC 3 . _RGBC_n 0 . _RGBC_n 1 . _RGBC_n 2 ]
 "46
 [; ;main.c: 46:         sendTxBuf();
 [e ( _sendTxBuf ..  ]
 "47
-[; ;main.c: 47:         TxBufferedString("");
-[e ( _TxBufferedString (1 :s 2C ]
+[; ;main.c: 47:         TxBufferedString(buf);
+[e ( _TxBufferedString (1 &U _buf ]
 "48
-[; ;main.c: 48:         _delay((unsigned long)((300)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 300 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;main.c: 48:         sendTxBuf();
+[e ( _sendTxBuf ..  ]
+"49
+[; ;main.c: 49:         TxBufferedString("");
+[e ( _TxBufferedString (1 :s 2C ]
 "50
-[; ;main.c: 50:     }
+[; ;main.c: 50:         _delay((unsigned long)((300)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 300 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"52
+[; ;main.c: 52:     }
 }
 [e :U 2019 ]
 [e $U 2020  ]
 [e :U 2021 ]
-"54
-[; ;main.c: 54: }
+"56
+[; ;main.c: 56: }
 [e :UE 2018 ]
 }
 [p f _sprintf 8388736 ]

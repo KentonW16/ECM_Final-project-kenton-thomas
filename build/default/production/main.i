@@ -24302,12 +24302,12 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR();
 
 
 
-struct RGBC_val {
+typedef struct RGBC_val {
  unsigned int R;
  unsigned int G;
  unsigned int B;
     unsigned int C;
-};
+} RGBC_val;
 
 
 
@@ -24332,13 +24332,20 @@ void white_Light(char state);
 
 
 
-void color_read(struct RGBC_val *RGBC);
+void color_read(RGBC_val *RGBC);
 
 
 
 
 
-void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
+
+
+
+
+
+
+unsigned char color_detect(RGBC_val RGBC_n);
 # 13 "main.c" 2
 
 # 1 "./i2c.h" 1
@@ -24399,6 +24406,7 @@ void main(void){
     color_click_init();
     initUSART4();
     Interrupts_init();
+    unsigned char color;
     char buf[40] = {0};
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24414,6 +24422,7 @@ void main(void){
 
         color_read(&RGBC);
         color_normalise(RGBC, &RGBC_n);
+        color = color_detect(RGBC_n);
 
         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
         sendTxBuf();

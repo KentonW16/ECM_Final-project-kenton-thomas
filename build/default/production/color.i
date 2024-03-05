@@ -24097,12 +24097,12 @@ unsigned char __t3rd16on(void);
 
 
 
-struct RGBC_val {
+typedef struct RGBC_val {
  unsigned int R;
  unsigned int G;
  unsigned int B;
     unsigned int C;
-};
+} RGBC_val;
 
 
 
@@ -24127,13 +24127,20 @@ void white_Light(char state);
 
 
 
-void color_read(struct RGBC_val *RGBC);
+void color_read(RGBC_val *RGBC);
 
 
 
 
 
-void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
+
+
+
+
+
+
+unsigned char color_detect(RGBC_val RGBC_n);
 # 2 "color.c" 2
 
 # 1 "./i2c.h" 1
@@ -24187,7 +24194,15 @@ void color_click_init(void)
 
  color_writetoaddr(0x01, 0xD5);
 
+
+ color_writetoaddr(0x00, 0x13);
+    color_writetoaddr(0x07, 0x07);
+    color_writetoaddr(0x06, 0xD0);
+    color_writetoaddr(0x05, 0x00);
+    color_writetoaddr(0x04, 0x00);
+
 }
+
 
 
 void color_writetoaddr(char address, char value){
@@ -24214,7 +24229,7 @@ void white_Light(char state)
 }
 
 
-void color_read(struct RGBC_val *RGBC)
+void color_read(RGBC_val *RGBC)
 {
  I2C_2_Master_Start();
  I2C_2_Master_Write(0x52 | 0x00);
@@ -24254,10 +24269,40 @@ void color_read(struct RGBC_val *RGBC)
 }
 
 
-void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n) {
-# 105 "color.c"
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
+# 113 "color.c"
     RGBC_n->C = RGBC.C;
     RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
+}
+
+unsigned char color_detect(RGBC_val RGBC_n)
+{
+    unsigned char color=0;
+    if (RGBC_n.R > 300) {
+        color = 1;
+    }
+    else if (RGBC_n.G > 300) {
+        color = 2;
+    }
+    else if (RGBC_n.B > 300) {
+        color = 3;
+    }
+    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
+        color = 4;
+    }
+    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
+        color = 5;
+    }
+    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
+        color = 6;
+    }
+    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
+        color = 7;
+    }
+    else if (RGBC_n.R > 300 && RGBC_n.G > 300 && RGBC_n.B > 300) {
+        color = 8;
+    }
+    return color;
 }

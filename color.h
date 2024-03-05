@@ -6,12 +6,12 @@
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 
-struct RGBC_val { //Structure to store RGB value
+typedef struct RGBC_val { //Structure to store RGB value
 	unsigned int R;
 	unsigned int G;
 	unsigned int B;
     unsigned int C;
-};
+} RGBC_val;
 
 
 /********************************************//**
@@ -36,13 +36,20 @@ void white_Light(char state);
  *  Function to read all RGBC channels
  *	Writes 16 bit ADC value representing colour intensity to struct for each color
  ***********************************************/
-void color_read(struct RGBC_val *RGBC);
+void color_read(RGBC_val *RGBC);
 
 /********************************************//**
  *  Function to normalise all RGB values
  *	Writes normalised values to RGBC_n struct for each color
  ***********************************************/
-void color_normalise(struct RGBC_val RGBC, struct RGBC_val *RGBC_n);
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
+
+/********************************************//**
+ *  Function to decide on color
+ *	Writes code (1-8) for color dependent on RGB values
+ *  No color detected = 0
+ ***********************************************/
+unsigned char color_detect(RGBC_val RGBC_n);
 
 
 /********************************************//**

@@ -24130,6 +24130,41 @@ void TxBufferedString(char *string);
 void sendTxBuf(void);
 # 3 "interrupts.c" 2
 
+# 1 "./i2c.h" 1
+# 13 "./i2c.h"
+void I2C_2_Master_Init(void);
+
+
+
+
+void I2C_2_Master_Idle(void);
+
+
+
+
+void I2C_2_Master_Start(void);
+
+
+
+
+void I2C_2_Master_RepStart(void);
+
+
+
+
+void I2C_2_Master_Stop(void);
+
+
+
+
+void I2C_2_Master_Write(unsigned char data_byte);
+
+
+
+
+unsigned char I2C_2_Master_Read(unsigned char ack);
+# 4 "interrupts.c" 2
+
 
 
 
@@ -24137,6 +24172,11 @@ void sendTxBuf(void);
 
 void Interrupts_init(void)
 {
+ TRISBbits.TRISB0=1;
+    ANSELBbits.ANSELB0=0;
+    PIE0bits.INT0IE=1;
+    IPR0bits.INT0IP=1;
+
 
 
     PIE4bits.RC4IE=1;
@@ -24152,6 +24192,17 @@ void Interrupts_init(void)
 void __attribute__((picinterrupt(("high_priority")))) HighISR()
 {
 
+
+    if(PIR0bits.INT0IF){
+ LATHbits.LATH3 = 1;
+
+    I2C_2_Master_Start();
+ I2C_2_Master_Write(0x52 | 0x00);
+ I2C_2_Master_Write(0b11100110);
+ I2C_2_Master_Stop();
+
+    PIR0bits.INT0IF = 0;
+ }
 
     if(PIR4bits.RC4IF){
 
