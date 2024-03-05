@@ -1,4 +1,7 @@
 build/default/production/main.p1:  \
 main.c  \
-dc_motor.h  \
-battery.h 
+serial.h  \
+interrupts.h  \
+color.h  \
+i2c.h  \
+buggysetup.h 
