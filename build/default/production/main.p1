@@ -2177,8 +2177,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 43:         color = color_detect(RGBC_n);
 [e = _color ( _color_detect (1 _RGBC_n ]
 "45
-[; ;main.c: 45:         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
-[e ( _sprintf (1 , , , , , , , (. , &U _buf :s 1C . _RGBC 0 . _RGBC 1 . _RGBC 2 . _RGBC 3 . _RGBC_n 0 . _RGBC_n 1 . _RGBC_n 2 ]
+[; ;main.c: 45:         sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+[e ( _sprintf (1 , , , , , , , , (. , &U _buf :s 1C . _RGBC 0 . _RGBC 1 . _RGBC 2 . _RGBC 3 . _RGBC_n 0 . _RGBC_n 1 . _RGBC_n 2 -> _color `i ]
 "46
 [; ;main.c: 46:         sendTxBuf();
 [e ( _sendTxBuf ..  ]
@@ -2205,5 +2205,5 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :UE 2018 ]
 }
 [p f _sprintf 8388736 ]
-[a 1C 114 61 37 100 32 103 61 37 100 32 98 61 37 100 32 99 61 37 100 32 32 32 110 58 32 114 61 37 100 32 103 61 37 100 32 98 61 37 100 13 10 0 ]
+[a 1C 114 61 37 100 32 103 61 37 100 32 98 61 37 100 32 99 61 37 100 32 32 32 110 58 32 114 61 37 100 32 103 61 37 100 32 98 61 37 100 32 32 99 111 108 111 114 58 32 37 100 32 13 10 0 ]
 [a 2C 0 ]

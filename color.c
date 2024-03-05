@@ -119,15 +119,17 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 300) { // red
+    if (RGBC_n.R > 550) { // red
         color = 1;
     }
-    else if (RGBC_n.G > 300) { // green
+    else if (RGBC_n.G > 290) { // green
         color = 2;
     }
-    else if (RGBC_n.B > 300) { // blue
+    else if (RGBC_n.B > 220 && RGBC_n.C < 800) { // blue
         color = 3;
     }
+    
+    /*
     else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // yellow
         color = 4;
     }
@@ -143,49 +145,7 @@ unsigned char color_detect(RGBC_val RGBC_n)
     else if (RGBC_n.R > 300 && RGBC_n.G > 300 && RGBC_n.B > 300) { // white
         color = 8;
     }
+     */
     return color;
 }
 
-
-/*
-unsigned int color_read_Red(void)
-{
-	unsigned int tmp;
-	I2C_2_Master_Start();         //Start condition
-	I2C_2_Master_Write(0x52 | 0x00);    //7 bit address + Write mode
-	I2C_2_Master_Write(0xA0 | 0x16);    //command (P.12) (auto-increment protocol transaction) + start at RED low register
-	I2C_2_Master_RepStart();			// start a repeated transmission
-	I2C_2_Master_Write(0x52 | 0x01);    //7 bit address + Read (1) mode
-	tmp=I2C_2_Master_Read(1);			//read the Red Low Byte
-	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Red MSB (don't acknowledge as this is the last read, hence send it 0)
-	I2C_2_Master_Stop();          //Stop condition
-	return tmp;
-}
-
-unsigned int color_read_Green(void)
-{
-	unsigned int tmp;
-	I2C_2_Master_Start();         //Start condition
-	I2C_2_Master_Write(0x52 | 0x00);    //7 bit address + Write mode
-	I2C_2_Master_Write(0xA0 | 0x18);    //command (P.12) (auto-increment protocol transaction) + start at Green low register
-	I2C_2_Master_RepStart();			// start a repeated transmission
-	I2C_2_Master_Write(0x52 | 0x01);    //7 bit address + Read (1) mode
-	tmp=I2C_2_Master_Read(1);			//read the Green Low Byte
-	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Green MSB (don't acknowledge as this is the last read, hence send it 0)
-	I2C_2_Master_Stop();          //Stop condition
-	return tmp;
-}
-
-unsigned int color_read_Blue(void)
-{
-	unsigned int tmp;
-	I2C_2_Master_Start();         //Start condition
-	I2C_2_Master_Write(0x52 | 0x00);    //7 bit address + Write mode
-	I2C_2_Master_Write(0xA0 | 0x1A);    //command (P.12) (auto-increment protocol transaction) + start at Blue low register
-	I2C_2_Master_RepStart();			// start a repeated transmission
-	I2C_2_Master_Write(0x52 | 0x01);    //7 bit address + Read (1) mode
-	tmp=I2C_2_Master_Read(1);			//read the Blue Low Byte
-	tmp=tmp | (I2C_2_Master_Read(0)<<8); //read the Blue MSB (don't acknowledge as this is the last read, hence send it 0)
-	I2C_2_Master_Stop();          //Stop condition
-	return tmp;
-}*/

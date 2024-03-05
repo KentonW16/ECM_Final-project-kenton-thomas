@@ -23,6 +23,7 @@
       <itemPath>interrupts.h</itemPath>
       <itemPath>serial.c</itemPath>
       <itemPath>serial.h</itemPath>
+      <itemPath>calibration.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

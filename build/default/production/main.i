@@ -24424,7 +24424,7 @@ void main(void){
         color_normalise(RGBC, &RGBC_n);
         color = color_detect(RGBC_n);
 
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
         sendTxBuf();
         TxBufferedString(buf);
         sendTxBuf();

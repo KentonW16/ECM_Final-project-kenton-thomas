@@ -2322,8 +2322,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _color `uc ~T0 @X0 1 a ]
 [e = _color -> -> 0 `i `uc ]
 "122
-[; ;color.c: 122:     if (RGBC_n.R > 300) {
-[e $ ! > . _RGBC_n 0 -> -> 300 `i `ui 2024  ]
+[; ;color.c: 122:     if (RGBC_n.R > 550) {
+[e $ ! > . _RGBC_n 0 -> -> 550 `i `ui 2024  ]
 {
 "123
 [; ;color.c: 123:         color = 1;
@@ -2333,9 +2333,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2025  ]
 "125
-[; ;color.c: 125:     else if (RGBC_n.G > 300) {
+[; ;color.c: 125:     else if (RGBC_n.G > 290) {
 [e :U 2024 ]
-[e $ ! > . _RGBC_n 1 -> -> 300 `i `ui 2026  ]
+[e $ ! > . _RGBC_n 1 -> -> 290 `i `ui 2026  ]
 {
 "126
 [; ;color.c: 126:         color = 2;
@@ -2345,9 +2345,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2027  ]
 "128
-[; ;color.c: 128:     else if (RGBC_n.B > 300) {
+[; ;color.c: 128:     else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
 [e :U 2026 ]
-[e $ ! > . _RGBC_n 2 -> -> 300 `i `ui 2028  ]
+[e $ ! && > . _RGBC_n 2 -> -> 220 `i `ui < . _RGBC_n 3 -> -> 800 `i `ui 2028  ]
 {
 "129
 [; ;color.c: 129:         color = 3;
@@ -2355,79 +2355,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 "130
 [; ;color.c: 130:     }
 }
-[e $U 2029  ]
-"131
-[; ;color.c: 131:     else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
 [e :U 2028 ]
-[e $ ! && > . _RGBC_n 2 -> -> 300 `i `ui > . _RGBC_n 2 -> -> 300 `i `ui 2030  ]
-{
-"132
-[; ;color.c: 132:         color = 4;
-[e = _color -> -> 4 `i `uc ]
-"133
-[; ;color.c: 133:     }
-}
-[e $U 2031  ]
-"134
-[; ;color.c: 134:     else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-[e :U 2030 ]
-[e $ ! && > . _RGBC_n 2 -> -> 300 `i `ui > . _RGBC_n 2 -> -> 300 `i `ui 2032  ]
-{
-"135
-[; ;color.c: 135:         color = 5;
-[e = _color -> -> 5 `i `uc ]
-"136
-[; ;color.c: 136:     }
-}
-[e $U 2033  ]
-"137
-[; ;color.c: 137:     else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-[e :U 2032 ]
-[e $ ! && > . _RGBC_n 2 -> -> 300 `i `ui > . _RGBC_n 2 -> -> 300 `i `ui 2034  ]
-{
-"138
-[; ;color.c: 138:         color = 6;
-[e = _color -> -> 6 `i `uc ]
-"139
-[; ;color.c: 139:     }
-}
-[e $U 2035  ]
-"140
-[; ;color.c: 140:     else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-[e :U 2034 ]
-[e $ ! && > . _RGBC_n 2 -> -> 300 `i `ui > . _RGBC_n 2 -> -> 300 `i `ui 2036  ]
-{
-"141
-[; ;color.c: 141:         color = 7;
-[e = _color -> -> 7 `i `uc ]
-"142
-[; ;color.c: 142:     }
-}
-[e $U 2037  ]
-"143
-[; ;color.c: 143:     else if (RGBC_n.R > 300 && RGBC_n.G > 300 && RGBC_n.B > 300) {
-[e :U 2036 ]
-[e $ ! && && > . _RGBC_n 0 -> -> 300 `i `ui > . _RGBC_n 1 -> -> 300 `i `ui > . _RGBC_n 2 -> -> 300 `i `ui 2038  ]
-{
-"144
-[; ;color.c: 144:         color = 8;
-[e = _color -> -> 8 `i `uc ]
-"145
-[; ;color.c: 145:     }
-}
-[e :U 2038 ]
-[e :U 2037 ]
-[e :U 2035 ]
-[e :U 2033 ]
-[e :U 2031 ]
-[e :U 2029 ]
 [e :U 2027 ]
 [e :U 2025 ]
-"146
-[; ;color.c: 146:     return color;
+"149
+[; ;color.c: 149:     return color;
 [e ) _color ]
 [e $UE 2023  ]
-"147
-[; ;color.c: 147: }
+"150
+[; ;color.c: 150: }
 [e :UE 2023 ]
 }
