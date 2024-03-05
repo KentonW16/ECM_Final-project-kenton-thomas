@@ -24200,7 +24200,7 @@ void color_click_init(void)
     color_writetoaddr(0x06, 0xD0);
     color_writetoaddr(0x05, 0x00);
     color_writetoaddr(0x04, 0x00);
-    color_writetoaddr(0x0C, 0x02);
+
 }
 
 
@@ -24280,29 +24280,15 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 300) {
+    if (RGBC_n.R > 550) {
         color = 1;
     }
-    else if (RGBC_n.G > 300) {
+    else if (RGBC_n.G > 290) {
         color = 2;
     }
-    else if (RGBC_n.B > 300) {
+    else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
         color = 3;
     }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-        color = 4;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-        color = 5;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-        color = 6;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) {
-        color = 7;
-    }
-    else if (RGBC_n.R > 300 && RGBC_n.G > 300 && RGBC_n.B > 300) {
-        color = 8;
-    }
+# 149 "color.c"
     return color;
 }

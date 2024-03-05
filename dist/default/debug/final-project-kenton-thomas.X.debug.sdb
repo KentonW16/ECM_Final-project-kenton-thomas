@@ -3,6 +3,12 @@
 [d edition pro ]
 [d chip 18F67K40 ]
 [d frameptr 4065 ]
+"9 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\ADC.c
+[v _ADC_init ADC_init `(v  1 e 1 0 ]
+"23
+[v _ADC_getval ADC_getval `(uc  1 e 1 0 ]
+"6 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\battery.c
+[v _batteryLevel batteryLevel `(v  1 e 1 0 ]
 "7 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\buggysetup.c
 [v _Buggy_init Buggy_init `(v  1 e 1 0 ]
 "1 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\abs.c
@@ -29,6 +35,8 @@
 [v ___ftmul __ftmul `(f  1 e 4 0 ]
 "19 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\ftsub.c
 [v ___ftsub __ftsub `(f  1 e 4 0 ]
+"7 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\lwdiv.c
+[v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
 "8 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\nf_fputc.c
 [v _fputc fputc `(i  1 e 2 0 ]
 "8 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\nf_fputs.c
@@ -45,6 +53,8 @@
 [v ___fldiv __fldiv `(d  1 e 4 0 ]
 "8 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\sprcmul.c
 [v ___flmul __flmul `(d  1 e 4 0 ]
+"15 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
 "15 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\Umul32.c
 [v ___lmul __lmul `(ul  1 e 4 0 ]
 "91 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\Umul64.c
@@ -61,25 +71,45 @@
 [v _color_normalise color_normalise `(v  1 e 1 0 ]
 "119
 [v _color_detect color_detect `(uc  1 e 1 0 ]
+"5 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\dc_motor.c
+[v _initDCmotorsPWM initDCmotorsPWM `(v  1 e 1 0 ]
+"65
+[v _setMotorPWM setMotorPWM `(v  1 e 1 0 ]
+"87
+[v _move move `(v  1 e 1 0 ]
+"182
+[v _turnLeft turnLeft `(v  1 e 1 0 ]
+"214
+[v _turnRight turnRight `(v  1 e 1 0 ]
+"246
+[v _fullSpeedAhead fullSpeedAhead `(v  1 e 1 0 ]
+"263
+[v _reverseOneSquare reverseOneSquare `(v  1 e 1 0 ]
+"296
+[v _calibration calibration `(v  1 e 1 0 ]
 "4 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\i2c.c
 [v _I2C_2_Master_Init I2C_2_Master_Init `(v  1 e 1 0 ]
 "22
 [v _I2C_2_Master_Idle I2C_2_Master_Idle `(v  1 e 1 0 ]
+[v i2_I2C_2_Master_Idle I2C_2_Master_Idle `(v  1 e 1 0 ]
 "27
 [v _I2C_2_Master_Start I2C_2_Master_Start `(v  1 e 1 0 ]
+[v i2_I2C_2_Master_Start I2C_2_Master_Start `(v  1 e 1 0 ]
 "33
 [v _I2C_2_Master_RepStart I2C_2_Master_RepStart `(v  1 e 1 0 ]
 "39
 [v _I2C_2_Master_Stop I2C_2_Master_Stop `(v  1 e 1 0 ]
+[v i2_I2C_2_Master_Stop I2C_2_Master_Stop `(v  1 e 1 0 ]
 "45
 [v _I2C_2_Master_Write I2C_2_Master_Write `(v  1 e 1 0 ]
+[v i2_I2C_2_Master_Write I2C_2_Master_Write `(v  1 e 1 0 ]
 "51
 [v _I2C_2_Master_Read I2C_2_Master_Read `(uc  1 e 1 0 ]
-"9 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
+"10 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
 [v _Interrupts_init Interrupts_init `(v  1 e 1 0 ]
-"27
+"29
 [v _HighISR HighISR `IIH(v  1 e 1 0 ]
-"22 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\main.c
+"23 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\main.c
 [v _main main `(v  1 e 1 0 ]
 "4 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v _initUSART4 initUSART4 `(v  1 e 1 0 ]
@@ -114,7 +144,17 @@
 [v _SSP2CLKPPS SSP2CLKPPS `VEuc  1 e 1 @3612 ]
 "3862
 [v _SSP2DATPPS SSP2DATPPS `VEuc  1 e 1 @3613 ]
-[s S1066 . 1 `uc 1 INT0IE 1 0 :1:0 
+[s S1149 . 1 `uc 1 INT0IP 1 0 :1:0 
+`uc 1 INT1IP 1 0 :1:1 
+`uc 1 INT2IP 1 0 :1:2 
+`uc 1 INT3IP 1 0 :1:3 
+`uc 1 IOCIP 1 0 :1:4 
+`uc 1 TMR0IP 1 0 :1:5 
+]
+"4009
+[u S1156 . 1 `S1149 1 . 1 0 ]
+[v _IPR0bits IPR0bits `VES1156  1 e 1 @3615 ]
+[s S1132 . 1 `uc 1 INT0IE 1 0 :1:0 
 `uc 1 INT1IE 1 0 :1:1 
 `uc 1 INT2IE 1 0 :1:2 
 `uc 1 INT3IE 1 0 :1:3 
@@ -122,9 +162,9 @@
 `uc 1 TMR0IE 1 0 :1:5 
 ]
 "4557
-[u S1073 . 1 `S1066 1 . 1 0 ]
-[v _PIE0bits PIE0bits `VES1073  1 e 1 @3625 ]
-[s S1083 . 1 `uc 1 TX3IE 1 0 :1:0 
+[u S1139 . 1 `S1132 1 . 1 0 ]
+[v _PIE0bits PIE0bits `VES1139  1 e 1 @3625 ]
+[s S1166 . 1 `uc 1 TX3IE 1 0 :1:0 
 `uc 1 RC3IE 1 0 :1:1 
 `uc 1 TX4IE 1 0 :1:2 
 `uc 1 RC4IE 1 0 :1:3 
@@ -132,9 +172,9 @@
 `uc 1 RC5IE 1 0 :1:5 
 ]
 "4819
-[u S1090 . 1 `S1083 1 . 1 0 ]
-[v _PIE4bits PIE4bits `VES1090  1 e 1 @3629 ]
-[s S1139 . 1 `uc 1 INT0IF 1 0 :1:0 
+[u S1173 . 1 `S1166 1 . 1 0 ]
+[v _PIE4bits PIE4bits `VES1173  1 e 1 @3629 ]
+[s S1222 . 1 `uc 1 INT0IF 1 0 :1:0 
 `uc 1 INT1IF 1 0 :1:1 
 `uc 1 INT2IF 1 0 :1:2 
 `uc 1 INT3IF 1 0 :1:3 
@@ -142,9 +182,9 @@
 `uc 1 TMR0IF 1 0 :1:5 
 ]
 "5102
-[u S1146 . 1 `S1139 1 . 1 0 ]
-[v _PIR0bits PIR0bits `VES1146  1 e 1 @3635 ]
-[s S1186 . 1 `uc 1 TX3IF 1 0 :1:0 
+[u S1229 . 1 `S1222 1 . 1 0 ]
+[v _PIR0bits PIR0bits `VES1229  1 e 1 @3635 ]
+[s S1272 . 1 `uc 1 TX3IF 1 0 :1:0 
 `uc 1 RC3IF 1 0 :1:1 
 `uc 1 TX4IF 1 0 :1:2 
 `uc 1 RC4IF 1 0 :1:3 
@@ -152,15 +192,23 @@
 `uc 1 RC5IF 1 0 :1:5 
 ]
 "5332
-[u S1193 . 1 `S1186 1 . 1 0 ]
-[v _PIR4bits PIR4bits `VES1193  1 e 1 @3639 ]
+[u S1279 . 1 `S1272 1 . 1 0 ]
+[v _PIR4bits PIR4bits `VES1279  1 e 1 @3639 ]
 "7858
 [v _RC0PPS RC0PPS `VEuc  1 e 1 @3682 ]
+"8208
+[v _RC7PPS RC7PPS `VEuc  1 e 1 @3689 ]
 "8508
 [v _RD5PPS RD5PPS `VEuc  1 e 1 @3695 ]
 "8558
 [v _RD6PPS RD6PPS `VEuc  1 e 1 @3696 ]
-[s S1045 . 1 `uc 1 ANSELB0 1 0 :1:0 
+"8758
+[v _RE2PPS RE2PPS `VEuc  1 e 1 @3700 ]
+"8858
+[v _RE4PPS RE4PPS `VEuc  1 e 1 @3702 ]
+"9708
+[v _RG6PPS RG6PPS `VEuc  1 e 1 @3720 ]
+[s S1111 . 1 `uc 1 ANSELB0 1 0 :1:0 
 `uc 1 ANSELB1 1 0 :1:1 
 `uc 1 ANSELB2 1 0 :1:2 
 `uc 1 ANSELB3 1 0 :1:3 
@@ -170,9 +218,9 @@
 `uc 1 ANSELB7 1 0 :1:7 
 ]
 "10769
-[u S1054 . 1 `S1045 1 . 1 0 ]
-[v _ANSELBbits ANSELBbits `VES1054  1 e 1 @3738 ]
-[s S529 . 1 `uc 1 ANSELD0 1 0 :1:0 
+[u S1120 . 1 `S1111 1 . 1 0 ]
+[v _ANSELBbits ANSELBbits `VES1120  1 e 1 @3738 ]
+[s S595 . 1 `uc 1 ANSELD0 1 0 :1:0 
 `uc 1 ANSELD1 1 0 :1:1 
 `uc 1 ANSELD2 1 0 :1:2 
 `uc 1 ANSELD3 1 0 :1:3 
@@ -182,9 +230,9 @@
 `uc 1 ANSELD7 1 0 :1:7 
 ]
 "11513
-[u S538 . 1 `S529 1 . 1 0 ]
-[v _ANSELDbits ANSELDbits `VES538  1 e 1 @3751 ]
-[s S772 . 1 `uc 1 ANSELF0 1 0 :1:0 
+[u S604 . 1 `S595 1 . 1 0 ]
+[v _ANSELDbits ANSELDbits `VES604  1 e 1 @3751 ]
+[s S838 . 1 `uc 1 ANSELF0 1 0 :1:0 
 `uc 1 ANSELF1 1 0 :1:1 
 `uc 1 ANSELF2 1 0 :1:2 
 `uc 1 ANSELF3 1 0 :1:3 
@@ -194,27 +242,27 @@
 `uc 1 ANSELF7 1 0 :1:7 
 ]
 "12319
-[u S781 . 1 `S772 1 . 1 0 ]
-[v _ANSELFbits ANSELFbits `VES781  1 e 1 @3764 ]
+[u S847 . 1 `S838 1 . 1 0 ]
+[v _ANSELFbits ANSELFbits `VES847  1 e 1 @3764 ]
 "14100
 [v _SSP2BUF SSP2BUF `VEuc  1 e 1 @3797 ]
 "14120
 [v _SSP2ADD SSP2ADD `VEuc  1 e 1 @3798 ]
 "14310
 [v _SSP2STAT SSP2STAT `VEuc  1 e 1 @3800 ]
-[s S462 . 1 `uc 1 SSPM 1 0 :4:0 
+[s S528 . 1 `uc 1 SSPM 1 0 :4:0 
 `uc 1 CKP 1 0 :1:4 
 `uc 1 SSPEN 1 0 :1:5 
 `uc 1 SSPOV 1 0 :1:6 
 `uc 1 WCOL 1 0 :1:7 
 ]
 "14794
-[s S468 . 1 `uc 1 SSPM0 1 0 :1:0 
+[s S534 . 1 `uc 1 SSPM0 1 0 :1:0 
 `uc 1 SSPM1 1 0 :1:1 
 `uc 1 SSPM2 1 0 :1:2 
 `uc 1 SSPM3 1 0 :1:3 
 ]
-[s S473 . 1 `uc 1 SSPM02 1 0 :1:0 
+[s S539 . 1 `uc 1 SSPM02 1 0 :1:0 
 `uc 1 SSPM12 1 0 :1:1 
 `uc 1 SSPM22 1 0 :1:2 
 `uc 1 SSPM32 1 0 :1:3 
@@ -223,11 +271,11 @@
 `uc 1 SSPOV2 1 0 :1:6 
 `uc 1 WCOL2 1 0 :1:7 
 ]
-[u S482 . 1 `S462 1 . 1 0 `S468 1 . 1 0 `S473 1 . 1 0 ]
-[v _SSP2CON1bits SSP2CON1bits `VES482  1 e 1 @3801 ]
+[u S548 . 1 `S528 1 . 1 0 `S534 1 . 1 0 `S539 1 . 1 0 ]
+[v _SSP2CON1bits SSP2CON1bits `VES548  1 e 1 @3801 ]
 "14884
 [v _SSP2CON2 SSP2CON2 `VEuc  1 e 1 @3802 ]
-[s S556 . 1 `uc 1 SEN 1 0 :1:0 
+[s S622 . 1 `uc 1 SEN 1 0 :1:0 
 `uc 1 RSEN 1 0 :1:1 
 `uc 1 PEN 1 0 :1:2 
 `uc 1 RCEN 1 0 :1:3 
@@ -237,17 +285,17 @@
 `uc 1 GCEN 1 0 :1:7 
 ]
 "14931
-[s S565 . 1 `uc 1 . 1 0 :1:0 
+[s S631 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 ADMSK 1 0 :5:1 
 ]
-[s S568 . 1 `uc 1 . 1 0 :1:0 
+[s S634 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 ADMSK1 1 0 :1:1 
 `uc 1 ADMSK2 1 0 :1:2 
 `uc 1 ADMSK3 1 0 :1:3 
 `uc 1 ADMSK4 1 0 :1:4 
 `uc 1 ADMSK5 1 0 :1:5 
 ]
-[s S575 . 1 `uc 1 SEN2 1 0 :1:0 
+[s S641 . 1 `uc 1 SEN2 1 0 :1:0 
 `uc 1 ADMSK12 1 0 :1:1 
 `uc 1 ADMSK22 1 0 :1:2 
 `uc 1 ADMSK32 1 0 :1:3 
@@ -256,15 +304,15 @@
 `uc 1 ACKSTAT2 1 0 :1:6 
 `uc 1 GCEN2 1 0 :1:7 
 ]
-[s S584 . 1 `uc 1 . 1 0 :1:0 
+[s S650 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 RSEN2 1 0 :1:1 
 `uc 1 PEN2 1 0 :1:2 
 `uc 1 RCEN2 1 0 :1:3 
 `uc 1 ADMSK42 1 0 :1:4 
 `uc 1 ADMSK52 1 0 :1:5 
 ]
-[u S591 . 1 `S556 1 . 1 0 `S565 1 . 1 0 `S568 1 . 1 0 `S575 1 . 1 0 `S584 1 . 1 0 ]
-[v _SSP2CON2bits SSP2CON2bits `VES591  1 e 1 @3802 ]
+[u S657 . 1 `S622 1 . 1 0 `S631 1 . 1 0 `S634 1 . 1 0 `S641 1 . 1 0 `S650 1 . 1 0 ]
+[v _SSP2CON2bits SSP2CON2bits `VES657  1 e 1 @3802 ]
 "15686
 [v _RC4REG RC4REG `VEuc  1 e 1 @3811 ]
 "15724
@@ -273,7 +321,7 @@
 [v _SP4BRGL SP4BRGL `VEuc  1 e 1 @3813 ]
 "15807
 [v _SP4BRGH SP4BRGH `VEuc  1 e 1 @3814 ]
-[s S1319 . 1 `uc 1 RX9D 1 0 :1:0 
+[s S1411 . 1 `uc 1 RX9D 1 0 :1:0 
 `uc 1 OERR 1 0 :1:1 
 `uc 1 FERR 1 0 :1:2 
 `uc 1 ADDEN 1 0 :1:3 
@@ -283,9 +331,9 @@
 `uc 1 SPEN 1 0 :1:7 
 ]
 "15867
-[u S1328 . 1 `S1319 1 . 1 0 ]
-[v _RC4STAbits RC4STAbits `VES1328  1 e 1 @3815 ]
-[s S1296 . 1 `uc 1 TX9D 1 0 :1:0 
+[u S1420 . 1 `S1411 1 . 1 0 ]
+[v _RC4STAbits RC4STAbits `VES1420  1 e 1 @3815 ]
+[s S1388 . 1 `uc 1 TX9D 1 0 :1:0 
 `uc 1 TRMT 1 0 :1:1 
 `uc 1 BRGH 1 0 :1:2 
 `uc 1 SENDB 1 0 :1:3 
@@ -295,9 +343,9 @@
 `uc 1 CSRC 1 0 :1:7 
 ]
 "15989
-[u S1305 . 1 `S1296 1 . 1 0 ]
-[v _TX4STAbits TX4STAbits `VES1305  1 e 1 @3816 ]
-[s S1275 . 1 `uc 1 ABDEN 1 0 :1:0 
+[u S1397 . 1 `S1388 1 . 1 0 ]
+[v _TX4STAbits TX4STAbits `VES1397  1 e 1 @3816 ]
+[s S1367 . 1 `uc 1 ABDEN 1 0 :1:0 
 `uc 1 WUE 1 0 :1:1 
 `uc 1 . 1 0 :1:2 
 `uc 1 BRG16 1 0 :1:3 
@@ -307,9 +355,91 @@
 `uc 1 ABDOVF 1 0 :1:7 
 ]
 "16115
-[u S1284 . 1 `S1275 1 . 1 0 ]
-[v _BAUD4CONbits BAUD4CONbits `VES1284  1 e 1 @3817 ]
-[s S354 . 1 `uc 1 LATA0 1 0 :1:0 
+[u S1376 . 1 `S1367 1 . 1 0 ]
+[v _BAUD4CONbits BAUD4CONbits `VES1376  1 e 1 @3817 ]
+"20738
+[v _CCPR4H CCPR4H `VEuc  1 e 1 @3873 ]
+[s S2071 . 1 `uc 1 MODE 1 0 :4:0 
+`uc 1 FMT 1 0 :1:4 
+`uc 1 OUT 1 0 :1:5 
+`uc 1 OE 1 0 :1:6 
+`uc 1 EN 1 0 :1:7 
+]
+"20791
+[s S1970 . 1 `uc 1 MODE0 1 0 :1:0 
+`uc 1 MODE1 1 0 :1:1 
+`uc 1 MODE2 1 0 :1:2 
+`uc 1 MODE3 1 0 :1:3 
+]
+[s S2132 . 1 `uc 1 CCP4MODE 1 0 :4:0 
+`uc 1 CCP4FMT 1 0 :1:4 
+`uc 1 CCP4OUT 1 0 :1:5 
+`uc 1 CCP4OE 1 0 :1:6 
+`uc 1 CCP4EN 1 0 :1:7 
+]
+[s S2138 . 1 `uc 1 CCP4MODE0 1 0 :1:0 
+`uc 1 CCP4MODE1 1 0 :1:1 
+`uc 1 CCP4MODE2 1 0 :1:2 
+`uc 1 CCP4MODE3 1 0 :1:3 
+]
+[u S2143 . 1 `S2071 1 . 1 0 `S1970 1 . 1 0 `S2132 1 . 1 0 `S2138 1 . 1 0 ]
+[v _CCP4CONbits CCP4CONbits `VES2143  1 e 1 @3874 ]
+"21041
+[v _CCPR3H CCPR3H `VEuc  1 e 1 @3877 ]
+"21094
+[s S2082 . 1 `uc 1 CCP3MODE 1 0 :4:0 
+`uc 1 CCP3FMT 1 0 :1:4 
+`uc 1 CCP3OUT 1 0 :1:5 
+`uc 1 CCP3OE 1 0 :1:6 
+`uc 1 CCP3EN 1 0 :1:7 
+]
+[s S2088 . 1 `uc 1 CCP3MODE0 1 0 :1:0 
+`uc 1 CCP3MODE1 1 0 :1:1 
+`uc 1 CCP3MODE2 1 0 :1:2 
+`uc 1 CCP3MODE3 1 0 :1:3 
+]
+[u S2093 . 1 `S2071 1 . 1 0 `S1970 1 . 1 0 `S2082 1 . 1 0 `S2088 1 . 1 0 ]
+[v _CCP3CONbits CCP3CONbits `VES2093  1 e 1 @3878 ]
+[s S1509 . 1 `uc 1 ADPREF 1 0 :2:0 
+`uc 1 . 1 0 :2:2 
+`uc 1 ADNREF 1 0 :1:4 
+]
+"25868
+[s S1513 . 1 `uc 1 ADPREF0 1 0 :1:0 
+`uc 1 ADPREF1 1 0 :1:1 
+]
+[u S1516 . 1 `S1509 1 . 1 0 `S1513 1 . 1 0 ]
+[v _ADREFbits ADREFbits `VES1516  1 e 1 @3928 ]
+"26272
+[v _ADPCH ADPCH `VEuc  1 e 1 @3935 ]
+[s S1528 . 1 `uc 1 ADGO 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 ADFM 1 0 :1:2 
+`uc 1 . 1 0 :1:3 
+`uc 1 ADCS 1 0 :1:4 
+`uc 1 . 1 0 :1:5 
+`uc 1 ADCONT 1 0 :1:6 
+`uc 1 ADON 1 0 :1:7 
+]
+"26365
+[s S1537 . 1 `uc 1 GO 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 ADFM0 1 0 :1:2 
+]
+[s S1541 . 1 `uc 1 DONE 1 0 :1:0 
+]
+[s S1543 . 1 `uc 1 GO_NOT_DONE 1 0 :1:0 
+]
+[s S1545 . 1 `uc 1 GO_nDONE 1 0 :1:0 
+]
+[s S1547 . 1 `uc 1 . 1 0 :7:0 
+`uc 1 ADCAL 1 0 :1:7 
+]
+[u S1550 . 1 `S1528 1 . 1 0 `S1537 1 . 1 0 `S1541 1 . 1 0 `S1543 1 . 1 0 `S1545 1 . 1 0 `S1547 1 . 1 0 ]
+[v _ADCON0bits ADCON0bits `VES1550  1 e 1 @3936 ]
+"26649
+[v _ADRESH ADRESH `VEuc  1 e 1 @3940 ]
+[s S420 . 1 `uc 1 LATA0 1 0 :1:0 
 `uc 1 LATA1 1 0 :1:1 
 `uc 1 LATA2 1 0 :1:2 
 `uc 1 LATA3 1 0 :1:3 
@@ -319,7 +449,7 @@
 `uc 1 LATA7 1 0 :1:7 
 ]
 "28172
-[s S363 . 1 `uc 1 LA0 1 0 :1:0 
+[s S429 . 1 `uc 1 LA0 1 0 :1:0 
 `uc 1 LA1 1 0 :1:1 
 `uc 1 LA2 1 0 :1:2 
 `uc 1 LA3 1 0 :1:3 
@@ -328,9 +458,30 @@
 `uc 1 LA6 1 0 :1:6 
 `uc 1 LA7 1 0 :1:7 
 ]
-[u S372 . 1 `S354 1 . 1 0 `S363 1 . 1 0 ]
-[v _LATAbits LATAbits `VES372  1 e 1 @3961 ]
-[s S97 . 1 `uc 1 LATD0 1 0 :1:0 
+[u S438 . 1 `S420 1 . 1 0 `S429 1 . 1 0 ]
+[v _LATAbits LATAbits `VES438  1 e 1 @3961 ]
+[s S1691 . 1 `uc 1 LATC0 1 0 :1:0 
+`uc 1 LATC1 1 0 :1:1 
+`uc 1 LATC2 1 0 :1:2 
+`uc 1 LATC3 1 0 :1:3 
+`uc 1 LATC4 1 0 :1:4 
+`uc 1 LATC5 1 0 :1:5 
+`uc 1 LATC6 1 0 :1:6 
+`uc 1 LATC7 1 0 :1:7 
+]
+"28396
+[s S1700 . 1 `uc 1 LC0 1 0 :1:0 
+`uc 1 LC1 1 0 :1:1 
+`uc 1 LC2 1 0 :1:2 
+`uc 1 LC3 1 0 :1:3 
+`uc 1 LC4 1 0 :1:4 
+`uc 1 LC5 1 0 :1:5 
+`uc 1 LC6 1 0 :1:6 
+`uc 1 LC7 1 0 :1:7 
+]
+[u S1709 . 1 `S1691 1 . 1 0 `S1700 1 . 1 0 ]
+[v _LATCbits LATCbits `VES1709  1 e 1 @3963 ]
+[s S96 . 1 `uc 1 LATD0 1 0 :1:0 
 `uc 1 LATD1 1 0 :1:1 
 `uc 1 LATD2 1 0 :1:2 
 `uc 1 LATD3 1 0 :1:3 
@@ -340,7 +491,7 @@
 `uc 1 LATD7 1 0 :1:7 
 ]
 "28508
-[s S106 . 1 `uc 1 LD0 1 0 :1:0 
+[s S105 . 1 `uc 1 LD0 1 0 :1:0 
 `uc 1 LD1 1 0 :1:1 
 `uc 1 LD2 1 0 :1:2 
 `uc 1 LD3 1 0 :1:3 
@@ -349,9 +500,9 @@
 `uc 1 LD6 1 0 :1:6 
 `uc 1 LD7 1 0 :1:7 
 ]
-[u S115 . 1 `S97 1 . 1 0 `S106 1 . 1 0 ]
-[v _LATDbits LATDbits `VES115  1 e 1 @3964 ]
-[s S314 . 1 `uc 1 LATE0 1 0 :1:0 
+[u S114 . 1 `S96 1 . 1 0 `S105 1 . 1 0 ]
+[v _LATDbits LATDbits `VES114  1 e 1 @3964 ]
+[s S380 . 1 `uc 1 LATE0 1 0 :1:0 
 `uc 1 LATE1 1 0 :1:1 
 `uc 1 LATE2 1 0 :1:2 
 `uc 1 LATE3 1 0 :1:3 
@@ -361,7 +512,7 @@
 `uc 1 LATE7 1 0 :1:7 
 ]
 "28620
-[s S323 . 1 `uc 1 LE0 1 0 :1:0 
+[s S389 . 1 `uc 1 LE0 1 0 :1:0 
 `uc 1 LE1 1 0 :1:1 
 `uc 1 LE2 1 0 :1:2 
 `uc 1 LE3 1 0 :1:3 
@@ -370,9 +521,9 @@
 `uc 1 LE6 1 0 :1:6 
 `uc 1 LE7 1 0 :1:7 
 ]
-[u S332 . 1 `S314 1 . 1 0 `S323 1 . 1 0 ]
-[v _LATEbits LATEbits `VES332  1 e 1 @3965 ]
-[s S805 . 1 `uc 1 LATF0 1 0 :1:0 
+[u S398 . 1 `S380 1 . 1 0 `S389 1 . 1 0 ]
+[v _LATEbits LATEbits `VES398  1 e 1 @3965 ]
+[s S871 . 1 `uc 1 LATF0 1 0 :1:0 
 `uc 1 LATF1 1 0 :1:1 
 `uc 1 LATF2 1 0 :1:2 
 `uc 1 LATF3 1 0 :1:3 
@@ -382,7 +533,7 @@
 `uc 1 LATF7 1 0 :1:7 
 ]
 "28732
-[s S814 . 1 `uc 1 LF0 1 0 :1:0 
+[s S880 . 1 `uc 1 LF0 1 0 :1:0 
 `uc 1 LF1 1 0 :1:1 
 `uc 1 LF2 1 0 :1:2 
 `uc 1 LF3 1 0 :1:3 
@@ -391,9 +542,9 @@
 `uc 1 LF6 1 0 :1:6 
 `uc 1 LF7 1 0 :1:7 
 ]
-[u S823 . 1 `S805 1 . 1 0 `S814 1 . 1 0 ]
-[v _LATFbits LATFbits `VES823  1 e 1 @3966 ]
-[s S280 . 1 `uc 1 LATG0 1 0 :1:0 
+[u S889 . 1 `S871 1 . 1 0 `S880 1 . 1 0 ]
+[v _LATFbits LATFbits `VES889  1 e 1 @3966 ]
+[s S346 . 1 `uc 1 LATG0 1 0 :1:0 
 `uc 1 LATG1 1 0 :1:1 
 `uc 1 LATG2 1 0 :1:2 
 `uc 1 LATG3 1 0 :1:3 
@@ -403,40 +554,40 @@
 `uc 1 LATG7 1 0 :1:7 
 ]
 "28841
-[s S289 . 1 `uc 1 LG0 1 0 :1:0 
+[s S355 . 1 `uc 1 LG0 1 0 :1:0 
 `uc 1 LG1 1 0 :1:1 
 `uc 1 LG2 1 0 :1:2 
 `uc 1 LG3 1 0 :1:3 
 `uc 1 LG4 1 0 :1:4 
 ]
-[u S295 . 1 `S280 1 . 1 0 `S289 1 . 1 0 ]
-[v _LATGbits LATGbits `VES295  1 e 1 @3967 ]
-[s S45 . 1 `uc 1 LATH0 1 0 :1:0 
+[u S361 . 1 `S346 1 . 1 0 `S355 1 . 1 0 ]
+[v _LATGbits LATGbits `VES361  1 e 1 @3967 ]
+[s S136 . 1 `uc 1 LATH0 1 0 :1:0 
 `uc 1 LATH1 1 0 :1:1 
 `uc 1 LATH2 1 0 :1:2 
 `uc 1 LATH3 1 0 :1:3 
 ]
 "28941
-[s S50 . 1 `uc 1 LH0 1 0 :1:0 
+[s S141 . 1 `uc 1 LH0 1 0 :1:0 
 `uc 1 LH1 1 0 :1:1 
 `uc 1 LH2 1 0 :1:2 
 `uc 1 LH3 1 0 :1:3 
 ]
-[s S55 . 1 `uc 1 . 1 0 :4:0 
+[s S146 . 1 `uc 1 . 1 0 :4:0 
 `uc 1 LH4 1 0 :1:4 
 ]
-[s S58 . 1 `uc 1 . 1 0 :5:0 
+[s S149 . 1 `uc 1 . 1 0 :5:0 
 `uc 1 LH5 1 0 :1:5 
 ]
-[s S61 . 1 `uc 1 . 1 0 :6:0 
+[s S152 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 LH6 1 0 :1:6 
 ]
-[s S64 . 1 `uc 1 . 1 0 :7:0 
+[s S155 . 1 `uc 1 . 1 0 :7:0 
 `uc 1 LH7 1 0 :1:7 
 ]
-[u S67 . 1 `S45 1 . 1 0 `S50 1 . 1 0 `S55 1 . 1 0 `S58 1 . 1 0 `S61 1 . 1 0 `S64 1 . 1 0 ]
-[v _LATHbits LATHbits `VES67  1 e 1 @3968 ]
-[s S950 . 1 `uc 1 TRISA0 1 0 :1:0 
+[u S158 . 1 `S136 1 . 1 0 `S141 1 . 1 0 `S146 1 . 1 0 `S149 1 . 1 0 `S152 1 . 1 0 `S155 1 . 1 0 ]
+[v _LATHbits LATHbits `VES158  1 e 1 @3968 ]
+[s S1016 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
 `uc 1 TRISA3 1 0 :1:3 
@@ -446,9 +597,9 @@
 `uc 1 TRISA7 1 0 :1:7 
 ]
 "29028
-[u S959 . 1 `S950 1 . 1 0 ]
-[v _TRISAbits TRISAbits `VES959  1 e 1 @3969 ]
-[s S1024 . 1 `uc 1 TRISB0 1 0 :1:0 
+[u S1025 . 1 `S1016 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES1025  1 e 1 @3969 ]
+[s S1090 . 1 `uc 1 TRISB0 1 0 :1:0 
 `uc 1 TRISB1 1 0 :1:1 
 `uc 1 TRISB2 1 0 :1:2 
 `uc 1 TRISB3 1 0 :1:3 
@@ -458,9 +609,21 @@
 `uc 1 TRISB7 1 0 :1:7 
 ]
 "29150
-[u S1033 . 1 `S1024 1 . 1 0 ]
-[v _TRISBbits TRISBbits `VES1033  1 e 1 @3970 ]
-[s S508 . 1 `uc 1 TRISD0 1 0 :1:0 
+[u S1099 . 1 `S1090 1 . 1 0 ]
+[v _TRISBbits TRISBbits `VES1099  1 e 1 @3970 ]
+[s S1731 . 1 `uc 1 TRISC0 1 0 :1:0 
+`uc 1 TRISC1 1 0 :1:1 
+`uc 1 TRISC2 1 0 :1:2 
+`uc 1 TRISC3 1 0 :1:3 
+`uc 1 TRISC4 1 0 :1:4 
+`uc 1 TRISC5 1 0 :1:5 
+`uc 1 TRISC6 1 0 :1:6 
+`uc 1 TRISC7 1 0 :1:7 
+]
+"29272
+[u S1740 . 1 `S1731 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES1740  1 e 1 @3971 ]
+[s S574 . 1 `uc 1 TRISD0 1 0 :1:0 
 `uc 1 TRISD1 1 0 :1:1 
 `uc 1 TRISD2 1 0 :1:2 
 `uc 1 TRISD3 1 0 :1:3 
@@ -470,9 +633,9 @@
 `uc 1 TRISD7 1 0 :1:7 
 ]
 "29394
-[u S517 . 1 `S508 1 . 1 0 ]
-[v _TRISDbits TRISDbits `VES517  1 e 1 @3972 ]
-[s S907 . 1 `uc 1 TRISE0 1 0 :1:0 
+[u S583 . 1 `S574 1 . 1 0 ]
+[v _TRISDbits TRISDbits `VES583  1 e 1 @3972 ]
+[s S973 . 1 `uc 1 TRISE0 1 0 :1:0 
 `uc 1 TRISE1 1 0 :1:1 
 `uc 1 TRISE2 1 0 :1:2 
 `uc 1 TRISE3 1 0 :1:3 
@@ -482,9 +645,9 @@
 `uc 1 TRISE7 1 0 :1:7 
 ]
 "29516
-[u S916 . 1 `S907 1 . 1 0 ]
-[v _TRISEbits TRISEbits `VES916  1 e 1 @3973 ]
-[s S751 . 1 `uc 1 TRISF0 1 0 :1:0 
+[u S982 . 1 `S973 1 . 1 0 ]
+[v _TRISEbits TRISEbits `VES982  1 e 1 @3973 ]
+[s S817 . 1 `uc 1 TRISF0 1 0 :1:0 
 `uc 1 TRISF1 1 0 :1:1 
 `uc 1 TRISF2 1 0 :1:2 
 `uc 1 TRISF3 1 0 :1:3 
@@ -494,9 +657,9 @@
 `uc 1 TRISF7 1 0 :1:7 
 ]
 "29633
-[u S760 . 1 `S751 1 . 1 0 ]
-[v _TRISFbits TRISFbits `VES760  1 e 1 @3974 ]
-[s S864 . 1 `uc 1 TRISG0 1 0 :1:0 
+[u S826 . 1 `S817 1 . 1 0 ]
+[v _TRISFbits TRISFbits `VES826  1 e 1 @3974 ]
+[s S930 . 1 `uc 1 TRISG0 1 0 :1:0 
 `uc 1 TRISG1 1 0 :1:1 
 `uc 1 TRISG2 1 0 :1:2 
 `uc 1 TRISG3 1 0 :1:3 
@@ -506,17 +669,17 @@
 `uc 1 TRISG7 1 0 :1:7 
 ]
 "29695
-[u S873 . 1 `S864 1 . 1 0 ]
-[v _TRISGbits TRISGbits `VES873  1 e 1 @3975 ]
-[s S738 . 1 `uc 1 TRISH0 1 0 :1:0 
+[u S939 . 1 `S930 1 . 1 0 ]
+[v _TRISGbits TRISGbits `VES939  1 e 1 @3975 ]
+[s S804 . 1 `uc 1 TRISH0 1 0 :1:0 
 `uc 1 TRISH1 1 0 :1:1 
 `uc 1 TRISH2 1 0 :1:2 
 `uc 1 TRISH3 1 0 :1:3 
 ]
 "29748
-[u S743 . 1 `S738 1 . 1 0 ]
-[v _TRISHbits TRISHbits `VES743  1 e 1 @3976 ]
-[s S142 . 1 `uc 1 RF0 1 0 :1:0 
+[u S809 . 1 `S804 1 . 1 0 ]
+[v _TRISHbits TRISHbits `VES809  1 e 1 @3976 ]
+[s S66 . 1 `uc 1 RF0 1 0 :1:0 
 `uc 1 RF1 1 0 :1:1 
 `uc 1 RF2 1 0 :1:2 
 `uc 1 RF3 1 0 :1:3 
@@ -526,13 +689,172 @@
 `uc 1 RF7 1 0 :1:7 
 ]
 "30278
-[s S151 . 1 `uc 1 . 1 0 :1:0 
+[s S75 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 C2OUTF 1 0 :1:1 
 `uc 1 C1OUTF 1 0 :1:2 
 ]
-[u S155 . 1 `S142 1 . 1 0 `S151 1 . 1 0 ]
-[v _PORTFbits PORTFbits `VES155  1 e 1 @3982 ]
-[s S1100 . 1 `uc 1 INT0EDG 1 0 :1:0 
+[u S79 . 1 `S66 1 . 1 0 `S75 1 . 1 0 ]
+[v _PORTFbits PORTFbits `VES79  1 e 1 @3982 ]
+"33876
+[v _CCPR2H CCPR2H `VEuc  1 e 1 @4006 ]
+[s S1964 . 1 `uc 1 MODE 1 0 :4:0 
+`uc 1 FMT 1 0 :1:4 
+`uc 1 OUT 1 0 :1:5 
+`uc 1 . 1 0 :1:6 
+`uc 1 EN 1 0 :1:7 
+]
+"33929
+"33929
+[s S2032 . 1 `uc 1 CCP2MODE 1 0 :4:0 
+`uc 1 CCP2FMT 1 0 :1:4 
+`uc 1 CCP2OUT 1 0 :1:5 
+`uc 1 . 1 0 :1:6 
+`uc 1 CCP2EN 1 0 :1:7 
+]
+"33929
+[s S2038 . 1 `uc 1 CCP2MODE0 1 0 :1:0 
+`uc 1 CCP2MODE1 1 0 :1:1 
+`uc 1 CCP2MODE2 1 0 :1:2 
+`uc 1 CCP2MODE3 1 0 :1:3 
+]
+"33929
+[u S2043 . 1 `S1964 1 . 1 0 `S1970 1 . 1 0 `S2032 1 . 1 0 `S2038 1 . 1 0 ]
+"33929
+"33929
+[v _CCP2CONbits CCP2CONbits `VES2043  1 e 1 @4007 ]
+"34097
+[v _CCPR1H CCPR1H `VEuc  1 e 1 @4010 ]
+"34154
+"34154
+[s S1975 . 1 `uc 1 CCP1MODE 1 0 :4:0 
+`uc 1 CCP1FMT 1 0 :1:4 
+`uc 1 CCP1OUT 1 0 :1:5 
+`uc 1 . 1 0 :1:6 
+`uc 1 CCP1EN 1 0 :1:7 
+]
+"34154
+[s S1981 . 1 `uc 1 CCP1MODE0 1 0 :1:0 
+`uc 1 CCP1MODE1 1 0 :1:1 
+`uc 1 CCP1MODE2 1 0 :1:2 
+`uc 1 CCP1MODE3 1 0 :1:3 
+]
+"34154
+[s S1986 . 1 `uc 1 . 1 0 :7:0 
+`uc 1 P1M1 1 0 :1:7 
+]
+"34154
+[u S1989 . 1 `S1964 1 . 1 0 `S1970 1 . 1 0 `S1975 1 . 1 0 `S1981 1 . 1 0 `S1986 1 . 1 0 ]
+"34154
+"34154
+[v _CCP1CONbits CCP1CONbits `VES1989  1 e 1 @4011 ]
+[s S1932 . 1 `uc 1 C1TSEL0 1 0 :1:0 
+`uc 1 C1TSEL1 1 0 :1:1 
+`uc 1 C2TSEL0 1 0 :1:2 
+`uc 1 C2TSEL1 1 0 :1:3 
+`uc 1 C3TSEL0 1 0 :1:4 
+`uc 1 C3TSEL1 1 0 :1:5 
+`uc 1 C4TSEL0 1 0 :1:6 
+`uc 1 C4TSEL1 1 0 :1:7 
+]
+"34323
+[s S1941 . 1 `uc 1 C1TSEL 1 0 :2:0 
+`uc 1 C2TSEL 1 0 :2:2 
+`uc 1 C3TSEL 1 0 :2:4 
+`uc 1 C4TSEL 1 0 :2:6 
+]
+"34323
+[u S1946 . 1 `S1932 1 . 1 0 `S1941 1 . 1 0 ]
+"34323
+"34323
+[v _CCPTMRS0bits CCPTMRS0bits `VES1946  1 e 1 @4013 ]
+"35596
+[v _T2PR T2PR `VEuc  1 e 1 @4028 ]
+[s S1787 . 1 `uc 1 OUTPS 1 0 :4:0 
+`uc 1 CKPS 1 0 :3:4 
+`uc 1 ON 1 0 :1:7 
+]
+"35686
+[s S1791 . 1 `uc 1 OUTPS0 1 0 :1:0 
+`uc 1 OUTPS1 1 0 :1:1 
+`uc 1 OUTPS2 1 0 :1:2 
+`uc 1 OUTPS3 1 0 :1:3 
+`uc 1 CKPS0 1 0 :1:4 
+`uc 1 CKPS1 1 0 :1:5 
+`uc 1 CKPS2 1 0 :1:6 
+]
+"35686
+[s S1799 . 1 `uc 1 T2OUTPS 1 0 :4:0 
+`uc 1 T2CKPS 1 0 :3:4 
+`uc 1 T2ON 1 0 :1:7 
+]
+"35686
+[s S1803 . 1 `uc 1 T2OUTPS0 1 0 :1:0 
+`uc 1 T2OUTPS1 1 0 :1:1 
+`uc 1 T2OUTPS2 1 0 :1:2 
+`uc 1 T2OUTPS3 1 0 :1:3 
+`uc 1 T2CKPS0 1 0 :1:4 
+`uc 1 T2CKPS1 1 0 :1:5 
+`uc 1 T2CKPS2 1 0 :1:6 
+`uc 1 TMR2ON 1 0 :1:7 
+]
+"35686
+[u S1812 . 1 `S1787 1 . 1 0 `S1791 1 . 1 0 `S1799 1 . 1 0 `S1803 1 . 1 0 ]
+"35686
+"35686
+[v _T2CONbits T2CONbits `VES1812  1 e 1 @4029 ]
+[s S1843 . 1 `uc 1 MODE 1 0 :5:0 
+`uc 1 CKSYNC 1 0 :1:5 
+`uc 1 CKPOL 1 0 :1:6 
+`uc 1 PSYNC 1 0 :1:7 
+]
+"35829
+[s S1848 . 1 `uc 1 MODE0 1 0 :1:0 
+`uc 1 MODE1 1 0 :1:1 
+`uc 1 MODE2 1 0 :1:2 
+`uc 1 MODE3 1 0 :1:3 
+`uc 1 MODE4 1 0 :1:4 
+]
+"35829
+[s S1854 . 1 `uc 1 T2MODE 1 0 :5:0 
+`uc 1 T2CKSYNC 1 0 :1:5 
+`uc 1 T2CKPOL 1 0 :1:6 
+`uc 1 T2PSYNC 1 0 :1:7 
+]
+"35829
+[s S1859 . 1 `uc 1 T2MODE0 1 0 :1:0 
+`uc 1 T2MODE1 1 0 :1:1 
+`uc 1 T2MODE2 1 0 :1:2 
+`uc 1 T2MODE3 1 0 :1:3 
+`uc 1 T2MODE4 1 0 :1:4 
+]
+"35829
+[u S1865 . 1 `S1843 1 . 1 0 `S1848 1 . 1 0 `S1854 1 . 1 0 `S1859 1 . 1 0 ]
+"35829
+"35829
+[v _T2HLTbits T2HLTbits `VES1865  1 e 1 @4030 ]
+[s S1893 . 1 `uc 1 CS 1 0 :4:0 
+]
+"35949
+[s S1895 . 1 `uc 1 CS0 1 0 :1:0 
+`uc 1 CS1 1 0 :1:1 
+`uc 1 CS2 1 0 :1:2 
+`uc 1 CS3 1 0 :1:3 
+]
+"35949
+[s S1900 . 1 `uc 1 T2CS 1 0 :4:0 
+]
+"35949
+[s S1902 . 1 `uc 1 T2CS0 1 0 :1:0 
+`uc 1 T2CS1 1 0 :1:1 
+`uc 1 T2CS2 1 0 :1:2 
+`uc 1 T2CS3 1 0 :1:3 
+]
+"35949
+[u S1907 . 1 `S1893 1 . 1 0 `S1895 1 . 1 0 `S1900 1 . 1 0 `S1902 1 . 1 0 ]
+"35949
+"35949
+[v _T2CLKCONbits T2CLKCONbits `VES1907  1 e 1 @4031 ]
+[s S1183 . 1 `uc 1 INT0EDG 1 0 :1:0 
 `uc 1 INT1EDG 1 0 :1:1 
 `uc 1 INT2EDG 1 0 :1:2 
 `uc 1 INT3EDG 1 0 :1:3 
@@ -542,20 +864,20 @@
 `uc 1 GIE_GIEH 1 0 :1:7 
 ]
 "40176
-[s S1109 . 1 `uc 1 . 1 0 :6:0 
+[s S1192 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 PEIE 1 0 :1:6 
 `uc 1 GIE 1 0 :1:7 
 ]
 "40176
-[s S1113 . 1 `uc 1 . 1 0 :6:0 
+[s S1196 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 GIEL 1 0 :1:6 
 `uc 1 GIEH 1 0 :1:7 
 ]
 "40176
-[u S1117 . 1 `S1100 1 . 1 0 `S1109 1 . 1 0 `S1113 1 . 1 0 ]
+[u S1200 . 1 `S1183 1 . 1 0 `S1192 1 . 1 0 `S1196 1 . 1 0 ]
 "40176
 "40176
-[v _INTCONbits INTCONbits `VES1117  1 e 1 @4082 ]
+[v _INTCONbits INTCONbits `VES1200  1 e 1 @4082 ]
 "153 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\doprnt.c
 [v _prec prec `i  1 s 2 prec ]
 [v _width width `i  1 s 2 width ]
@@ -563,16 +885,34 @@
 [v _flags flags `uc  1 s 1 flags ]
 "185
 [v _dbuf dbuf `[32]uc  1 s 32 dbuf ]
-"22 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\main.c
+"23 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"28
-[v main@buf buf `[40]uc  1 a 40 0 ]
-[s S40 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
+"32
+[v main@buf buf `[40]uc  1 a 40 2 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"34
+[v main@motorR motorR `S50  1 a 10 75 ]
+[v main@motorL motorL `S50  1 a 10 65 ]
+[s S45 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
 "30
-[v main@RGBC RGBC `S40  1 a 8 48 ]
-[v main@RGBC_n RGBC_n `S40  1 a 8 40 ]
+[v main@RGBC RGBC `S45  1 a 8 57 ]
+[v main@RGBC_n RGBC_n `S45  1 a 8 49 ]
+"59
+[v main@turnDuration turnDuration `uc  1 a 1 48 ]
+"60
+[v main@turnRamp turnRamp `uc  1 a 1 47 ]
+"58
+[v main@turnSpeed turnSpeed `uc  1 a 1 46 ]
+"31
+[v main@color color `uc  1 a 1 45 ]
 "56
+[v main@reverseDuration reverseDuration `uc  1 a 1 44 ]
+"54
+[v main@straightRamp straightRamp `uc  1 a 1 43 ]
+"53
+[v main@straightSpeed straightSpeed `uc  1 a 1 42 ]
+"96
 } 0
 "40 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\color.c
 [v _white_Light white_Light `(v  1 e 1 0 ]
@@ -586,12 +926,12 @@
 "9 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\nf_sprintf.c
 [v _sprintf sprintf `(i  1 e 2 0 ]
 {
-[u S1830 . 3 `*.2uc 1 buffer 3 0 `*.2Cuc 1 source 3 0 ]
+[u S2927 . 3 `*.2uc 1 buffer 3 0 `*.2Cuc 1 source 3 0 ]
 "13
-[s S1833 _IO_FILE 12 `S1830 1 . 3 0 `i 1 count 2 3 `[3]uc 1 ungetbuf 3 5 `i 1 ungetcnt 2 8 `i 1 limit 2 10 ]
-[v sprintf@f f `S1833  1 a 12 46 ]
+[s S2930 _IO_FILE 12 `S2927 1 . 3 0 `i 1 count 2 3 `[3]uc 1 ungetbuf 3 5 `i 1 ungetcnt 2 8 `i 1 limit 2 10 ]
+[v sprintf@f f `S2930  1 a 12 48 ]
 "12
-[v sprintf@ap ap `[1]*.30v  1 a 1 45 ]
+[v sprintf@ap ap `[1]*.30v  1 a 1 47 ]
 "9
 [v sprintf@s s `*.30uc  1 p 1 29 ]
 [v sprintf@fmt fmt `*.31Cuc  1 p 1 30 ]
@@ -602,9 +942,9 @@
 {
 "1820
 [v vfprintf@cfmt cfmt `*.31uc  1 a 1 28 ]
-[s S1865 _IO_FILE 0 ]
+[s S2962 _IO_FILE 0 ]
 "1817
-[v vfprintf@fp fp `*.30S1865  1 p 1 25 ]
+[v vfprintf@fp fp `*.30S2962  1 p 1 25 ]
 [v vfprintf@fmt fmt `*.31Cuc  1 p 1 26 ]
 [v vfprintf@ap ap `*.30*.30v  1 p 1 27 ]
 "1840
@@ -612,17 +952,17 @@
 "1177
 [v _vfpfcnvrt vfpfcnvrt `(v  1 s 1 vfpfcnvrt ]
 {
-[u S1878 . 4 `i 1 sint 2 0 `ui 1 uint 2 0 `d 1 f 4 0 ]
+[u S2975 . 4 `i 1 sint 2 0 `ui 1 uint 2 0 `d 1 f 4 0 ]
 "1188
-[v vfpfcnvrt@convarg convarg `S1878  1 a 4 20 ]
+[v vfpfcnvrt@convarg convarg `S2975  1 a 4 20 ]
 "1179
 [v vfpfcnvrt@c c `uc  1 a 1 24 ]
 [v vfpfcnvrt@cp cp `*.31uc  1 a 1 19 ]
 "1180
 [v vfpfcnvrt@done done `a  1 a 1 18 ]
-[s S1865 _IO_FILE 0 ]
+[s S2962 _IO_FILE 0 ]
 "1177
-[v vfpfcnvrt@fp fp `*.30S1865  1 p 1 14 ]
+[v vfpfcnvrt@fp fp `*.30S2962  1 p 1 14 ]
 [v vfpfcnvrt@fmt fmt `*.30*.31uc  1 p 1 15 ]
 [v vfpfcnvrt@ap ap `*.30*.30v  1 p 1 16 ]
 "1814
@@ -631,9 +971,9 @@
 [v _fputc fputc `(i  1 e 2 0 ]
 {
 [v fputc@c c `i  1 p 2 4 ]
-[u S1830 . 3 `*.2uc 1 buffer 3 0 `*.2Cuc 1 source 3 0 ]
-[s S1833 _IO_FILE 12 `S1830 1 . 3 0 `i 1 count 2 3 `[3]uc 1 ungetbuf 3 5 `i 1 ungetcnt 2 8 `i 1 limit 2 10 ]
-[v fputc@fp fp `*.30S1833  1 p 1 6 ]
+[u S2927 . 3 `*.2uc 1 buffer 3 0 `*.2Cuc 1 source 3 0 ]
+[s S2930 _IO_FILE 12 `S2927 1 . 3 0 `i 1 count 2 3 `[3]uc 1 ungetbuf 3 5 `i 1 ungetcnt 2 8 `i 1 limit 2 10 ]
+[v fputc@fp fp `*.30S2930  1 p 1 6 ]
 "24
 } 0
 "7 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\putch.c
@@ -658,19 +998,6 @@
 [v ___awmod@divisor divisor `i  1 p 2 6 ]
 "34
 } 0
-"7 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\awdiv.c
-[v ___awdiv __awdiv `(i  1 e 2 0 ]
-{
-"10
-[v ___awdiv@quotient quotient `i  1 a 2 10 ]
-"11
-[v ___awdiv@sign sign `uc  1 a 1 9 ]
-[v ___awdiv@counter counter `uc  1 a 1 8 ]
-"7
-[v ___awdiv@dividend dividend `i  1 p 2 4 ]
-[v ___awdiv@divisor divisor `i  1 p 2 6 ]
-"41
-} 0
 "74 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v _sendTxBuf sendTxBuf `(v  1 e 1 0 ]
 {
@@ -681,16 +1008,68 @@
 {
 "63
 } 0
-"4
+"87 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\dc_motor.c
+[v _move move `(v  1 e 1 0 ]
+{
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+[v move@mL mL `*.30S50  1 p 1 34 ]
+[v move@mR mR `*.30S50  1 p 1 35 ]
+[v move@color color `uc  1 p 1 36 ]
+[v move@straightSpeed straightSpeed `uc  1 p 1 37 ]
+[v move@reverseDuration reverseDuration `uc  1 p 1 38 ]
+[v move@straightRamp straightRamp `uc  1 p 1 39 ]
+[v move@turnSpeed turnSpeed `uc  1 p 1 40 ]
+[v move@turnDuration turnDuration `uc  1 p 1 41 ]
+[v move@turnRamp turnRamp `uc  1 p 1 42 ]
+"160
+} 0
+"263
+[v _reverseOneSquare reverseOneSquare `(v  1 e 1 0 ]
+{
+"268
+[v reverseOneSquare@cur_power cur_power `i  1 a 2 32 ]
+"267
+[v reverseOneSquare@i i `i  1 a 2 30 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"263
+[v reverseOneSquare@mL mL `*.30S50  1 p 1 22 ]
+[v reverseOneSquare@mR mR `*.30S50  1 p 1 23 ]
+[v reverseOneSquare@straightSpeed straightSpeed `uc  1 p 1 24 ]
+[v reverseOneSquare@reverseDuration reverseDuration `uc  1 p 1 25 ]
+[v reverseOneSquare@straightRamp straightRamp `uc  1 p 1 26 ]
+"294
+} 0
+"246
+[v _fullSpeedAhead fullSpeedAhead `(v  1 e 1 0 ]
+{
+"251
+[v fullSpeedAhead@cur_power cur_power `i  1 a 2 31 ]
+"250
+[v fullSpeedAhead@i i `i  1 a 2 29 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"246
+[v fullSpeedAhead@mL mL `*.30S50  1 p 1 22 ]
+[v fullSpeedAhead@mR mR `*.30S50  1 p 1 23 ]
+[v fullSpeedAhead@straightSpeed straightSpeed `uc  1 p 1 24 ]
+[v fullSpeedAhead@straightRamp straightRamp `uc  1 p 1 25 ]
+"261
+} 0
+"4 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v _initUSART4 initUSART4 `(v  1 e 1 0 ]
 {
 "22
 } 0
+"5 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\dc_motor.c
+[v _initDCmotorsPWM initDCmotorsPWM `(v  1 e 1 0 ]
+{
+[v initDCmotorsPWM@PWMperiod PWMperiod `ui  1 p 2 4 ]
+"62
+} 0
 "55 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\color.c
 [v _color_read color_read `(v  1 e 1 0 ]
 {
-[s S40 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
-[v color_read@RGBC RGBC `*.30S40  1 p 1 8 ]
+[s S45 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
+[v color_read@RGBC RGBC `*.30S45  1 p 1 8 ]
 "92
 } 0
 "33 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\i2c.c
@@ -713,9 +1092,9 @@
 "95 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\color.c
 [v _color_normalise color_normalise `(v  1 e 1 0 ]
 {
-[s S40 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
-[v color_normalise@RGBC RGBC `S40  1 p 8 30 ]
-[v color_normalise@RGBC_n RGBC_n `*.30S40  1 p 1 38 ]
+[s S45 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
+[v color_normalise@RGBC RGBC `S45  1 p 8 30 ]
+[v color_normalise@RGBC_n RGBC_n `*.30S45  1 p 1 38 ]
 "117
 } 0
 "15 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\Umul32.c
@@ -746,10 +1125,10 @@
 {
 "121
 [v color_detect@color color `uc  1 a 1 12 ]
-[s S40 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
+[s S45 RGBC_val 8 `ui 1 R 2 0 `ui 1 G 2 2 `ui 1 B 2 4 `ui 1 C 2 6 ]
 "119
-[v color_detect@RGBC_n RGBC_n `S40  1 p 8 4 ]
-"147
+[v color_detect@RGBC_n RGBC_n `S45  1 p 8 4 ]
+"150
 } 0
 "5
 [v _color_click_init color_click_init `(v  1 e 1 0 ]
@@ -794,6 +1173,116 @@
 {
 "20
 } 0
+"296 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\dc_motor.c
+[v _calibration calibration `(v  1 e 1 0 ]
+{
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+[v calibration@mL mL `*.30S50  1 p 1 34 ]
+[v calibration@mR mR `*.30S50  1 p 1 35 ]
+[v calibration@turnSpeed turnSpeed `uc  1 p 1 36 ]
+[v calibration@turnDuration turnDuration `*.30uc  1 p 1 37 ]
+[v calibration@turnRamp turnRamp `uc  1 p 1 38 ]
+"344
+} 0
+"214
+[v _turnRight turnRight `(v  1 e 1 0 ]
+{
+"219
+[v turnRight@cur_power cur_power `i  1 a 2 32 ]
+"218
+[v turnRight@i i `i  1 a 2 30 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"214
+[v turnRight@mL mL `*.30S50  1 p 1 22 ]
+[v turnRight@mR mR `*.30S50  1 p 1 23 ]
+[v turnRight@turnSpeed turnSpeed `uc  1 p 1 24 ]
+[v turnRight@turnDuration turnDuration `uc  1 p 1 25 ]
+[v turnRight@turnRamp turnRamp `uc  1 p 1 26 ]
+"243
+} 0
+"182
+[v _turnLeft turnLeft `(v  1 e 1 0 ]
+{
+"187
+[v turnLeft@cur_power cur_power `i  1 a 2 32 ]
+"186
+[v turnLeft@i i `i  1 a 2 30 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"182
+[v turnLeft@mL mL `*.30S50  1 p 1 22 ]
+[v turnLeft@mR mR `*.30S50  1 p 1 23 ]
+[v turnLeft@turnSpeed turnSpeed `uc  1 p 1 24 ]
+[v turnLeft@turnDuration turnDuration `uc  1 p 1 25 ]
+[v turnLeft@turnRamp turnRamp `uc  1 p 1 26 ]
+"211
+} 0
+"65
+[v _setMotorPWM setMotorPWM `(v  1 e 1 0 ]
+{
+"67
+[v setMotorPWM@negDuty negDuty `uc  1 a 1 21 ]
+[v setMotorPWM@posDuty posDuty `uc  1 a 1 20 ]
+[s S50 DC_motor 10 `uc 1 power 1 0 `uc 1 direction 1 1 `uc 1 brakemode 1 2 `ui 1 PWMperiod 2 3 `*.39uc 1 posDutyHighByte 2 5 `*.39uc 1 negDutyHighByte 2 7 `uc 1 compensation 1 9 ]
+"65
+[v setMotorPWM@m m `*.30S50  1 p 1 17 ]
+"85
+} 0
+"15 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+{
+"17
+[v ___wmul@product product `ui  1 a 2 8 ]
+"15
+[v ___wmul@multiplier multiplier `ui  1 p 2 4 ]
+[v ___wmul@multiplicand multiplicand `ui  1 p 2 6 ]
+"53
+} 0
+"7 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\lwdiv.c
+[v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
+{
+"10
+[v ___lwdiv@quotient quotient `ui  1 a 2 14 ]
+"11
+[v ___lwdiv@counter counter `uc  1 a 1 16 ]
+"7
+[v ___lwdiv@dividend dividend `ui  1 p 2 10 ]
+[v ___lwdiv@divisor divisor `ui  1 p 2 12 ]
+"30
+} 0
+"6 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\battery.c
+[v _batteryLevel batteryLevel `(v  1 e 1 0 ]
+{
+"9
+[v batteryLevel@batteryQuarter batteryQuarter `uc  1 a 1 13 ]
+"8
+[v batteryLevel@batteryVoltage batteryVoltage `uc  1 a 1 12 ]
+"15
+} 0
+"7 C:\Program Files\Microchip\xc8\v2.45\pic\sources\c99\common\awdiv.c
+[v ___awdiv __awdiv `(i  1 e 2 0 ]
+{
+"10
+[v ___awdiv@quotient quotient `i  1 a 2 10 ]
+"11
+[v ___awdiv@sign sign `uc  1 a 1 9 ]
+[v ___awdiv@counter counter `uc  1 a 1 8 ]
+"7
+[v ___awdiv@dividend dividend `i  1 p 2 4 ]
+[v ___awdiv@divisor divisor `i  1 p 2 6 ]
+"41
+} 0
+"9 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\ADC.c
+[v _ADC_init ADC_init `(v  1 e 1 0 ]
+{
+"21
+} 0
+"23
+[v _ADC_getval ADC_getval `(uc  1 e 1 0 ]
+{
+"25
+[v ADC_getval@tmpval tmpval `uc  1 a 1 4 ]
+"36
+} 0
 "66 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v _TxBufferedString TxBufferedString `(v  1 e 1 0 ]
 {
@@ -808,27 +1297,51 @@
 [v putCharToTxBuf@byte byte `uc  1 a 1 4 ]
 "56
 } 0
-"9 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
+"10 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
 [v _Interrupts_init Interrupts_init `(v  1 e 1 0 ]
 {
-"21
+"23
 } 0
 "7 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\buggysetup.c
 [v _Buggy_init Buggy_init `(v  1 e 1 0 ]
 {
 "63
 } 0
-"27 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
+"29 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\interrupts.c
 [v _HighISR HighISR `IIH(v  1 e 1 0 ]
 {
-"49
+"57
 } 0
 "61 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v i2_isDataInTxBuf isDataInTxBuf `(uc  1 e 1 0 ]
 {
 "63
 } 0
-"33
+"45 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\i2c.c
+[v i2_I2C_2_Master_Write I2C_2_Master_Write `(v  1 e 1 0 ]
+{
+[v i2I2C_2_Master_Write@data_byte data_byte `uc  1 a 1 wreg ]
+[v i2I2C_2_Master_Write@data_byte data_byte `uc  1 a 1 wreg ]
+"47
+[v i2I2C_2_Master_Write@data_byte data_byte `uc  1 a 1 1 ]
+"49
+} 0
+"39
+[v i2_I2C_2_Master_Stop I2C_2_Master_Stop `(v  1 e 1 0 ]
+{
+"43
+} 0
+"27
+[v i2_I2C_2_Master_Start I2C_2_Master_Start `(v  1 e 1 0 ]
+{
+"31
+} 0
+"22
+[v i2_I2C_2_Master_Idle I2C_2_Master_Idle `(v  1 e 1 0 ]
+{
+"25
+} 0
+"33 C:\Users\thoma\Documents\GitHub\final-project-kenton-thomas.X\serial.c
 [v _putCharToRxBuf putCharToRxBuf `(v  1 e 1 0 ]
 {
 [v putCharToRxBuf@byte byte `uc  1 a 1 wreg ]

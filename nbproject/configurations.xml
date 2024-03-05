@@ -24,6 +24,12 @@
       <itemPath>serial.c</itemPath>
       <itemPath>serial.h</itemPath>
       <itemPath>calibration.c</itemPath>
+      <itemPath>ADC.c</itemPath>
+      <itemPath>ADC.h</itemPath>
+      <itemPath>battery.c</itemPath>
+      <itemPath>battery.h</itemPath>
+      <itemPath>dc_motor.c</itemPath>
+      <itemPath>dc_motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -4,4 +4,6 @@ serial.h  \
 interrupts.h  \
 color.h  \
 i2c.h  \
-buggysetup.h 
+buggysetup.h  \
+dc_motor.h  \
+battery.h 

@@ -24395,6 +24395,47 @@ unsigned char I2C_2_Master_Read(unsigned char ack);
 void Buggy_init(void);
 # 15 "main.c" 2
 
+# 1 "./dc_motor.h" 1
+
+
+
+
+
+
+
+typedef struct DC_motor {
+    char power;
+    char direction;
+    char brakemode;
+    unsigned int PWMperiod;
+    unsigned char *posDutyHighByte;
+    unsigned char *negDutyHighByte;
+    char compensation;
+} DC_motor;
+
+
+void initDCmotorsPWM(unsigned int PWMperiod);
+void setMotorPWM(DC_motor *m);
+void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
+void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
+void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
+# 16 "main.c" 2
+
+# 1 "./battery.h" 1
+
+
+
+
+
+
+
+
+void batteryLevel(void);
+# 17 "main.c" 2
 
 
 
@@ -24406,13 +24447,51 @@ void main(void){
     color_click_init();
     initUSART4();
     Interrupts_init();
+    unsigned int PWMcycle = 199;
+    initDCmotorsPWM(PWMcycle);
+    struct RGBC_val RGBC, RGBC_n;
     unsigned char color;
     char buf[40] = {0};
 
-    struct RGBC_val RGBC, RGBC_n;
+    struct DC_motor motorL, motorR;
 
+    motorL.power=0;
+    motorL.direction=1;
+    motorL.brakemode=1;
+    motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
+    motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
+    motorL.PWMperiod=PWMcycle;
+    motorL.compensation=3;
+
+    motorR.power=0;
+    motorR.direction=1;
+    motorR.brakemode=1;
+    motorR.posDutyHighByte=(unsigned char *)(&CCPR3H);
+    motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);
+    motorR.PWMperiod=PWMcycle;
+    motorR.compensation=0;
+
+
+    char straightSpeed=60;
+    unsigned char straightRamp=2;
+
+    unsigned char reverseDuration=10;
+
+    char turnSpeed=21;
+    unsigned char turnDuration=10;
+    unsigned char turnRamp=4;
+
+
+    batteryLevel();
+
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
     LATHbits.LATH1=LATDbits.LATD3=1;
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+
+    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
 
 
     white_Light(1);
@@ -24423,8 +24502,9 @@ void main(void){
         color_read(&RGBC);
         color_normalise(RGBC, &RGBC_n);
         color = color_detect(RGBC_n);
+        move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
         sendTxBuf();
         TxBufferedString(buf);
         sendTxBuf();
