@@ -24445,13 +24445,14 @@ void batteryLevel(void);
 void main(void){
     Buggy_init();
     color_click_init();
-    initUSART4();
     Interrupts_init();
+    initUSART4();
+    char buf[40] = {0};
     unsigned int PWMcycle = 199;
     initDCmotorsPWM(PWMcycle);
     struct RGBC_val RGBC, RGBC_n;
     unsigned char color;
-    char buf[40] = {0};
+
 
     struct DC_motor motorL, motorR;
 
@@ -24472,7 +24473,7 @@ void main(void){
     motorR.compensation=0;
 
 
-    char straightSpeed=60;
+    char straightSpeed=50;
     unsigned char straightRamp=2;
 
     unsigned char reverseDuration=10;
@@ -24487,32 +24488,60 @@ void main(void){
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-
+# 90 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
+    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
 
+
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    unsigned int ambient;
+    color_read(&RGBC);
+    ambient=RGBC.C;
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
 
     white_Light(1);
 
+    fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+
     while(1) {
-        while (PORTFbits.RF2);
-
         color_read(&RGBC);
-        color_normalise(RGBC, &RGBC_n);
-        color = color_detect(RGBC_n);
-        move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
-        sendTxBuf();
-        TxBufferedString(buf);
-        sendTxBuf();
-        TxBufferedString("");
-        _delay((unsigned long)((300)*(64000000/4000.0)));
+        if (RGBC.C < ambient-40 || RGBC.C > ambient+40 ){
+            stop(&motorL, &motorR, straightRamp);
+            color_read(&RGBC);
+            color_normalise(RGBC, &RGBC_n);
+            color = color_detect(RGBC_n);
+            if (color !=0){
+                move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            }
 
+
+
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+            sendTxBuf();
+            TxBufferedString(buf);
+            sendTxBuf();
+            TxBufferedString("");
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+        }
+
+        else {
+            color_read(&RGBC);
+            LATDbits.LATD7 = !LATDbits.LATD7;
+
+
+            color_normalise(RGBC, &RGBC_n);
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+            sendTxBuf();
+            TxBufferedString(buf);
+            sendTxBuf();
+            TxBufferedString("");
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+        }
     }
-
-
 
 }

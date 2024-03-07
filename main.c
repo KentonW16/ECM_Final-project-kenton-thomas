@@ -23,13 +23,14 @@
 void main(void){
     Buggy_init();
     color_click_init();
-    initUSART4();
     Interrupts_init();
+    initUSART4();
+    char buf[40] = {0};
     unsigned int PWMcycle = 199;
     initDCmotorsPWM(PWMcycle);
     struct RGBC_val RGBC, RGBC_n;
     unsigned char color;
-    char buf[40] = {0};
+    
     
     struct DC_motor motorL, motorR; 		//declare two DC_motor structures 
 
@@ -50,7 +51,7 @@ void main(void){
     motorR.compensation=0;                  //right motor run at lower power
     
     //calibration parameters for motor control
-    char straightSpeed=60;             //maximum power
+    char straightSpeed=50;             //maximum power
     unsigned char straightRamp=2;      //time between each power step
     
     unsigned char reverseDuration=10;  //adjust to length of one square
@@ -64,33 +65,81 @@ void main(void){
     
     //wait for button press
     while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off
+    LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off 
+    
+    // Calibration mode, getting values through serial connection
+    /*
+    while (1){
+        while (!PORTFbits.RF2){
+            LATHbits.LATH1=LATDbits.LATD3=1;
+            white_Light(1);
+            color_read(&RGBC);              //read RGBC values
+            color_normalise(RGBC, &RGBC_n); //normalise RGB values
+            color = color_detect(RGBC_n);
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+            sendTxBuf();
+            TxBufferedString(buf); //send string to PC
+            sendTxBuf();
+            TxBufferedString(""); 
+            __delay_ms(300);
+            }
+    }
+    */
+    
     // Turn on bright headlights to show buggy is on
     LATHbits.LATH1=LATDbits.LATD3=1;
     __delay_ms(500);
     
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
+    // Calibrate to ambient light
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on 
+    __delay_ms(500);
+    unsigned int ambient;
+    color_read(&RGBC);
+    ambient=RGBC.C;
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    
     // Turn on white LED on color click 
     white_Light(1);
     
+    fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+    
     while(1) {
-        while (PORTFbits.RF2);          //read RGBC and send to PC on button press
+        color_read(&RGBC);
 
-        color_read(&RGBC);              //read RGBC values
-        color_normalise(RGBC, &RGBC_n); //normalise RGB values
-        color = color_detect(RGBC_n);
-        move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+        if (RGBC.C < ambient-40 || RGBC.C > ambient+40 ){ //Adjust range to ambient light value
+            stop(&motorL, &motorR, straightRamp);
+            color_read(&RGBC);              //read RGBC values
+            color_normalise(RGBC, &RGBC_n); //normalise RGB values
+            color = color_detect(RGBC_n);
+            if (color !=0){
+                move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            }
+   
+
+            // Display value on serial monitor for debugging
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+            sendTxBuf();
+            TxBufferedString(buf); //send string to PC
+            sendTxBuf();
+            TxBufferedString(""); 
+            __delay_ms(300);
+        }
         
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
-        sendTxBuf();
-        TxBufferedString(buf); //send string to PC
-        sendTxBuf();
-        TxBufferedString(""); 
-        __delay_ms(300);
-        
+        else {
+            color_read(&RGBC);
+            LATDbits.LATD7 = !LATDbits.LATD7;
+            
+            // Display value on serial monitor for debugging
+            color_normalise(RGBC, &RGBC_n); //normalise RGB values
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+            sendTxBuf();
+            TxBufferedString(buf); //send string to PC
+            sendTxBuf();
+            TxBufferedString(""); 
+            __delay_ms(300);
+        }
     }
-    
-    
-    
+ 
 }

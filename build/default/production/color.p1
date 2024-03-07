@@ -2322,8 +2322,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _color `uc ~T0 @X0 1 a ]
 [e = _color -> -> 0 `i `uc ]
 "122
-[; ;color.c: 122:     if (RGBC_n.R > 550) {
-[e $ ! > . _RGBC_n 0 -> -> 550 `i `ui 2024  ]
+[; ;color.c: 122:     if (RGBC_n.R > 560) {
+[e $ ! > . _RGBC_n 0 -> -> 560 `i `ui 2024  ]
 {
 "123
 [; ;color.c: 123:         color = 1;
@@ -2345,9 +2345,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2027  ]
 "128
-[; ;color.c: 128:     else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
+[; ;color.c: 128:     else if (RGBC_n.B > 230) {
 [e :U 2026 ]
-[e $ ! && > . _RGBC_n 2 -> -> 220 `i `ui < . _RGBC_n 3 -> -> 800 `i `ui 2028  ]
+[e $ ! > . _RGBC_n 2 -> -> 230 `i `ui 2028  ]
 {
 "129
 [; ;color.c: 129:         color = 3;

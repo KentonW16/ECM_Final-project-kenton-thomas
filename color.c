@@ -119,13 +119,13 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 550) { // red
+    if (RGBC_n.R > 560) { // red
         color = 1;
     }
     else if (RGBC_n.G > 290) { // green
         color = 2;
     }
-    else if (RGBC_n.B > 220 && RGBC_n.C < 800) { // blue
+    else if (RGBC_n.B > 230) { // blue
         color = 3;
     }
     

@@ -24445,13 +24445,14 @@ void batteryLevel(void);
 void main(void){
     Buggy_init();
     color_click_init();
-    initUSART4();
     Interrupts_init();
+    initUSART4();
+    char buf[40] = {0};
     unsigned int PWMcycle = 199;
     initDCmotorsPWM(PWMcycle);
     struct RGBC_val RGBC, RGBC_n;
     unsigned char color;
-    char buf[40] = {0};
+
 
     struct DC_motor motorL, motorR;
 
@@ -24472,7 +24473,7 @@ void main(void){
     motorR.compensation=0;
 
 
-    char straightSpeed=60;
+    char straightSpeed=50;
     unsigned char straightRamp=2;
 
     unsigned char reverseDuration=10;
@@ -24487,18 +24488,33 @@ void main(void){
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-
+# 90 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
-    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+
+
+
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    unsigned int ambient;
+    color_read(&RGBC);
+    ambient=RGBC.C;
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
 
     white_Light(1);
 
-    while(1) {
-        while (PORTFbits.RF2);
+    fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
 
+    while(1) {
+        while (ambient-1< RGBC.C < ambient+1 ){
+            color_read(&RGBC);
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+            LATDbits.LATD7 = !LATDbits.LATD7;
+        }
+        LATHbits.LATH3 = 1;
+        stop(&motorL, &motorR, straightRamp);
         color_read(&RGBC);
         color_normalise(RGBC, &RGBC_n);
         color = color_detect(RGBC_n);
