@@ -2,8 +2,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "13 ./i2c.h
 [; ;./i2c.h: 13: void I2C_2_Master_Init(void);
 [v _I2C_2_Master_Init `(v ~T0 @X0 0 ef ]
-"27 ./color.h
-[; ;./color.h: 27: void color_writetoaddr(char address, char value);
+"33 ./color.h
+[; ;./color.h: 33: void color_writetoaddr(char address, char value);
 [v _color_writetoaddr `(v ~T0 @X0 0 ef2`uc`uc ]
 [v F205 `(v ~T0 @X0 1 tf1`ul ]
 "20 C:\Program Files\Microchip\xc8\v2.45\pic\include\builtins.h
@@ -2087,7 +2087,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e ( _color_writetoaddr (2 , -> -> 4 `i `uc -> -> 0 `i `uc ]
 "27
 [; ;color.c: 27: }
-[e :UE 2016 ]
+[e :UE 2017 ]
 }
 "31
 [; ;color.c: 31: void color_writetoaddr(char address, char value){
@@ -2114,7 +2114,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e ( _I2C_2_Master_Stop ..  ]
 "37
 [; ;color.c: 37: }
-[e :UE 2017 ]
+[e :UE 2018 ]
 }
 "40
 [; ;color.c: 40: void white_Light(char state)
@@ -2131,7 +2131,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [f ]
 "42
 [; ;color.c: 42:     if (state){
-[e $ ! != -> _state `i -> 0 `i 2019  ]
+[e $ ! != -> _state `i -> 0 `i 2020  ]
 {
 "43
 [; ;color.c: 43:         LATGbits.LATG0 = 1;
@@ -2145,10 +2145,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 "46
 [; ;color.c: 46:     }
 }
-[e $U 2020  ]
+[e $U 2021  ]
 "47
 [; ;color.c: 47:     else {
-[e :U 2019 ]
+[e :U 2020 ]
 {
 "48
 [; ;color.c: 48:         LATGbits.LATG0 = 0;
@@ -2162,10 +2162,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 "51
 [; ;color.c: 51:     }
 }
-[e :U 2020 ]
+[e :U 2021 ]
 "52
 [; ;color.c: 52: }
-[e :UE 2018 ]
+[e :UE 2019 ]
 }
 "55
 [; ;color.c: 55: void color_read(RGBC_val *RGBC)
@@ -2278,7 +2278,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e ( _I2C_2_Master_Stop ..  ]
 "92
 [; ;color.c: 92: }
-[e :UE 2021 ]
+[e :UE 2022 ]
 }
 "95
 [; ;color.c: 95: void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
@@ -2302,7 +2302,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e = . *U _RGBC_n 2 -> / * -> 1000 `l -> . _RGBC 2 `l -> + + . _RGBC 0 . _RGBC 1 . _RGBC 2 `l `ui ]
 "117
 [; ;color.c: 117: }
-[e :UE 2022 ]
+[e :UE 2023 ]
 }
 "119
 [; ;color.c: 119: unsigned char color_detect(RGBC_val RGBC_n)
@@ -2322,8 +2322,12 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _color `uc ~T0 @X0 1 a ]
 [e = _color -> -> 0 `i `uc ]
 "122
-[; ;color.c: 122:     if (RGBC_n.R > 550) {
-[e $ ! > . _RGBC_n 0 -> -> 550 `i `ui 2024  ]
+[; ;color.c: 122:     if (RGBC_n.R > 560) {
+<<<<<<< HEAD
+[e $ ! > . _RGBC_n 0 -> -> 560 `i `ui 2025  ]
+=======
+[e $ ! > . _RGBC_n 0 -> -> 560 `i `ui 2024  ]
+>>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
 {
 "123
 [; ;color.c: 123:         color = 1;
@@ -2331,11 +2335,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 "124
 [; ;color.c: 124:     }
 }
-[e $U 2025  ]
+[e $U 2026  ]
 "125
 [; ;color.c: 125:     else if (RGBC_n.G > 290) {
-[e :U 2024 ]
-[e $ ! > . _RGBC_n 1 -> -> 290 `i `ui 2026  ]
+[e :U 2025 ]
+[e $ ! > . _RGBC_n 1 -> -> 290 `i `ui 2027  ]
 {
 "126
 [; ;color.c: 126:         color = 2;
@@ -2343,11 +2347,16 @@ Version 4.0 HI-TECH Software Intermediate Code
 "127
 [; ;color.c: 127:     }
 }
-[e $U 2027  ]
+[e $U 2028  ]
 "128
-[; ;color.c: 128:     else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
+[; ;color.c: 128:     else if (RGBC_n.B > 230) {
+<<<<<<< HEAD
+[e :U 2027 ]
+[e $ ! > . _RGBC_n 2 -> -> 230 `i `ui 2029  ]
+=======
 [e :U 2026 ]
-[e $ ! && > . _RGBC_n 2 -> -> 220 `i `ui < . _RGBC_n 3 -> -> 800 `i `ui 2028  ]
+[e $ ! > . _RGBC_n 2 -> -> 230 `i `ui 2028  ]
+>>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
 {
 "129
 [; ;color.c: 129:         color = 3;
@@ -2355,14 +2364,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 "130
 [; ;color.c: 130:     }
 }
+[e :U 2029 ]
 [e :U 2028 ]
-[e :U 2027 ]
-[e :U 2025 ]
+[e :U 2026 ]
 "149
 [; ;color.c: 149:     return color;
 [e ) _color ]
-[e $UE 2023  ]
+[e $UE 2024  ]
 "150
 [; ;color.c: 150: }
-[e :UE 2023 ]
+[e :UE 2024 ]
 }

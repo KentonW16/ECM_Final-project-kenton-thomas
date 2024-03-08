@@ -24104,6 +24104,12 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
@@ -24280,13 +24286,13 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 550) {
+    if (RGBC_n.R > 560) {
         color = 1;
     }
     else if (RGBC_n.G > 290) {
         color = 2;
     }
-    else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
+    else if (RGBC_n.B > 230) {
         color = 3;
     }
 # 149 "color.c"

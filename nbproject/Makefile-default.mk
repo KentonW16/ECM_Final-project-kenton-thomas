@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c color.c i2c.c buggysetup.c interrupts.c serial.c calibration.c ADC.c battery.c dc_motor.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c color.c i2c.c buggysetup.c interrupts.c serial.c ADC.c battery.c dc_motor.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/color.p1 ${OBJECTDIR}/i2c.p1 ${OBJECTDIR}/buggysetup.p1 ${OBJECTDIR}/interrupts.p1 ${OBJECTDIR}/serial.p1 ${OBJECTDIR}/calibration.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/battery.p1 ${OBJECTDIR}/dc_motor.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/color.p1.d ${OBJECTDIR}/i2c.p1.d ${OBJECTDIR}/buggysetup.p1.d ${OBJECTDIR}/interrupts.p1.d ${OBJECTDIR}/serial.p1.d ${OBJECTDIR}/calibration.p1.d ${OBJECTDIR}/ADC.p1.d ${OBJECTDIR}/battery.p1.d ${OBJECTDIR}/dc_motor.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/color.p1 ${OBJECTDIR}/i2c.p1 ${OBJECTDIR}/buggysetup.p1 ${OBJECTDIR}/interrupts.p1 ${OBJECTDIR}/serial.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/battery.p1 ${OBJECTDIR}/dc_motor.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/color.p1.d ${OBJECTDIR}/i2c.p1.d ${OBJECTDIR}/buggysetup.p1.d ${OBJECTDIR}/interrupts.p1.d ${OBJECTDIR}/serial.p1.d ${OBJECTDIR}/ADC.p1.d ${OBJECTDIR}/battery.p1.d ${OBJECTDIR}/dc_motor.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/color.p1 ${OBJECTDIR}/i2c.p1 ${OBJECTDIR}/buggysetup.p1 ${OBJECTDIR}/interrupts.p1 ${OBJECTDIR}/serial.p1 ${OBJECTDIR}/calibration.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/battery.p1 ${OBJECTDIR}/dc_motor.p1
+OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/color.p1 ${OBJECTDIR}/i2c.p1 ${OBJECTDIR}/buggysetup.p1 ${OBJECTDIR}/interrupts.p1 ${OBJECTDIR}/serial.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/battery.p1 ${OBJECTDIR}/dc_motor.p1
 
 # Source Files
-SOURCEFILES=main.c color.c i2c.c buggysetup.c interrupts.c serial.c calibration.c ADC.c battery.c dc_motor.c
+SOURCEFILES=main.c color.c i2c.c buggysetup.c interrupts.c serial.c ADC.c battery.c dc_motor.c
 
 
 
@@ -136,14 +136,6 @@ ${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/serial.d ${OBJECTDIR}/serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/calibration.p1: calibration.c  nbproject/Makefile-${CND_CONF}.mk 
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/calibration.p1.d 
-	@${RM} ${OBJECTDIR}/calibration.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1  -mdebugger=none   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-download -mno-default-config-bits $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/calibration.p1 calibration.c 
-	@-${MV} ${OBJECTDIR}/calibration.d ${OBJECTDIR}/calibration.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/calibration.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
 ${OBJECTDIR}/ADC.p1: ADC.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/ADC.p1.d 
@@ -216,14 +208,6 @@ ${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-download -mno-default-config-bits $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/serial.p1 serial.c 
 	@-${MV} ${OBJECTDIR}/serial.d ${OBJECTDIR}/serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
-${OBJECTDIR}/calibration.p1: calibration.c  nbproject/Makefile-${CND_CONF}.mk 
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/calibration.p1.d 
-	@${RM} ${OBJECTDIR}/calibration.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-download -mno-default-config-bits $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/calibration.p1 calibration.c 
-	@-${MV} ${OBJECTDIR}/calibration.d ${OBJECTDIR}/calibration.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/calibration.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/ADC.p1: ADC.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 

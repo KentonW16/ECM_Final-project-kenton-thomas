@@ -13,6 +13,12 @@ typedef struct RGBC_val { //Structure to store RGB value
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val { //Structure to store HSV value
+	unsigned int H;
+	unsigned int S;
+	unsigned int V;
+} HSV_val;
+
 
 /********************************************//**
  *  Function to initialise the colour click module using I2C
@@ -51,23 +57,10 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
  ***********************************************/
 unsigned char color_detect(RGBC_val RGBC_n);
 
-
 /********************************************//**
- *  Function to read the red channel
- *	Returns a 16 bit ADC value representing colour intensity
+ *  Function to write to convert RGB value to HSV
  ***********************************************/
-//unsigned int color_read_Red(void);
 
-/********************************************//**
- *  Function to read the green channel
- *	Returns a 16 bit ADC value representing colour intensity
- ***********************************************/
-//unsigned int color_read_Green(void);
 
-/********************************************//**
- *  Function to read the blue channel
- *	Returns a 16 bit ADC value representing colour intensity
- ***********************************************/
-//unsigned int color_read_Blue(void);
 
 #endif
