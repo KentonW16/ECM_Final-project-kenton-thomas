@@ -7,8 +7,8 @@ void color_click_init(void) // See Colour click datasheet P.13
     //setup colour sensor via i2c interface
     I2C_2_Master_Init();      //Initialise i2c Master
 
-     //set device PON
-	 color_writetoaddr(0x00, 0x01);
+    //set device PON
+	color_writetoaddr(0x00, 0x01);
     __delay_ms(3); //need to wait 3ms for everthing to start up
     
     //turn on device ADC
@@ -16,14 +16,31 @@ void color_click_init(void) // See Colour click datasheet P.13
 
     //set integration time
 	color_writetoaddr(0x01, 0xD5);
+    
+    //initialise color click interrupts
+    color_clear_init_interrupts();
+    
+}
+
+void color_clear_init_interrupts(void) {
+    //clear interrupt on color click
+    I2C_2_Master_Start();            
+    I2C_2_Master_Write(0x52 | 0x00); 
+    I2C_2_Master_Write(0b11100110);  
+    I2C_2_Master_Stop();
    
-    //RGBC interrupts
+    //set interrupt thresholds
+    unsigned int high_threshold = ambient + 100;
+    unsigned int low_threshold = ambient - 100;
+    
+    //initialise interrupt
 	color_writetoaddr(0x00, 0x13); //turn on RGBC interrupts
-    color_writetoaddr(0x07, 0x07); //high threshold upper
-    color_writetoaddr(0x06, 0xD0); //high threshold lower
-    color_writetoaddr(0x05, 0x00); //low threshold upper
-    color_writetoaddr(0x04, 0x00); //low threshold lower
-    //color_writetoaddr(0x0C, 0x02); //persistence - requires [2] C readings outside threshold
+    __delay_ms(3);
+    color_writetoaddr(0x07, (high_threshold >> 8)); //high threshold upper
+    color_writetoaddr(0x06, (high_threshold & 0xFF)); //high threshold lower
+    color_writetoaddr(0x05, (low_threshold >> 8)); //low threshold upper
+    color_writetoaddr(0x04, (low_threshold & 0xFF)); //low threshold lower
+    color_writetoaddr(0x0C, 0b0100); //persistence - requires [5] C readings outside threshold
 }
     
 

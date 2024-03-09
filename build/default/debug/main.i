@@ -24289,6 +24289,8 @@ void sendTxBuf(void);
 
 
 
+extern char wall;
+
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
 # 12 "main.c" 2
@@ -24301,6 +24303,8 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR();
 
 
 
+extern unsigned int ambient;
+
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24309,11 +24313,22 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
 
 void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
 
 
 
@@ -24443,18 +24458,20 @@ void batteryLevel(void);
 
 
 void main(void){
+    unsigned int ambient = 600;
+    char wall = 0;
+    char buf[40] = {0};
+    unsigned int PWMcycle = 199;
+    unsigned char color;
+
+    struct RGBC_val RGBC, RGBC_n;
+    struct DC_motor motorL, motorR;
+
     Buggy_init();
     color_click_init();
     Interrupts_init();
     initUSART4();
-    char buf[40] = {0};
-    unsigned int PWMcycle = 199;
     initDCmotorsPWM(PWMcycle);
-    struct RGBC_val RGBC, RGBC_n;
-    unsigned char color;
-
-
-    struct DC_motor motorL, motorR;
 
     motorL.power=0;
     motorL.direction=1;
@@ -24473,7 +24490,7 @@ void main(void){
     motorR.compensation=0;
 
 
-    char straightSpeed=50;
+    char straightSpeed=25;
     unsigned char straightRamp=2;
 
     unsigned char reverseDuration=10;
@@ -24483,52 +24500,44 @@ void main(void){
     unsigned char turnRamp=4;
 
 
-    batteryLevel();
+
 
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 90 "main.c"
+# 93 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
 
 
 
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    unsigned int ambient;
-    color_read(&RGBC);
-    ambient=RGBC.C;
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-
-
     white_Light(1);
 
+
+
+    color_read(&RGBC);
+    ambient=RGBC.C;
+
+    wall=0;
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
 
     while(1) {
-        while (ambient-1< RGBC.C < ambient+1 ){
-            color_read(&RGBC);
-            _delay((unsigned long)((300)*(64000000/4000.0)));
-            LATDbits.LATD7 = !LATDbits.LATD7;
-        }
-        LATHbits.LATH3 = 1;
-        stop(&motorL, &motorR, straightRamp);
-        color_read(&RGBC);
-        color_normalise(RGBC, &RGBC_n);
-        color = color_detect(RGBC_n);
-        move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
-        sendTxBuf();
-        TxBufferedString(buf);
-        sendTxBuf();
-        TxBufferedString("");
-        _delay((unsigned long)((300)*(64000000/4000.0)));
+
+        if (wall == 1) {
+            PIE0bits.INT0IE=0;
+            stop(&motorL, &motorR, straightRamp);
+            color_read(&RGBC);
+            color_normalise(RGBC, &RGBC_n);
+            color = color_detect(RGBC_n);
+            move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            wall = 0;
+            PIE0bits.INT0IE=1;
+# 129 "main.c"
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+        }
 
     }
-
-
 
 }

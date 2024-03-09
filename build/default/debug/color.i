@@ -24096,6 +24096,8 @@ unsigned char __t3rd16on(void);
 
 
 
+extern unsigned int ambient;
+
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24104,11 +24106,22 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
 
 void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
 
 
 
@@ -24185,7 +24198,7 @@ void color_click_init(void)
     I2C_2_Master_Init();
 
 
-  color_writetoaddr(0x00, 0x01);
+ color_writetoaddr(0x00, 0x01);
     _delay((unsigned long)((3)*(64000000/4000.0)));
 
 
@@ -24195,12 +24208,29 @@ void color_click_init(void)
  color_writetoaddr(0x01, 0xD5);
 
 
- color_writetoaddr(0x00, 0x13);
-    color_writetoaddr(0x07, 0x07);
-    color_writetoaddr(0x06, 0xD0);
-    color_writetoaddr(0x05, 0x00);
-    color_writetoaddr(0x04, 0x00);
+    color_clear_init_interrupts();
 
+}
+
+void color_clear_init_interrupts(void) {
+
+    I2C_2_Master_Start();
+    I2C_2_Master_Write(0x52 | 0x00);
+    I2C_2_Master_Write(0b11100110);
+    I2C_2_Master_Stop();
+
+
+    unsigned int high_threshold = ambient + 100;
+    unsigned int low_threshold = ambient - 100;
+
+
+ color_writetoaddr(0x00, 0x13);
+    _delay((unsigned long)((3)*(64000000/4000.0)));
+    color_writetoaddr(0x07, (high_threshold >> 8));
+    color_writetoaddr(0x06, (high_threshold & 0xFF));
+    color_writetoaddr(0x05, (low_threshold >> 8));
+    color_writetoaddr(0x04, (low_threshold & 0xFF));
+    color_writetoaddr(0x0C, 0b0100);
 }
 
 
@@ -24270,7 +24300,7 @@ void color_read(RGBC_val *RGBC)
 
 
 void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-# 113 "color.c"
+# 130 "color.c"
     RGBC_n->C = RGBC.C;
     RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
@@ -24280,15 +24310,15 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 550) {
+    if (RGBC_n.R > 560) {
         color = 1;
     }
     else if (RGBC_n.G > 290) {
         color = 2;
     }
-    else if (RGBC_n.B > 220 && RGBC_n.C < 800) {
+    else if (RGBC_n.B > 230) {
         color = 3;
     }
-# 149 "color.c"
+# 166 "color.c"
     return color;
 }

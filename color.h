@@ -5,6 +5,8 @@
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
+extern unsigned int ambient;
+
 
 typedef struct RGBC_val { //Structure to store RGB value
 	unsigned int R;
@@ -24,6 +26,11 @@ typedef struct HSV_val { //Structure to store HSV value
  *  Function to initialise the colour click module using I2C
  ***********************************************/
 void color_click_init(void);
+
+/********************************************//**
+ *  Function to clear and re-initialise the clear channel interrupt on the color click
+ ***********************************************/
+void color_clear_init_interrupts(void);
 
 /********************************************//**
  *  Function to write to the colour click module

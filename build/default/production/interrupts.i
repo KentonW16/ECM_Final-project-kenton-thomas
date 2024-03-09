@@ -24096,6 +24096,8 @@ unsigned char __t3rd16on(void);
 
 
 
+extern char wall;
+
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
 # 2 "interrupts.c" 2
@@ -24165,6 +24167,74 @@ void I2C_2_Master_Write(unsigned char data_byte);
 unsigned char I2C_2_Master_Read(unsigned char ack);
 # 4 "interrupts.c" 2
 
+# 1 "./color.h" 1
+
+
+
+
+
+
+
+extern unsigned int ambient;
+
+
+typedef struct RGBC_val {
+ unsigned int R;
+ unsigned int G;
+ unsigned int B;
+    unsigned int C;
+} RGBC_val;
+
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
+
+
+
+
+void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
+
+
+
+
+
+
+void color_writetoaddr(char address, char value);
+
+
+
+
+
+void white_Light(char state);
+
+
+
+
+
+void color_read(RGBC_val *RGBC);
+
+
+
+
+
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
+
+
+
+
+
+
+unsigned char color_detect(RGBC_val RGBC_n);
+# 5 "interrupts.c" 2
+
 
 
 
@@ -24172,10 +24242,12 @@ unsigned char I2C_2_Master_Read(unsigned char ack);
 
 void Interrupts_init(void)
 {
- TRISBbits.TRISB0=1;
+
+    TRISBbits.TRISB0=1;
     ANSELBbits.ANSELB0=0;
     PIE0bits.INT0IE=1;
-    IPR0bits.INT0IP=1;
+    IPR0bits.INT0IP = 1;
+    INTCONbits.INT0EDG = 0;
 
 
 
@@ -24194,15 +24266,16 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
     if(PIR0bits.INT0IF){
- LATHbits.LATH3 = 1;
 
-    I2C_2_Master_Start();
- I2C_2_Master_Write(0x52 | 0x00);
- I2C_2_Master_Write(0b11100110);
- I2C_2_Master_Stop();
-
+    wall = 1;
+    color_clear_init_interrupts();
     PIR0bits.INT0IF = 0;
+
+
+
  }
+
+
 
     if(PIR4bits.RC4IF){
 

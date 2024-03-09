@@ -2,6 +2,7 @@
 #include "interrupts.h"
 #include "serial.h"
 #include "i2c.h"
+#include "color.h"
 
 /************************************
  * Function to turn on interrupts and set if priority is used
@@ -9,10 +10,12 @@
 ************************************/
 void Interrupts_init(void)
 {
-	TRISBbits.TRISB0=1; //set TRIS value for pin (input)
+	//set up interrupts from color click (through pin RB0)
+    TRISBbits.TRISB0=1; //set TRIS value for pin (input)
     ANSELBbits.ANSELB0=0; //turn off analogue input on pin 
     PIE0bits.INT0IE=1; //enable interrupts from color click (pin RB0) pg. 8
-    IPR0bits.INT0IP=1;
+    IPR0bits.INT0IP = 1; // high priority
+    INTCONbits.INT0EDG = 0; // trigger on falling edge
     
     // turn on global interrupts, peripheral interrupts and the interrupt source 
 	// It's a good idea to turn on global interrupts last, once all other interrupt configuration is done.
@@ -28,19 +31,20 @@ void Interrupts_init(void)
 ************************************/
 void __interrupt(high_priority) HighISR()
 {
-	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
     
+    // Wall detection interrupt
     if(PIR0bits.INT0IF){ 			    //receive interrupt
-	LATHbits.LATH3 = 1;   //toggle LED
     
-    I2C_2_Master_Start();                        //Start condition
-	I2C_2_Master_Write(0x52 | 0x00);             //7 bit address + Write mode
-	I2C_2_Master_Write(0b11100110);              //write to special function register to clear (pg. 12)
-	I2C_2_Master_Stop();     
+    wall = 1;                      //set flag to be read in main   
+    color_clear_init_interrupts(); //clear and re-initialise interrupt on color click
+    PIR0bits.INT0IF = 0;           //clear interrupt flag
     
-    PIR0bits.INT0IF = 0; //clear interrupt flag
+    //LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
+    //__delay_ms(200);
 	}
     
+    
+    // Serial transfer interrupts
     if(PIR4bits.RC4IF){ 			    //receive interrupt
 	//LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
     putCharToRxBuf(RC4REG);
