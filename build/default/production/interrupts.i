@@ -24251,6 +24251,7 @@ void Interrupts_init(void)
 
 
 
+    TMR0IE=1;
     PIE4bits.RC4IE=1;
     INTCONbits.PEIE=1;
     INTCONbits.GIE=1;
@@ -24271,7 +24272,16 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
     color_clear_init_interrupts();
     PIR0bits.INT0IF = 0;
 
+    LATHbits.LATH3 = !LATHbits.LATH3;
 
+
+ }
+
+
+    if(TMR0IF){
+
+
+ TMR0IF=0;
 
  }
 

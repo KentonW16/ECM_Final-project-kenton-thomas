@@ -24295,6 +24295,19 @@ void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
 # 12 "main.c" 2
 
+# 1 "./timers.h" 1
+
+
+
+
+
+
+
+void Timer0_init(void);
+void resetTimer(void);
+unsigned int get16bitTMR0val(void);
+# 13 "main.c" 2
+
 # 1 "./color.h" 1
 
 
@@ -24361,7 +24374,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 unsigned char color_detect(RGBC_val RGBC_n);
-# 13 "main.c" 2
+# 14 "main.c" 2
 
 # 1 "./i2c.h" 1
 # 13 "./i2c.h"
@@ -24396,7 +24409,7 @@ void I2C_2_Master_Write(unsigned char data_byte);
 
 
 unsigned char I2C_2_Master_Read(unsigned char ack);
-# 14 "main.c" 2
+# 15 "main.c" 2
 
 # 1 "./buggysetup.h" 1
 
@@ -24408,7 +24421,7 @@ unsigned char I2C_2_Master_Read(unsigned char ack);
 
 
 void Buggy_init(void);
-# 15 "main.c" 2
+# 16 "main.c" 2
 
 # 1 "./dc_motor.h" 1
 
@@ -24431,14 +24444,15 @@ typedef struct DC_motor {
 
 void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
-void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
-# 16 "main.c" 2
+# 17 "main.c" 2
 
 # 1 "./battery.h" 1
 
@@ -24450,7 +24464,7 @@ void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turn
 
 
 void batteryLevel(void);
-# 17 "main.c" 2
+# 18 "main.c" 2
 
 
 
@@ -24464,7 +24478,12 @@ void main(void){
 
     char buf[40] = {0};
     unsigned int PWMcycle = 199;
-    unsigned char color;
+    unsigned char color = 0;
+    unsigned char moveSequence[40] = {0};
+    unsigned int straightTime[41] = {0};
+    char curMove = 0;
+
+    unsigned char testSequence[4] = {1,3,2,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24473,6 +24492,7 @@ void main(void){
 
     Buggy_init();
     color_click_init();
+    Timer0_init();
     Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
@@ -24509,7 +24529,7 @@ void main(void){
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 97 "main.c"
+# 104 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
@@ -24518,33 +24538,45 @@ void main(void){
 
 
     white_Light(1);
-    _delay((unsigned long)((200)*(64000000/4000.0)));
+    _delay((unsigned long)((1000)*(64000000/4000.0)));
 
 
     color_read(&RGBC);
     ambient=RGBC.C;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
-    wall=0;
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+    resetTimer();
+
+    wall=0;
 
     while(1) {
         if (wall == 1) {
-            PIE0bits.INT0IE=0;
+            PIE0bits.INT0IE=TMR0IE=0;
+            straightTime[curMove] = get16bitTMR0val();
 
 
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);
             color_normalise(RGBC, &RGBC_n);
-            color = color_detect(RGBC_n);
+
+            color = testSequence[curMove];
+            moveSequence[curMove] = color;
 
 
-            move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            move(&motorL, &motorR, color, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+
+            curMove++;
+            resetTimer();
+            PIE0bits.INT0IE=TMR0IE=1;
             wall = 0;
-            PIE0bits.INT0IE=1;
-# 138 "main.c"
+# 153 "main.c"
         }
 
+        if (color == 8) {break;}
+
     }
+
+
 
 }

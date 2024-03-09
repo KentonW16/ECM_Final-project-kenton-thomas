@@ -1,5 +1,7 @@
 #include <xc.h>
 #include "dc_motor.h"
+#include "timers.h"
+
 
 // function initialise T2 and CCP for DC motor control
 void initDCmotorsPWM(unsigned int PWMperiod){
@@ -84,7 +86,7 @@ void setMotorPWM(DC_motor *m)
     }
 }
 
-void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     if (color == 1) { //red - right 90
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -155,9 +157,97 @@ void move(DC_motor *mL, DC_motor *mR, char color ,char straightSpeed, unsigned c
     }
     
     else if (color == 8) { //white - return home
-        /*return home code*/
+        returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     }
 }
+
+void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+{
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    resetTimer();
+    while (get16bitTMR0val() < straightTime[curMove]);
+    stop(mL, mR, straightRamp);
+    
+    char i=curMove;
+    while (i>0) {
+        i--;
+        
+        if (moveSequence[i] == 1) { 
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 2) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 3) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 4) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 5) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 6) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 7) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+        resetTimer();
+        while (get16bitTMR0val() < straightTime[i]);
+        stop(mL, mR, straightRamp);
+    }
+}
+
 //function to stop the robot gradually 
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp)
 {

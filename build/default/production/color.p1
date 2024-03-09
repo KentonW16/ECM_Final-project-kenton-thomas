@@ -2102,13 +2102,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;color.c: 30:     I2C_2_Master_Stop();
 [e ( _I2C_2_Master_Stop ..  ]
 "33
-[; ;color.c: 33:     unsigned int high_threshold = ambient + 100;
+[; ;color.c: 33:     unsigned int high_threshold = ambient + 20;
 [v _high_threshold `ui ~T0 @X0 1 a ]
-[e = _high_threshold + _ambient -> -> 100 `i `ui ]
+[e = _high_threshold + _ambient -> -> 20 `i `ui ]
 "34
-[; ;color.c: 34:     unsigned int low_threshold = ambient - 100;
+[; ;color.c: 34:     unsigned int low_threshold = ambient - 20;
 [v _low_threshold `ui ~T0 @X0 1 a ]
-[e = _low_threshold - _ambient -> -> 100 `i `ui ]
+[e = _low_threshold - _ambient -> -> 20 `i `ui ]
 "37
 [; ;color.c: 37:  color_writetoaddr(0x00, 0x13);
 [e ( _color_writetoaddr (2 , -> -> 0 `i `uc -> -> 19 `i `uc ]

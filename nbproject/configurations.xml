@@ -29,6 +29,8 @@
       <itemPath>battery.h</itemPath>
       <itemPath>dc_motor.c</itemPath>
       <itemPath>dc_motor.h</itemPath>
+      <itemPath>timers.c</itemPath>
+      <itemPath>timers.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

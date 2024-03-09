@@ -1,4 +1,4 @@
-# 1 "interrupts.c"
+# 1 "timers.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,7 +6,7 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "interrupts.c" 2
+# 1 "timers.c" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -24086,9 +24086,9 @@ __attribute__((__unsupported__("The READTIMER" "0" "() macro is not available wi
 unsigned char __t1rd16on(void);
 unsigned char __t3rd16on(void);
 # 33 "C:\\Program Files\\Microchip\\xc8\\v2.45\\pic\\include\\xc.h" 2 3
-# 1 "interrupts.c" 2
+# 1 "timers.c" 2
 
-# 1 "./interrupts.h" 1
+# 1 "./timers.h" 1
 
 
 
@@ -24096,208 +24096,46 @@ unsigned char __t3rd16on(void);
 
 
 
-extern char wall;
+void Timer0_init(void);
+void resetTimer(void);
+unsigned int get16bitTMR0val(void);
+# 2 "timers.c" 2
 
-void Interrupts_init(void);
-void __attribute__((picinterrupt(("high_priority")))) HighISR();
-# 2 "interrupts.c" 2
 
-# 1 "./serial.h" 1
-# 13 "./serial.h"
-volatile char EUSART4RXbuf[20];
-volatile char RxBufWriteCnt=0;
-volatile char RxBufReadCnt=0;
 
-volatile char EUSART4TXbuf[60];
-volatile char TxBufWriteCnt=0;
-volatile char TxBufReadCnt=0;
 
 
-
-void initUSART4(void);
-char getCharSerial4(void);
-void sendCharSerial4(char charToSend);
-void sendStringSerial4(char *string);
-
-
-char getCharFromRxBuf(void);
-void putCharToRxBuf(char byte);
-char isDataInRxBuf (void);
-
-
-char getCharFromTxBuf(void);
-void putCharToTxBuf(char byte);
-char isDataInTxBuf (void);
-void TxBufferedString(char *string);
-void sendTxBuf(void);
-# 3 "interrupts.c" 2
-
-# 1 "./i2c.h" 1
-# 13 "./i2c.h"
-void I2C_2_Master_Init(void);
-
-
-
-
-void I2C_2_Master_Idle(void);
-
-
-
-
-void I2C_2_Master_Start(void);
-
-
-
-
-void I2C_2_Master_RepStart(void);
-
-
-
-
-void I2C_2_Master_Stop(void);
-
-
-
-
-void I2C_2_Master_Write(unsigned char data_byte);
-
-
-
-
-unsigned char I2C_2_Master_Read(unsigned char ack);
-# 4 "interrupts.c" 2
-
-# 1 "./color.h" 1
-
-
-
-
-
-
-
-extern unsigned int ambient;
-
-
-typedef struct RGBC_val {
- unsigned int R;
- unsigned int G;
- unsigned int B;
-    unsigned int C;
-} RGBC_val;
-
-typedef struct HSV_val {
- unsigned int H;
- unsigned int S;
- unsigned int V;
-} HSV_val;
-
-
-
-
-
-void color_click_init(void);
-
-
-
-
-void color_clear_init_interrupts(void);
-
-
-
-
-
-
-void color_writetoaddr(char address, char value);
-
-
-
-
-
-void white_Light(char state);
-
-
-
-
-
-void color_read(RGBC_val *RGBC);
-
-
-
-
-
-void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
-
-
-
-
-
-
-unsigned char color_detect(RGBC_val RGBC_n);
-# 5 "interrupts.c" 2
-
-
-
-
-
-
-void Interrupts_init(void)
+void Timer0_init(void)
 {
-
-    TRISBbits.TRISB0=1;
-    ANSELBbits.ANSELB0=0;
-    PIE0bits.INT0IE=1;
-    IPR0bits.INT0IP = 1;
-    INTCONbits.INT0EDG = 0;
+    T0CON1bits.T0CS=0b010;
+    T0CON1bits.T0ASYNC=1;
+    T0CON1bits.T0CKPS=0b1011;
+    T0CON0bits.T016BIT=1;
 
 
+    TMR0H=0;
+    TMR0L=0;
+    T0CON0bits.T0EN=1;
+}
 
-    TMR0IE=1;
-    PIE4bits.RC4IE=1;
-    INTCONbits.PEIE=1;
-    INTCONbits.GIE=1;
 
+
+
+void resetTimer(void)
+{
+    TMR0H=0;
+    TMR0L=0;
 }
 
 
 
 
 
-void __attribute__((picinterrupt(("high_priority")))) HighISR()
+unsigned int get16bitTMR0val(void)
 {
 
-
-    if(PIR0bits.INT0IF){
-
-    wall = 1;
-    color_clear_init_interrupts();
-    PIR0bits.INT0IF = 0;
-
-
-
-
- }
-
-
-    if(TMR0IF){
-
-    LATHbits.LATH3 = !LATHbits.LATH3;
- TMR0IF=0;
-
- }
-
-
-
-    if(PIR4bits.RC4IF){
-
-    putCharToRxBuf(RC4REG);
-
- }
-
-    if(PIR4bits.TX4IF){
-
-    TX4REG = getCharFromTxBuf();
-    if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
-
- }
-
+    unsigned int timer_low = TMR0L;
+    unsigned int timer_high = TMR0H;
+    unsigned int timer_val = (timer_high<<8) | timer_low;
+    return timer_val;
 }

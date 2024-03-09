@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "serial.h"
 #include "interrupts.h"
+#include "timers.h"
 #include "color.h"
 #include "i2c.h"
 #include "buggysetup.h"
@@ -27,7 +28,12 @@ void main(void){
     // Declare local variables
     char buf[40] = {0};
     unsigned int PWMcycle = 199;
-    unsigned char color;
+    unsigned char color = 0;
+    unsigned char moveSequence[40] = {0}; //length is max number of moves
+    unsigned int straightTime[41] = {0};
+    char curMove = 0;
+    
+    unsigned char testSequence[4] = {1,3,2,8}; //***for testing without colors
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
@@ -36,6 +42,7 @@ void main(void){
     // Initialisation functions
     Buggy_init();
     color_click_init();
+    Timer0_init();
     Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
@@ -102,34 +109,42 @@ void main(void){
     
     // Turn on white LED on color click 
     white_Light(1);
-    __delay_ms(200);
+    __delay_ms(1000);
     
     // Calibrate to ambient light
     color_read(&RGBC);
     ambient=RGBC.C;
     __delay_ms(500);
     
-    wall=0;
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+    resetTimer();
+    
+    wall=0;
     
     while(1) {
         if (wall == 1) { //if wall interrupt triggered
-            PIE0bits.INT0IE=0;                     //turn off wall interrupt so not triggered during movement
+            PIE0bits.INT0IE=TMR0IE=0;      //turn off interrupts so not triggered during movement
+            straightTime[curMove] = get16bitTMR0val();
             
             // Stop and read color
             stop(&motorL, &motorR, straightRamp);  //stop
             color_read(&RGBC);                     //read RGBC values
             color_normalise(RGBC, &RGBC_n);        //normalise RGB values
-            color = color_detect(RGBC_n);          //determine color from RGBC values
+            //color = color_detect(RGBC_n);          //determine color from RGBC values
+            color = testSequence[curMove];         //***for testing without colors
+            moveSequence[curMove] = color;         //record movement
             
             // Carry out movement based on color detected
-            move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
-            wall = 0;           //reset flag
-            PIE0bits.INT0IE=1;  //turn wall interrupts on
+            move(&motorL, &motorR, color, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+
+            curMove++;                             //increment current move number
+            resetTimer();                          //reset timer
+            PIE0bits.INT0IE=TMR0IE=1;              //turn interrupts on
+            wall = 0;                              //reset flag
             
             
 //            // Display value on serial monitor for debugging
-//            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+//            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  c: %d cm: %d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color,curMove);
 //            sendTxBuf();
 //            TxBufferedString(buf); //send string to PC
 //            sendTxBuf();
@@ -137,6 +152,10 @@ void main(void){
 //            __delay_ms(300);
         }
         
+        if (color == 8) {break;}
+        
     }
+    
+    //while(1) {};
  
 }
