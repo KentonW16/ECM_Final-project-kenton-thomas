@@ -24096,6 +24096,8 @@ unsigned char __t3rd16on(void);
 
 
 
+extern char lost;
+
 typedef struct DC_motor {
     char power;
     char direction;
@@ -24111,6 +24113,7 @@ void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
@@ -24217,6 +24220,7 @@ void setMotorPWM(DC_motor *m)
     }
 }
 
+
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     if (color == 1) {
@@ -24290,7 +24294,12 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     else if (color == 8) {
         returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     }
+
+    else {
+        returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+    }
 }
+
 
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
@@ -24305,6 +24314,95 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
     resetTimer();
     while (get16bitTMR0val() < straightTime[curMove]);
+    stop(mL, mR, straightRamp);
+
+    char i=curMove;
+    while (i>0) {
+        i--;
+
+        if (moveSequence[i] == 1) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 2) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 3) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 4) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 5) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 6) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        else if (moveSequence[i] == 7) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            _delay((unsigned long)((50)*(64000000/4000.0)));
+        }
+
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+        resetTimer();
+        while (get16bitTMR0val() < straightTime[i]);
+        stop(mL, mR, straightRamp);
+    }
+}
+
+
+void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+{
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    _delay((unsigned long)((50)*(64000000/4000.0)));
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    _delay((unsigned long)((50)*(64000000/4000.0)));
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    _delay((unsigned long)((50)*(64000000/4000.0)));
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    _delay((unsigned long)((50)*(64000000/4000.0)));
+    fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    resetTimer();
+    lost = 0;
+    while (lost == 0);
     stop(mL, mR, straightRamp);
 
     char i=curMove;

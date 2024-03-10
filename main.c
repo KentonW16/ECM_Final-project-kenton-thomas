@@ -23,6 +23,7 @@
 // Declare global variables
 unsigned int ambient = 500;
 char wall = 0;
+char lost = 0;
 
 void main(void){
     // Declare local variables
@@ -33,7 +34,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
     
-    unsigned char testSequence[4] = {1,3,2,8}; //***for testing without colors
+    unsigned char testSequence[4] = {1,3,9,8}; //***for testing without colors
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
@@ -120,6 +121,7 @@ void main(void){
     resetTimer();
     
     wall=0;
+    lost=0;
     
     while(1) {
         if (wall == 1) { //if wall interrupt triggered
@@ -152,7 +154,16 @@ void main(void){
 //            __delay_ms(300);
         }
         
-        if (color == 8) {break;}
+        if (lost == 1) {  //if timer interrupt triggered (moving straight for > 8s)
+            PIE0bits.INT0IE=0;                     // turn off color click interrupts (not timer)
+            stop(&motorL, &motorR, straightRamp);  //stop
+            lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            PIE0bits.INT0IE=1;                     // turn back on color click interrupts
+            lost = 0;
+            break;
+        }
+        
+        if (color == 8 || color == 9) {break;} //color white or not recognised
         
     }
     

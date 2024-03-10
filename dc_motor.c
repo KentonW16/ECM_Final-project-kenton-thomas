@@ -86,6 +86,7 @@ void setMotorPWM(DC_motor *m)
     }
 }
 
+// function to perform movement depending on wall color detected
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     if (color == 1) { //red - right 90
@@ -159,8 +160,13 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     else if (color == 8) { //white - return home
         returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     }
+    
+    else { //color not recognised (lost) - return home
+        returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+    }
 }
 
+//function to return home if white or unrecognised wall encountered
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -174,6 +180,95 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
     resetTimer();
     while (get16bitTMR0val() < straightTime[curMove]);
+    stop(mL, mR, straightRamp);
+    
+    char i=curMove;
+    while (i>0) {
+        i--;
+        
+        if (moveSequence[i] == 1) { 
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 2) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 3) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 4) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 5) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
+            __delay_ms(50);
+        }
+
+        else if (moveSequence[i] == 6) {
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        else if (moveSequence[i] == 7) {
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+            turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
+            __delay_ms(50);
+        }
+        
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+        resetTimer();
+        while (get16bitTMR0val() < straightTime[i]);
+        stop(mL, mR, straightRamp);
+    }
+}
+
+//function to return home after timer overflow
+void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
+{
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+    resetTimer();
+    lost = 0;
+    while (lost == 0);
     stop(mL, mR, straightRamp);
     
     char i=curMove;

@@ -163,6 +163,10 @@ unsigned char color_detect(RGBC_val RGBC_n)
         color = 8;
     }
      */
+    
+    else {  //color not recognised
+        color = 9;
+    }
     return color;
 }
 

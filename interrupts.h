@@ -6,6 +6,7 @@
 #define _XTAL_FREQ 64000000
 
 extern char wall;
+extern char lost;
 
 void Interrupts_init(void);
 void __interrupt(high_priority) HighISR();

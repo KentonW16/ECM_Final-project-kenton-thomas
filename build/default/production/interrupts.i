@@ -24097,6 +24097,7 @@ unsigned char __t3rd16on(void);
 
 
 extern char wall;
+extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
@@ -24267,21 +24268,19 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
     if(PIR0bits.INT0IF){
+        wall = 1;
+        color_clear_init_interrupts();
+        PIR0bits.INT0IF = 0;
 
-    wall = 1;
-    color_clear_init_interrupts();
-    PIR0bits.INT0IF = 0;
-
-    LATHbits.LATH3 = !LATHbits.LATH3;
 
 
  }
 
 
     if(TMR0IF){
+        lost = 1;
+        TMR0IF=0;
 
-
- TMR0IF=0;
 
  }
 
@@ -24289,14 +24288,14 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
     if(PIR4bits.RC4IF){
 
-    putCharToRxBuf(RC4REG);
+        putCharToRxBuf(RC4REG);
 
  }
 
     if(PIR4bits.TX4IF){
 
-    TX4REG = getCharFromTxBuf();
-    if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
+        TX4REG = getCharFromTxBuf();
+        if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
 
  }
 

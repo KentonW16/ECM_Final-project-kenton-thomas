@@ -24319,6 +24319,9 @@ unsigned char color_detect(RGBC_val RGBC_n)
     else if (RGBC_n.B > 230) {
         color = 3;
     }
-# 166 "color.c"
+# 167 "color.c"
+    else {
+        color = 9;
+    }
     return color;
 }

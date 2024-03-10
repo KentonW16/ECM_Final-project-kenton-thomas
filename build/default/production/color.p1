@@ -2400,14 +2400,25 @@ Version 4.0 HI-TECH Software Intermediate Code
 "147
 [; ;color.c: 147:     }
 }
+[e $U 2031  ]
+"167
+[; ;color.c: 167:     else {
 [e :U 2030 ]
+{
+"168
+[; ;color.c: 168:         color = 9;
+[e = _color -> -> 9 `i `uc ]
+"169
+[; ;color.c: 169:     }
+}
+[e :U 2031 ]
 [e :U 2029 ]
 [e :U 2027 ]
-"166
-[; ;color.c: 166:     return color;
+"170
+[; ;color.c: 170:     return color;
 [e ) _color ]
 [e $UE 2025  ]
-"167
-[; ;color.c: 167: }
+"171
+[; ;color.c: 171: }
 [e :UE 2025 ]
 }

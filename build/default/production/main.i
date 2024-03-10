@@ -24290,6 +24290,7 @@ void sendTxBuf(void);
 
 
 extern char wall;
+extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
@@ -24431,6 +24432,8 @@ void Buggy_init(void);
 
 
 
+extern char lost;
+
 typedef struct DC_motor {
     char power;
     char direction;
@@ -24446,6 +24449,7 @@ void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
@@ -24473,6 +24477,7 @@ void batteryLevel(void);
 
 unsigned int ambient = 500;
 char wall = 0;
+char lost = 0;
 
 void main(void){
 
@@ -24483,7 +24488,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {1,3,2,8};
+    unsigned char testSequence[4] = {1,3,9,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24529,7 +24534,7 @@ void main(void){
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 104 "main.c"
+# 105 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
@@ -24549,6 +24554,7 @@ void main(void){
     resetTimer();
 
     wall=0;
+    lost=0;
 
     while(1) {
         if (wall == 1) {
@@ -24570,10 +24576,19 @@ void main(void){
             resetTimer();
             PIE0bits.INT0IE=TMR0IE=1;
             wall = 0;
-# 153 "main.c"
+# 155 "main.c"
         }
 
-        if (color == 8) {break;}
+        if (lost == 1) {
+            PIE0bits.INT0IE=0;
+            stop(&motorL, &motorR, straightRamp);
+            lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            PIE0bits.INT0IE=1;
+            lost = 0;
+            break;
+        }
+
+        if (color == 8 || color == 9) {break;}
 
     }
 
