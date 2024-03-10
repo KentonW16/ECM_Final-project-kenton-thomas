@@ -34,7 +34,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
     
-    unsigned char testSequence[4] = {1,3,9,8}; //***for testing without colors
+    unsigned char testSequence[4] = {4,3,9,8}; //***for testing without colors
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
@@ -64,15 +64,15 @@ void main(void){
     motorR.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
     motorR.compensation=0;                  //right motor run at lower power
     
-    //calibration parameters for motor control
+    // Calibration parameters for motor control (durations in 10ms increments)
     char straightSpeed=25;             //maximum power
-    unsigned char straightRamp=2;      //time between each power step
+    unsigned char straightRamp=1;      //time between each power step
     
     unsigned char reverseDuration=10;  //adjust to length of one square
     
-    char turnSpeed=21;                 //maximum power
-    unsigned char turnDuration=10;     //time between ramp up and ramp down
-    unsigned char turnRamp=4;          //time between each power step 
+    char turnSpeed=20;                 //maximum power
+    unsigned char turnDuration=5;      //time between ramp up and ramp down
+    unsigned char turnRamp=2;          //time between each power step 
     
     // Display battery voltage in binary on LEDs (before button press)
     batteryLevel();
@@ -106,7 +106,7 @@ void main(void){
     __delay_ms(500);
     
     // Calibration for turning angle
-    //calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
     // Turn on white LED on color click 
     white_Light(1);
@@ -167,6 +167,4 @@ void main(void){
         
     }
     
-    //while(1) {};
- 
 }

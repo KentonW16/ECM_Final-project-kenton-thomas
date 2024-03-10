@@ -24138,6 +24138,7 @@ unsigned int get16bitTMR0val(void);
 
 
 
+
 void initDCmotorsPWM(unsigned int PWMperiod){
 
 
@@ -24490,7 +24491,7 @@ void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp)
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
     mL->power = 0;
@@ -24510,12 +24511,12 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<turnDuration;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
 
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -24524,7 +24525,7 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 }
@@ -24542,12 +24543,12 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<turnDuration;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
 
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -24556,7 +24557,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 }
@@ -24574,7 +24575,7 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned cha
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 }
@@ -24591,12 +24592,12 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<reverseDuration;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
 
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -24605,7 +24606,7 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((5)*(64000000/4000.0)));
+            _delay((unsigned long)((10)*(64000000/4000.0)));
         }
     }
     mL->power = 0;
@@ -24627,19 +24628,19 @@ void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turn
         while (PORTFbits.RF2 && PORTFbits.RF3);
 
         if (!PORTFbits.RF2 && *turnDuration>0) {
-            *turnDuration--;
+            (*turnDuration)--;
             LATDbits.LATD7 = 1;
         }
 
         else if (!PORTFbits.RF3) {
-            *turnDuration++;
+            (*turnDuration)++;
             LATHbits.LATH3 = 1;
         }
 
         _delay((unsigned long)((500)*(64000000/4000.0)));
 
         if (!PORTFbits.RF3) {
-            *turnDuration--;
+            (*turnDuration)--;
             break;
         }
 

@@ -3,6 +3,7 @@
 #include "timers.h"
 
 
+
 // function initialise T2 and CCP for DC motor control
 void initDCmotorsPWM(unsigned int PWMperiod){
     //initialise your TRIS and LAT registers for PWM  
@@ -356,7 +357,7 @@ void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp)
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
     mL->power = 0;
@@ -376,12 +377,12 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
     
     for (i=0;i<turnDuration;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -390,7 +391,7 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
 }
@@ -408,12 +409,12 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
     
     for (i=0;i<turnDuration;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -422,7 +423,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
 }
@@ -440,7 +441,7 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned cha
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
 }
@@ -457,12 +458,12 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
     
     for (i=0;i<reverseDuration;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -471,7 +472,7 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            __delay_ms(5);
+            __delay_ms(10);
         }
     }
     mL->power = 0;
@@ -490,28 +491,28 @@ void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turn
     turnRight(mL, mR, turnSpeed, *turnDuration, turnRamp);
     
     while (1) {   
-        while (PORTFbits.RF2 && PORTFbits.RF3); //wait for button press
+        while (PORTFbits.RF2 && PORTFbits.RF3);  //wait for button press
         
         if (!PORTFbits.RF2 && *turnDuration>0) { // button 1 press decreases turning angle
-            *turnDuration--;
-            LATDbits.LATD7 = 1; // LED 1 on
+            (*turnDuration)--;
+            LATDbits.LATD7 = 1;                  // LED 1 on
         } 
         
-        else if (!PORTFbits.RF3) {              // button 2 press increases turning angle
-            *turnDuration++;
-            LATHbits.LATH3 = 1; // LED 2 on
+        else if (!PORTFbits.RF3) {               // button 2 press increases turning angle
+            (*turnDuration)++;
+            LATHbits.LATH3 = 1;                  // LED 2 on
         } 
         
-        __delay_ms(500); // delay to check for long press
+        __delay_ms(500);         // delay to check for long press
         
-        if (!PORTFbits.RF3) { // long press on button 2 to continue
-            *turnDuration--;   // no effect on calibration from a long press
-            break;            // leave while loop
+        if (!PORTFbits.RF3) {    // long press on button 2 to continue
+            (*turnDuration)--;   // no effect on calibration from a long press
+            break;               // leave while loop
         }
         
         LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off
         
-        // run to assess improvement
+        // Run to assess improvement
         turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
         __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, *turnDuration, turnRamp);
@@ -522,7 +523,7 @@ void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turn
         
     }
     
-    // flash both to indicate continue
+    // Flash both to indicate continue
     LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on
     __delay_ms(100);
     LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off

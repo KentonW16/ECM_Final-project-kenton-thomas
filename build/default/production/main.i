@@ -24488,7 +24488,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {1,3,9,8};
+    unsigned char testSequence[4] = {4,3,9,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24520,13 +24520,13 @@ void main(void){
 
 
     char straightSpeed=25;
-    unsigned char straightRamp=2;
+    unsigned char straightRamp=1;
 
     unsigned char reverseDuration=10;
 
-    char turnSpeed=21;
-    unsigned char turnDuration=10;
-    unsigned char turnRamp=4;
+    char turnSpeed=20;
+    unsigned char turnDuration=5;
+    unsigned char turnRamp=2;
 
 
     batteryLevel();
@@ -24539,7 +24539,7 @@ void main(void){
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
 
-
+    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
 
 
     white_Light(1);
@@ -24591,7 +24591,5 @@ void main(void){
         if (color == 8 || color == 9) {break;}
 
     }
-
-
 
 }
