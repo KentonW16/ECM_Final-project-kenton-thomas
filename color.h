@@ -5,8 +5,11 @@
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
-extern unsigned int ambient;
-
+typedef struct RGB_calib { //Structure to store calibrated RGB value
+	unsigned int R;
+	unsigned int G;
+	unsigned int B;
+} RGB_calib;
 
 typedef struct RGBC_val { //Structure to store RGB value
 	unsigned int R;
@@ -15,22 +18,12 @@ typedef struct RGBC_val { //Structure to store RGB value
     unsigned int C;
 } RGBC_val;
 
-typedef struct HSV_val { //Structure to store HSV value
-	unsigned int H;
-	unsigned int S;
-	unsigned int V;
-} HSV_val;
 
 
 /********************************************//**
  *  Function to initialise the colour click module using I2C
  ***********************************************/
 void color_click_init(void);
-
-/********************************************//**
- *  Function to clear and re-initialise the clear channel interrupt on the color click
- ***********************************************/
-void color_clear_init_interrupts(void);
 
 /********************************************//**
  *  Function to write to the colour click module
@@ -65,9 +58,10 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 unsigned char color_detect(RGBC_val RGBC_n);
 
 /********************************************//**
- *  Function to write to convert RGB value to HSV
+ *  Function to calibrate color sensor by flashing each color one by one
+ *	Writes code (1-8) for color dependent on RGB values
+ *  No color detected = 0
  ***********************************************/
-
-
+void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
 
 #endif

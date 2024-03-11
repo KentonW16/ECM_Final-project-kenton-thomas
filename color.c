@@ -2,6 +2,8 @@
 #include "color.h"
 #include "i2c.h"
 
+
+
 void color_click_init(void) // See Colour click datasheet P.13
 {   
     //setup colour sensor via i2c interface
@@ -136,9 +138,26 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-    if (RGBC_n.R > 560) { // red
-        color = 1;
+    /*
+    if (RGBC_n.R > 500) { // red, yellow or orange
+        if (RGBC_n.G < 200){color = 1;} //Red
+        else if (255 < RGBC_n.G < 295) {color = 4;} //Yellow
+        else if (200 < RGBC_n.G < 250) {color = 6;} //Orange
+        else {color = 0;}
     }
+    
+    else if (RGBC_n.R < 420) { // Blue or light blue
+        if (345 < RGBC_n.B < 385){color = 3;} //Blue
+        else if (290 < RGBC_n.B < 330) {color = 7;} //Light blue
+        else {color = 0;}
+    }
+    
+    else if (300 < RGBC_n.G) {color = 2;} // green
+        
+    else if (460 < RGBC_n.R < 500 && 240 < RGBC_n.G < 260) {color=5;} //Pink
+    
+    else if (430 < RGBC_n.R < 470 && 260 < RGBC_n.G < 300) {color=8;} //White
+
     else if (RGBC_n.G > 290) { // green
         color = 2;
     }
@@ -146,7 +165,6 @@ unsigned char color_detect(RGBC_val RGBC_n)
         color = 3;
     }
     
-    /*
     else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // yellow
         color = 4;
     }
@@ -168,5 +186,100 @@ unsigned char color_detect(RGBC_val RGBC_n)
         color = 9;
     }
     return color;
+
 }
 
+void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
+{
+    white_Light(1);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
+    while (PORTFbits.RF2); //read red when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    red->R = RGBC_n->R;
+    red->G = RGBC_n->G;
+    red->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+    while (PORTFbits.RF2); //read green when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    green->R = RGBC_n->R;
+    green->G = RGBC_n->G;
+    green->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+    while (PORTFbits.RF2); //read blue when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    blue->R = RGBC_n->R;
+    blue->G = RGBC_n->G;
+    blue->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+    while (PORTFbits.RF2); //read yellow when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    yellow->R = RGBC_n->R;
+    yellow->G = RGBC_n->G;
+    yellow->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+    while (PORTFbits.RF2); //read pink when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    pink->R = RGBC_n->R;
+    pink->G = RGBC_n->G;
+    pink->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+    while (PORTFbits.RF2); //read orange when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    orange->R = RGBC_n->R;
+    orange->G = RGBC_n->G;
+    orange->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; 
+    
+    while (PORTFbits.RF2); //read light blue when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    lightblue->R = RGBC_n->R;
+    lightblue->G = RGBC_n->G;
+    lightblue->B = RGBC_n->B;
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; 
+    
+    while (PORTFbits.RF2); //read white when button pressed
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    color_normalise(*RGBC, RGBC_n);
+    white->R = RGBC_n->R;
+    white->G = RGBC_n->G;
+    white->B = RGBC_n->B;  
+    
+    __delay_ms(500);
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    
+}
