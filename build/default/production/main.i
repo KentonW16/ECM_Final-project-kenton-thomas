@@ -24301,6 +24301,11 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR();
 
 
 
+typedef struct RGB_calib {
+ unsigned int R;
+ unsigned int G;
+ unsigned int B;
+} RGB_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24309,11 +24314,6 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
-typedef struct HSV_val {
- unsigned int H;
- unsigned int S;
- unsigned int V;
-} HSV_val;
 
 
 
@@ -24352,6 +24352,13 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 unsigned char color_detect(RGBC_val RGBC_n);
+
+
+
+
+
+
+void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
 # 13 "main.c" 2
 
 # 1 "./i2c.h" 1
@@ -24498,10 +24505,12 @@ void main(void){
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
-    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+
+
 
 
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+     white_Light(1);
     _delay((unsigned long)((500)*(64000000/4000.0)));
     unsigned int ambient;
     color_read(&RGBC);
@@ -24509,17 +24518,28 @@ void main(void){
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
 
-    white_Light(1);
+
+    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white;
+    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+
+
+
+
+    sprintf(buf,"c=%d \r\n", RGBC.C);
+
+    sendTxBuf();
+    TxBufferedString(buf);
+    sendTxBuf();
+    TxBufferedString("");
+    _delay((unsigned long)((300)*(64000000/4000.0)));
+
 
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
 
     while(1) {
         color_read(&RGBC);
-<<<<<<< HEAD
-        LATDbits.LATD7 = LATHbits.LATH3 = 1;
 
-
-        if (RGBC.C < ambient-40 || RGBC.C > ambient+40 ){
+        if (RGBC.C < 500 || RGBC.C > 800 ){
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);
             color_normalise(RGBC, &RGBC_n);
@@ -24528,18 +24548,6 @@ void main(void){
                 move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
             }
 
-=======
-
-        if (RGBC.C < ambient-40 || RGBC.C > ambient+40 ){
-            stop(&motorL, &motorR, straightRamp);
-            color_read(&RGBC);
-            color_normalise(RGBC, &RGBC_n);
-            color = color_detect(RGBC_n);
-            if (color !=0){
-                move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
-            }
-
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
 
 
             sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
@@ -24548,14 +24556,12 @@ void main(void){
             sendTxBuf();
             TxBufferedString("");
             _delay((unsigned long)((300)*(64000000/4000.0)));
+
         }
 
         else {
             color_read(&RGBC);
-<<<<<<< HEAD
-=======
-            LATDbits.LATD7 = !LATDbits.LATD7;
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
+
 
 
             color_normalise(RGBC, &RGBC_n);
@@ -24565,11 +24571,9 @@ void main(void){
             sendTxBuf();
             TxBufferedString("");
             _delay((unsigned long)((300)*(64000000/4000.0)));
+
         }
-<<<<<<< HEAD
-        LATDbits.LATD7 = LATHbits.LATH3 = 0;
-=======
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
+
     }
 
 }

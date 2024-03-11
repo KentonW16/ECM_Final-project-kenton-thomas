@@ -82,7 +82,7 @@ void main(void){
             sendTxBuf();
             TxBufferedString(""); 
             __delay_ms(300);
-            }
+        }
     }
     */
     
@@ -90,30 +90,41 @@ void main(void){
     LATHbits.LATH1=LATDbits.LATD3=1;
     __delay_ms(500);
     
-    calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+    //calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+    
     
     // Calibrate to ambient light
     LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on 
+     white_Light(1); // Turn on white LED on color click 
     __delay_ms(500);
     unsigned int ambient;
     color_read(&RGBC);
     ambient=RGBC.C;
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     
-    // Turn on white LED on color click 
-    white_Light(1);
     
+    // Flash color cards in front of buggy
+    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
+    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    
+    
+    //sprintf(buf,"c=%d read_n: r=%d g=%d b=%d red: r=%d g=%d b=%d \r\n", RGBC.C, RGBC_n.R, RGBC_n.G, RGBC_n.B, red.R, red.G, red.B);
+    //fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
+    sprintf(buf,"c=%d \r\n", RGBC.C);
+
+    sendTxBuf();
+    TxBufferedString(buf); //send string to PC
+    sendTxBuf();
+    TxBufferedString(""); 
+    __delay_ms(300);
+    
+ 
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
     
     while(1) {
         color_read(&RGBC);
-<<<<<<< HEAD
-        LATDbits.LATD7 = LATHbits.LATH3 = 1;
-        
-=======
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
 
-        if (RGBC.C < ambient-40 || RGBC.C > ambient+40 ){ //Adjust range to ambient light value
+        if (RGBC.C < 500 || RGBC.C > 800 ){ //Adjust range to ambient light value
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);              //read RGBC values
             color_normalise(RGBC, &RGBC_n); //normalise RGB values
@@ -122,7 +133,7 @@ void main(void){
                 move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
             }
    
-
+            
             // Display value on serial monitor for debugging
             sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
             sendTxBuf();
@@ -130,14 +141,12 @@ void main(void){
             sendTxBuf();
             TxBufferedString(""); 
             __delay_ms(300);
+            
         }
         
         else {
             color_read(&RGBC);
-<<<<<<< HEAD
-=======
-            LATDbits.LATD7 = !LATDbits.LATD7;
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
+
             
             // Display value on serial monitor for debugging
             color_normalise(RGBC, &RGBC_n); //normalise RGB values
@@ -147,11 +156,9 @@ void main(void){
             sendTxBuf();
             TxBufferedString(""); 
             __delay_ms(300);
+             
         }
-<<<<<<< HEAD
-        LATDbits.LATD7 = LATHbits.LATH3 = 0;
-=======
->>>>>>> dfbd7f392885995f930a40db35da84a37f5434c5
+        
     }
- 
+    
 }

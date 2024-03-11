@@ -24301,6 +24301,11 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR();
 
 
 
+typedef struct RGB_calib {
+ unsigned int R;
+ unsigned int G;
+ unsigned int B;
+} RGB_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24308,6 +24313,7 @@ typedef struct RGBC_val {
  unsigned int B;
     unsigned int C;
 } RGBC_val;
+
 
 
 
@@ -24346,6 +24352,13 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 unsigned char color_detect(RGBC_val RGBC_n);
+
+
+
+
+
+
+void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
 # 13 "main.c" 2
 
 # 1 "./i2c.h" 1
@@ -24495,7 +24508,9 @@ void main(void){
 
 
 
+
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+     white_Light(1);
     _delay((unsigned long)((500)*(64000000/4000.0)));
     unsigned int ambient;
     color_read(&RGBC);
@@ -24503,32 +24518,62 @@ void main(void){
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
 
-    white_Light(1);
+
+    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white;
+    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+
+
+
+
+    sprintf(buf,"c=%d \r\n", RGBC.C);
+
+    sendTxBuf();
+    TxBufferedString(buf);
+    sendTxBuf();
+    TxBufferedString("");
+    _delay((unsigned long)((300)*(64000000/4000.0)));
+
 
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
 
     while(1) {
-        while (ambient-1< RGBC.C < ambient+1 ){
-            color_read(&RGBC);
-            _delay((unsigned long)((300)*(64000000/4000.0)));
-            LATDbits.LATD7 = !LATDbits.LATD7;
-        }
-        LATHbits.LATH3 = 1;
-        stop(&motorL, &motorR, straightRamp);
         color_read(&RGBC);
-        color_normalise(RGBC, &RGBC_n);
-        color = color_detect(RGBC_n);
-        move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
-        sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
-        sendTxBuf();
-        TxBufferedString(buf);
-        sendTxBuf();
-        TxBufferedString("");
-        _delay((unsigned long)((300)*(64000000/4000.0)));
+        if (RGBC.C < 500 || RGBC.C > 800 ){
+            stop(&motorL, &motorR, straightRamp);
+            color_read(&RGBC);
+            color_normalise(RGBC, &RGBC_n);
+            color = color_detect(RGBC_n);
+            if (color !=0){
+                move(&motorL, &motorR, color, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            }
+
+
+
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
+            sendTxBuf();
+            TxBufferedString(buf);
+            sendTxBuf();
+            TxBufferedString("");
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+
+        }
+
+        else {
+            color_read(&RGBC);
+
+
+
+            color_normalise(RGBC, &RGBC_n);
+            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
+            sendTxBuf();
+            TxBufferedString(buf);
+            sendTxBuf();
+            TxBufferedString("");
+            _delay((unsigned long)((300)*(64000000/4000.0)));
+
+        }
 
     }
-
-
 
 }
