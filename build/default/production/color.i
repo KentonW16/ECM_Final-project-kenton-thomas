@@ -24096,6 +24096,8 @@ unsigned char __t3rd16on(void);
 
 
 
+extern unsigned int ambient;
+
 typedef struct RGB_calib {
  unsigned int R;
  unsigned int G;
@@ -24115,6 +24117,11 @@ typedef struct RGBC_val {
 
 
 void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
 
 
 
@@ -24200,7 +24207,7 @@ void color_click_init(void)
     I2C_2_Master_Init();
 
 
-  color_writetoaddr(0x00, 0x01);
+ color_writetoaddr(0x00, 0x01);
     _delay((unsigned long)((3)*(64000000/4000.0)));
 
 
@@ -24210,12 +24217,29 @@ void color_click_init(void)
  color_writetoaddr(0x01, 0xD5);
 
 
- color_writetoaddr(0x00, 0x13);
-    color_writetoaddr(0x07, 0x07);
-    color_writetoaddr(0x06, 0xD0);
-    color_writetoaddr(0x05, 0x00);
-    color_writetoaddr(0x04, 0x00);
+    color_clear_init_interrupts();
 
+}
+
+void color_clear_init_interrupts(void) {
+
+    I2C_2_Master_Start();
+    I2C_2_Master_Write(0x52 | 0x00);
+    I2C_2_Master_Write(0b11100110);
+    I2C_2_Master_Stop();
+
+
+    unsigned int high_threshold = ambient + 15;
+    unsigned int low_threshold = ambient - 15;
+
+
+ color_writetoaddr(0x00, 0x13);
+    _delay((unsigned long)((3)*(64000000/4000.0)));
+    color_writetoaddr(0x07, (high_threshold >> 8));
+    color_writetoaddr(0x06, (high_threshold & 0xFF));
+    color_writetoaddr(0x05, (low_threshold >> 8));
+    color_writetoaddr(0x04, (low_threshold & 0xFF));
+    color_writetoaddr(0x0C, 0b0100);
 }
 
 
@@ -24285,7 +24309,7 @@ void color_read(RGBC_val *RGBC)
 
 
 void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-# 115 "color.c"
+# 132 "color.c"
     RGBC_n->C = RGBC.C;
     RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
@@ -24295,9 +24319,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
 unsigned char color_detect(RGBC_val RGBC_n)
 {
     unsigned char color=0;
-# 167 "color.c"
-    return color;
-
+# 191 "color.c"
 }
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)

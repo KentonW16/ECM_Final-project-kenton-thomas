@@ -105,6 +105,10 @@ void main(void){
     LATHbits.LATH1=LATDbits.LATD3=1;
     __delay_ms(500);
     
+    // Flash color cards in front of buggy
+    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
+    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
@@ -139,19 +143,15 @@ void main(void){
             // Carry out movement based on color detected
             move(&motorL, &motorR, color, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
+            // Calibrate to ambient light
+            color_read(&RGBC);
+            ambient=RGBC.C;
+            
             curMove++;                             //increment current move number
             resetTimer();                          //reset timer
             PIE0bits.INT0IE=TMR0IE=1;              //turn interrupts on
             wall = 0;                              //reset flag
             
-            
-//            // Display value on serial monitor for debugging
-//            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  c: %d cm: %d\r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color,curMove);
-//            sendTxBuf();
-//            TxBufferedString(buf); //send string to PC
-//            sendTxBuf();
-//            TxBufferedString(""); 
-//            __delay_ms(300);
         }
         
         if (lost == 1) {  //if timer interrupt triggered (moving straight for > 8s)
