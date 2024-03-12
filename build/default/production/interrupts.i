@@ -24191,6 +24191,12 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
@@ -24241,6 +24247,12 @@ unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_
 
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 5 "interrupts.c" 2
 
 

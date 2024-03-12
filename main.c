@@ -38,13 +38,14 @@ void main(void){
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
+    struct HSV_val HSV;
     struct DC_motor motorL, motorR; //declare two DC_motor structures 
     
     // Initialisation functions
     Buggy_init();
     color_click_init();
     Timer0_init();
-    Interrupts_init();
+    //Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -76,6 +77,13 @@ void main(void){
     
     // Display battery voltage in binary on LEDs (before button press)
     batteryLevel();
+    
+    // Testing HSV function
+    RGBC.R = 200;
+    RGBC.G = 50;
+    RGBC.B = 170;
+    
+    rgb_2_hsv (RGBC, &HSV);
     
     // Wait for button press
     while (PORTFbits.RF2);

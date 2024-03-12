@@ -20,6 +20,12 @@ typedef struct RGBC_val { //Structure to store RGB value
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val { //Structure to store HSV value
+	unsigned int H; //Ranges from 0-36000
+	unsigned int S; //Ranges from 0-10000
+	unsigned int V; //Ranges from 0-10000
+} HSV_val;
+
 
 
 /********************************************//**
@@ -70,5 +76,12 @@ unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_
  *  No color detected = 0
  ***********************************************/
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
+
 
 #endif

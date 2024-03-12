@@ -24332,6 +24332,12 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
@@ -24374,7 +24380,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
 
 
 
@@ -24382,6 +24388,12 @@ unsigned char color_detect(RGBC_val RGBC_n, RGB_calib *red, RGB_calib *green, RG
 
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 14 "main.c" 2
 
 # 1 "./i2c.h" 1
@@ -24499,13 +24511,14 @@ void main(void){
 
 
     struct RGBC_val RGBC, RGBC_n;
+    struct HSV_val HSV;
     struct DC_motor motorL, motorR;
 
 
     Buggy_init();
     color_click_init();
     Timer0_init();
-    Interrupts_init();
+
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -24539,9 +24552,16 @@ void main(void){
     batteryLevel();
 
 
+    RGBC.R = 200;
+    RGBC.G = 50;
+    RGBC.B = 170;
+
+    rgb_2_hsv (RGBC, &HSV);
+
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 105 "main.c"
+# 115 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
@@ -24576,7 +24596,7 @@ void main(void){
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);
             color_normalise(RGBC, &RGBC_n);
-            color = color_detect(RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+            color = color_detect(RGBC_n, red, green, blue, yellow, pink, orange, lightblue, white);
 
             moveSequence[curMove] = color;
 

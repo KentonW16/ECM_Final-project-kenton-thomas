@@ -24111,6 +24111,12 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
 
 
 
@@ -24161,6 +24167,12 @@ unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_
 
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 2 "color.c" 2
 
 # 1 "./i2c.h" 1
@@ -24316,7 +24328,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }
 
-unsigned char color_detect(RGBC_val RGBC_n,RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white)
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white)
 {
     unsigned char color=0;
 
@@ -24375,4 +24387,45 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 # 300 "color.c"
+}
+
+unsigned int max (unsigned int a, unsigned int b){
+    if (a > b){return a;}
+    else {return b;}
+}
+
+unsigned int min (unsigned int a,unsigned int b){
+    if (a < b){return a;}
+    else {return b;}
+}
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
+
+
+    unsigned int r = (unsigned int)(RGBC.R*10000L/255);
+    unsigned int g = (unsigned int)(RGBC.G*10000L/255);
+    unsigned int b = (unsigned int)(RGBC.B*10000L/255);
+
+
+    unsigned int cmax = max(r, max(g, b));
+    unsigned int cmin = min(r, min(g, b));
+    unsigned long diff = cmax - cmin;
+
+
+    if (cmax == r){
+        if (g > b){HSV->H = (unsigned int)((g-b)*6000L/diff);}
+        else if (b > g){HSV->H = (unsigned int)((g + 6*diff -b)*6000L/diff);}
+    }
+    else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);}
+
+    else if (cmax == b){HSV->H = (unsigned int)((r + 4*diff -g)*6000L/diff);}
+
+
+    HSV->S = (unsigned int)((diff * 10000)/cmax);
+
+    if (HSV->S == 0){HSV->H = 0;}
+
+
+    HSV->V = cmax;
+
 }
