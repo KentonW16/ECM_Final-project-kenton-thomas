@@ -2243,10 +2243,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 [i F14635
 :U ..
 "37
-[; ;main.c: 37:     unsigned char testSequence[4] = {4,3,9,8};
--> -> 4 `i `uc
--> -> 3 `i `uc
--> -> 9 `i `uc
+[; ;main.c: 37:     unsigned char testSequence[4] = {2,1,1,8};
+-> -> 2 `i `uc
+-> -> 1 `i `uc
+-> -> 1 `i `uc
 -> -> 8 `i `uc
 ..
 ]
@@ -2297,8 +2297,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 56:     motorL.PWMperiod=PWMcycle;
 [e = . _motorL 3 _PWMcycle ]
 "57
-[; ;main.c: 57:     motorL.compensation=3;
-[e = . _motorL 6 -> -> 3 `i `uc ]
+[; ;main.c: 57:     motorL.compensation=0;
+[e = . _motorL 6 -> -> 0 `i `uc ]
 "59
 [; ;main.c: 59:     motorR.power=0;
 [e = . _motorR 0 -> -> 0 `i `uc ]
@@ -2329,17 +2329,17 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _straightRamp `uc ~T0 @X0 1 a ]
 [e = _straightRamp -> -> 1 `i `uc ]
 "71
-[; ;main.c: 71:     unsigned char reverseDuration=10;
+[; ;main.c: 71:     unsigned char reverseDuration=200;
 [v _reverseDuration `uc ~T0 @X0 1 a ]
-[e = _reverseDuration -> -> 10 `i `uc ]
+[e = _reverseDuration -> -> 200 `i `uc ]
 "73
 [; ;main.c: 73:     char turnSpeed=20;
 [v _turnSpeed `uc ~T0 @X0 1 a ]
 [e = _turnSpeed -> -> 20 `i `uc ]
 "74
-[; ;main.c: 74:     unsigned char turnDuration=5;
+[; ;main.c: 74:     unsigned char turnDuration=25;
 [v _turnDuration `uc ~T0 @X0 1 a ]
-[e = _turnDuration -> -> 5 `i `uc ]
+[e = _turnDuration -> -> 25 `i `uc ]
 "75
 [; ;main.c: 75:     unsigned char turnRamp=2;
 [v _turnRamp `uc ~T0 @X0 1 a ]

@@ -32,8 +32,8 @@ void color_clear_init_interrupts(void) {
     I2C_2_Master_Stop();
    
     //set interrupt thresholds
-    unsigned int high_threshold = ambient + 12;
-    unsigned int low_threshold = ambient - 12;
+    unsigned int high_threshold = ambient + 10;
+    unsigned int low_threshold = ambient - 35;
     
     //initialise interrupt
 	color_writetoaddr(0x00, 0x13); //turn on RGBC interrupts
@@ -143,7 +143,7 @@ unsigned char color_detect(RGBC_val RGBC_n,RGB_calib red, RGB_calib green, RGB_c
         color = 1;
     }
     
-    else if ((green.G)-25 < RGBC_n.G) { //green
+    else if ((green.G)-25 < RGBC_n.G && (green.B)+50 > RGBC_n.B) { //green
         color = 2;
     }
     
@@ -151,7 +151,30 @@ unsigned char color_detect(RGBC_val RGBC_n,RGB_calib red, RGB_calib green, RGB_c
         color = 3;
     }
     
-    else {color = 9;}
+    else if ((yellow.R)-20 < RGBC_n.R && (yellow.G)-20 < RGBC_n.G) { //yellow
+        color = 4;
+    }
+    
+    else if ((pink.R)-20 < RGBC_n.R && (pink.B)-30 < RGBC_n.B) { //pink
+        color = 5;
+    }
+    
+    else if ((orange.R)-30 < RGBC_n.R && (orange.G)-30 < RGBC_n.G && (orange.G)+20 > RGBC_n.G) { //orange
+        color = 6;
+    }
+    
+    else if ((lightBlue.B)-20 < RGBC_n.B && (lightBlue.B)+30 > RGBC_n.B) { //light blue
+        color = 7;
+    }
+    
+    else if ((white.R)-20 < RGBC_n.R && (white.G)-20 < RGBC_n.G && (white.B)-30 < RGBC_n.B) { //white
+        color = 8;
+    }
+    
+    else {
+        color = 9;
+        LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on
+    }
     
     /*
     if (RGBC_n.R > 500) { // red, yellow or orange
@@ -241,7 +264,7 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    /*
+    
     while (PORTFbits.RF2); //read yellow when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -296,6 +319,5 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    */
 }
 

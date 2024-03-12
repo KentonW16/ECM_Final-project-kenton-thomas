@@ -258,6 +258,7 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
 //function to return home after timer overflow
 void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; // both LEDs on
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     __delay_ms(50);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);

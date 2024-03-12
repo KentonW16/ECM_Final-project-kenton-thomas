@@ -24495,7 +24495,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {4,3,9,8};
+    unsigned char testSequence[4] = {2,1,1,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24515,7 +24515,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
     motorL.PWMperiod=PWMcycle;
-    motorL.compensation=3;
+    motorL.compensation=0;
 
     motorR.power=0;
     motorR.direction=1;
@@ -24529,10 +24529,10 @@ void main(void){
     char straightSpeed=25;
     unsigned char straightRamp=1;
 
-    unsigned char reverseDuration=10;
+    unsigned char reverseDuration=200;
 
     char turnSpeed=20;
-    unsigned char turnDuration=5;
+    unsigned char turnDuration=25;
     unsigned char turnRamp=2;
 
 

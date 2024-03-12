@@ -24392,6 +24392,7 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
 
 void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     _delay((unsigned long)((50)*(64000000/4000.0)));
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);

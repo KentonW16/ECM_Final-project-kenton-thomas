@@ -2167,13 +2167,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;color.c: 32:     I2C_2_Master_Stop();
 [e ( _I2C_2_Master_Stop ..  ]
 "35
-[; ;color.c: 35:     unsigned int high_threshold = ambient + 12;
+[; ;color.c: 35:     unsigned int high_threshold = ambient + 10;
 [v _high_threshold `ui ~T0 @X0 1 a ]
-[e = _high_threshold + _ambient -> -> 12 `i `ui ]
+[e = _high_threshold + _ambient -> -> 10 `i `ui ]
 "36
-[; ;color.c: 36:     unsigned int low_threshold = ambient - 12;
+[; ;color.c: 36:     unsigned int low_threshold = ambient - 35;
 [v _low_threshold `ui ~T0 @X0 1 a ]
-[e = _low_threshold - _ambient -> -> 12 `i `ui ]
+[e = _low_threshold - _ambient -> -> 35 `i `ui ]
 "39
 [; ;color.c: 39:  color_writetoaddr(0x00, 0x13);
 [e ( _color_writetoaddr (2 , -> -> 0 `i `uc -> -> 19 `i `uc ]
@@ -2451,9 +2451,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2027  ]
 "146
-[; ;color.c: 146:     else if ((green.G)-25 < RGBC_n.G) {
+[; ;color.c: 146:     else if ((green.G)-25 < RGBC_n.G && (green.B)+50 > RGBC_n.B) {
 [e :U 2026 ]
-[e $ ! < - . _green 1 -> -> 25 `i `ui . _RGBC_n 1 2028  ]
+[e $ ! && < - . _green 1 -> -> 25 `i `ui . _RGBC_n 1 > + . _green 2 -> -> 50 `i `ui . _RGBC_n 2 2028  ]
 {
 "147
 [; ;color.c: 147:         color = 2;
@@ -2475,31 +2475,103 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2031  ]
 "154
-[; ;color.c: 154:     else {color = 9;}
+[; ;color.c: 154:     else if ((yellow.R)-20 < RGBC_n.R && (yellow.G)-20 < RGBC_n.G) {
 [e :U 2030 ]
+[e $ ! && < - . _yellow 0 -> -> 20 `i `ui . _RGBC_n 0 < - . _yellow 1 -> -> 20 `i `ui . _RGBC_n 1 2032  ]
 {
-[e = _color -> -> 9 `i `uc ]
+"155
+[; ;color.c: 155:         color = 4;
+[e = _color -> -> 4 `i `uc ]
+"156
+[; ;color.c: 156:     }
 }
+[e $U 2033  ]
+"158
+[; ;color.c: 158:     else if ((pink.R)-20 < RGBC_n.R && (pink.B)-30 < RGBC_n.B) {
+[e :U 2032 ]
+[e $ ! && < - . _pink 0 -> -> 20 `i `ui . _RGBC_n 0 < - . _pink 2 -> -> 30 `i `ui . _RGBC_n 2 2034  ]
+{
+"159
+[; ;color.c: 159:         color = 5;
+[e = _color -> -> 5 `i `uc ]
+"160
+[; ;color.c: 160:     }
+}
+[e $U 2035  ]
+"162
+[; ;color.c: 162:     else if ((orange.R)-30 < RGBC_n.R && (orange.G)-30 < RGBC_n.G && (orange.G)+20 > RGBC_n.G) {
+[e :U 2034 ]
+[e $ ! && && < - . _orange 0 -> -> 30 `i `ui . _RGBC_n 0 < - . _orange 1 -> -> 30 `i `ui . _RGBC_n 1 > + . _orange 1 -> -> 20 `i `ui . _RGBC_n 1 2036  ]
+{
+"163
+[; ;color.c: 163:         color = 6;
+[e = _color -> -> 6 `i `uc ]
+"164
+[; ;color.c: 164:     }
+}
+[e $U 2037  ]
+"166
+[; ;color.c: 166:     else if ((lightBlue.B)-20 < RGBC_n.B && (lightBlue.B)+30 > RGBC_n.B) {
+[e :U 2036 ]
+[e $ ! && < - . _lightBlue 2 -> -> 20 `i `ui . _RGBC_n 2 > + . _lightBlue 2 -> -> 30 `i `ui . _RGBC_n 2 2038  ]
+{
+"167
+[; ;color.c: 167:         color = 7;
+[e = _color -> -> 7 `i `uc ]
+"168
+[; ;color.c: 168:     }
+}
+[e $U 2039  ]
+"170
+[; ;color.c: 170:     else if ((white.R)-20 < RGBC_n.R && (white.G)-20 < RGBC_n.G && (white.B)-30 < RGBC_n.B) {
+[e :U 2038 ]
+[e $ ! && && < - . _white 0 -> -> 20 `i `ui . _RGBC_n 0 < - . _white 1 -> -> 20 `i `ui . _RGBC_n 1 < - . _white 2 -> -> 30 `i `ui . _RGBC_n 2 2040  ]
+{
+"171
+[; ;color.c: 171:         color = 8;
+[e = _color -> -> 8 `i `uc ]
+"172
+[; ;color.c: 172:     }
+}
+[e $U 2041  ]
+"174
+[; ;color.c: 174:     else {
+[e :U 2040 ]
+{
+"175
+[; ;color.c: 175:         color = 9;
+[e = _color -> -> 9 `i `uc ]
+"176
+[; ;color.c: 176:         LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"177
+[; ;color.c: 177:     }
+}
+[e :U 2041 ]
+[e :U 2039 ]
+[e :U 2037 ]
+[e :U 2035 ]
+[e :U 2033 ]
 [e :U 2031 ]
 [e :U 2029 ]
 [e :U 2027 ]
-"204
-[; ;color.c: 204:     return color;
+"227
+[; ;color.c: 227:     return color;
 [e ) _color ]
 [e $UE 2025  ]
-"205
-[; ;color.c: 205: }
+"228
+[; ;color.c: 228: }
 [e :UE 2025 ]
 }
-"207
-[; ;color.c: 207: void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
+"230
+[; ;color.c: 230: void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
 [v _color_calibration `(v ~T0 @X0 1 ef10`*S2016`*S2016`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015 ]
-"208
-[; ;color.c: 208: {
+"231
+[; ;color.c: 231: {
 {
 [e :U _color_calibration ]
-"207
-[; ;color.c: 207: void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
+"230
+[; ;color.c: 230: void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
 [v _RGBC `*S2016 ~T0 @X0 1 r1 ]
 [v _RGBC_n `*S2016 ~T0 @X0 1 r2 ]
 [v _red `*S2015 ~T0 @X0 1 r3 ]
@@ -2510,109 +2582,264 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _orange `*S2015 ~T0 @X0 1 r8 ]
 [v _lightblue `*S2015 ~T0 @X0 1 r9 ]
 [v _white `*S2015 ~T0 @X0 1 r10 ]
-"208
-[; ;color.c: 208: {
-[f ]
-"209
-[; ;color.c: 209:     white_Light(1);
-[e ( _white_Light (1 -> -> 1 `i `uc ]
-"210
-[; ;color.c: 210:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"212
-[; ;color.c: 212:     while (PORTFbits.RF2);
-[e $U 2033  ]
-[e :U 2034 ]
-[e :U 2033 ]
-[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2034  ]
-[e :U 2035 ]
-"213
-[; ;color.c: 213:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"214
-[; ;color.c: 214:     color_read(RGBC);
-[e ( _color_read (1 _RGBC ]
-"215
-[; ;color.c: 215:     color_normalise(*RGBC, RGBC_n);
-[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
-"216
-[; ;color.c: 216:     red->R = RGBC_n->R;
-[e = . *U _red 0 . *U _RGBC_n 0 ]
-"217
-[; ;color.c: 217:     red->G = RGBC_n->G;
-[e = . *U _red 1 . *U _RGBC_n 1 ]
-"218
-[; ;color.c: 218:     red->B = RGBC_n->B;
-[e = . *U _red 2 . *U _RGBC_n 2 ]
-"220
-[; ;color.c: 220:     _delay((unsigned long)((500)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"221
-[; ;color.c: 221:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"223
-[; ;color.c: 223:     while (PORTFbits.RF2);
-[e $U 2036  ]
-[e :U 2037 ]
-[e :U 2036 ]
-[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2037  ]
-[e :U 2038 ]
-"224
-[; ;color.c: 224:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"225
-[; ;color.c: 225:     color_read(RGBC);
-[e ( _color_read (1 _RGBC ]
-"226
-[; ;color.c: 226:     color_normalise(*RGBC, RGBC_n);
-[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
-"227
-[; ;color.c: 227:     green->R = RGBC_n->R;
-[e = . *U _green 0 . *U _RGBC_n 0 ]
-"228
-[; ;color.c: 228:     green->G = RGBC_n->G;
-[e = . *U _green 1 . *U _RGBC_n 1 ]
-"229
-[; ;color.c: 229:     green->B = RGBC_n->B;
-[e = . *U _green 2 . *U _RGBC_n 2 ]
 "231
-[; ;color.c: 231:     _delay((unsigned long)((500)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;color.c: 231: {
+[f ]
 "232
-[; ;color.c: 232:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[; ;color.c: 232:     white_Light(1);
+[e ( _white_Light (1 -> -> 1 `i `uc ]
+"233
+[; ;color.c: 233:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"234
-[; ;color.c: 234:     while (PORTFbits.RF2);
-[e $U 2039  ]
-[e :U 2040 ]
-[e :U 2039 ]
-[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2040  ]
-[e :U 2041 ]
 "235
-[; ;color.c: 235:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+[; ;color.c: 235:     while (PORTFbits.RF2);
+[e $U 2043  ]
+[e :U 2044 ]
+[e :U 2043 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2044  ]
+[e :U 2045 ]
 "236
-[; ;color.c: 236:     color_read(RGBC);
-[e ( _color_read (1 _RGBC ]
+[; ;color.c: 236:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
 "237
-[; ;color.c: 237:     color_normalise(*RGBC, RGBC_n);
-[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+[; ;color.c: 237:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
 "238
-[; ;color.c: 238:     blue->R = RGBC_n->R;
-[e = . *U _blue 0 . *U _RGBC_n 0 ]
+[; ;color.c: 238:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
 "239
-[; ;color.c: 239:     blue->G = RGBC_n->G;
-[e = . *U _blue 1 . *U _RGBC_n 1 ]
+[; ;color.c: 239:     red->R = RGBC_n->R;
+[e = . *U _red 0 . *U _RGBC_n 0 ]
 "240
-[; ;color.c: 240:     blue->B = RGBC_n->B;
-[e = . *U _blue 2 . *U _RGBC_n 2 ]
-"242
-[; ;color.c: 242:     _delay((unsigned long)((500)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;color.c: 240:     red->G = RGBC_n->G;
+[e = . *U _red 1 . *U _RGBC_n 1 ]
+"241
+[; ;color.c: 241:     red->B = RGBC_n->B;
+[e = . *U _red 2 . *U _RGBC_n 2 ]
 "243
-[; ;color.c: 243:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[; ;color.c: 243:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"244
+[; ;color.c: 244:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"300
-[; ;color.c: 300: }
-[e :UE 2032 ]
+"246
+[; ;color.c: 246:     while (PORTFbits.RF2);
+[e $U 2046  ]
+[e :U 2047 ]
+[e :U 2046 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2047  ]
+[e :U 2048 ]
+"247
+[; ;color.c: 247:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"248
+[; ;color.c: 248:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"249
+[; ;color.c: 249:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"250
+[; ;color.c: 250:     green->R = RGBC_n->R;
+[e = . *U _green 0 . *U _RGBC_n 0 ]
+"251
+[; ;color.c: 251:     green->G = RGBC_n->G;
+[e = . *U _green 1 . *U _RGBC_n 1 ]
+"252
+[; ;color.c: 252:     green->B = RGBC_n->B;
+[e = . *U _green 2 . *U _RGBC_n 2 ]
+"254
+[; ;color.c: 254:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"255
+[; ;color.c: 255:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"257
+[; ;color.c: 257:     while (PORTFbits.RF2);
+[e $U 2049  ]
+[e :U 2050 ]
+[e :U 2049 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2050  ]
+[e :U 2051 ]
+"258
+[; ;color.c: 258:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"259
+[; ;color.c: 259:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"260
+[; ;color.c: 260:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"261
+[; ;color.c: 261:     blue->R = RGBC_n->R;
+[e = . *U _blue 0 . *U _RGBC_n 0 ]
+"262
+[; ;color.c: 262:     blue->G = RGBC_n->G;
+[e = . *U _blue 1 . *U _RGBC_n 1 ]
+"263
+[; ;color.c: 263:     blue->B = RGBC_n->B;
+[e = . *U _blue 2 . *U _RGBC_n 2 ]
+"265
+[; ;color.c: 265:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"266
+[; ;color.c: 266:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"268
+[; ;color.c: 268:     while (PORTFbits.RF2);
+[e $U 2052  ]
+[e :U 2053 ]
+[e :U 2052 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2053  ]
+[e :U 2054 ]
+"269
+[; ;color.c: 269:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"270
+[; ;color.c: 270:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"271
+[; ;color.c: 271:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"272
+[; ;color.c: 272:     yellow->R = RGBC_n->R;
+[e = . *U _yellow 0 . *U _RGBC_n 0 ]
+"273
+[; ;color.c: 273:     yellow->G = RGBC_n->G;
+[e = . *U _yellow 1 . *U _RGBC_n 1 ]
+"274
+[; ;color.c: 274:     yellow->B = RGBC_n->B;
+[e = . *U _yellow 2 . *U _RGBC_n 2 ]
+"276
+[; ;color.c: 276:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"277
+[; ;color.c: 277:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"279
+[; ;color.c: 279:     while (PORTFbits.RF2);
+[e $U 2055  ]
+[e :U 2056 ]
+[e :U 2055 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2056  ]
+[e :U 2057 ]
+"280
+[; ;color.c: 280:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"281
+[; ;color.c: 281:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"282
+[; ;color.c: 282:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"283
+[; ;color.c: 283:     pink->R = RGBC_n->R;
+[e = . *U _pink 0 . *U _RGBC_n 0 ]
+"284
+[; ;color.c: 284:     pink->G = RGBC_n->G;
+[e = . *U _pink 1 . *U _RGBC_n 1 ]
+"285
+[; ;color.c: 285:     pink->B = RGBC_n->B;
+[e = . *U _pink 2 . *U _RGBC_n 2 ]
+"287
+[; ;color.c: 287:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"288
+[; ;color.c: 288:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"290
+[; ;color.c: 290:     while (PORTFbits.RF2);
+[e $U 2058  ]
+[e :U 2059 ]
+[e :U 2058 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2059  ]
+[e :U 2060 ]
+"291
+[; ;color.c: 291:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"292
+[; ;color.c: 292:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"293
+[; ;color.c: 293:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"294
+[; ;color.c: 294:     orange->R = RGBC_n->R;
+[e = . *U _orange 0 . *U _RGBC_n 0 ]
+"295
+[; ;color.c: 295:     orange->G = RGBC_n->G;
+[e = . *U _orange 1 . *U _RGBC_n 1 ]
+"296
+[; ;color.c: 296:     orange->B = RGBC_n->B;
+[e = . *U _orange 2 . *U _RGBC_n 2 ]
+"298
+[; ;color.c: 298:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"299
+[; ;color.c: 299:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"301
+[; ;color.c: 301:     while (PORTFbits.RF2);
+[e $U 2061  ]
+[e :U 2062 ]
+[e :U 2061 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2062  ]
+[e :U 2063 ]
+"302
+[; ;color.c: 302:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"303
+[; ;color.c: 303:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"304
+[; ;color.c: 304:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"305
+[; ;color.c: 305:     lightblue->R = RGBC_n->R;
+[e = . *U _lightblue 0 . *U _RGBC_n 0 ]
+"306
+[; ;color.c: 306:     lightblue->G = RGBC_n->G;
+[e = . *U _lightblue 1 . *U _RGBC_n 1 ]
+"307
+[; ;color.c: 307:     lightblue->B = RGBC_n->B;
+[e = . *U _lightblue 2 . *U _RGBC_n 2 ]
+"309
+[; ;color.c: 309:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"310
+[; ;color.c: 310:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"312
+[; ;color.c: 312:     while (PORTFbits.RF2);
+[e $U 2064  ]
+[e :U 2065 ]
+[e :U 2064 ]
+[e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2065  ]
+[e :U 2066 ]
+"313
+[; ;color.c: 313:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
+"314
+[; ;color.c: 314:     color_read(RGBC);
+[e ( _color_read (1 _RGBC ]
+"315
+[; ;color.c: 315:     color_normalise(*RGBC, RGBC_n);
+[e ( _color_normalise (2 , *U _RGBC _RGBC_n ]
+"316
+[; ;color.c: 316:     white->R = RGBC_n->R;
+[e = . *U _white 0 . *U _RGBC_n 0 ]
+"317
+[; ;color.c: 317:     white->G = RGBC_n->G;
+[e = . *U _white 1 . *U _RGBC_n 1 ]
+"318
+[; ;color.c: 318:     white->B = RGBC_n->B;
+[e = . *U _white 2 . *U _RGBC_n 2 ]
+"320
+[; ;color.c: 320:     _delay((unsigned long)((500)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+"321
+[; ;color.c: 321:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+[e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"322
+[; ;color.c: 322: }
+[e :UE 2042 ]
 }

@@ -34,7 +34,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
     
-    unsigned char testSequence[4] = {4,3,9,8}; //***for testing without colors
+    unsigned char testSequence[4] = {2,1,1,8}; //***for testing without colors
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
@@ -54,7 +54,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);  //store address of CCP1 duty high byte
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);  //store address of CCP2 duty high byte
     motorL.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
-    motorL.compensation=3;                  //left motor run at higher power
+    motorL.compensation=0;                  //left motor run at higher power
 
     motorR.power=0; 						//zero power to start
     motorR.direction=1; 					//set default motor direction
@@ -68,10 +68,10 @@ void main(void){
     char straightSpeed=25;             //maximum power
     unsigned char straightRamp=1;      //time between each power step
     
-    unsigned char reverseDuration=10;  //adjust to length of one square
+    unsigned char reverseDuration=200;  //adjust to length of one square
     
     char turnSpeed=20;                 //maximum power
-    unsigned char turnDuration=5;      //time between ramp up and ramp down
+    unsigned char turnDuration=25;      //time between ramp up and ramp down
     unsigned char turnRamp=2;          //time between each power step 
     
     // Display battery voltage in binary on LEDs (before button press)
