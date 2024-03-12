@@ -24096,6 +24096,8 @@ unsigned char __t3rd16on(void);
 
 
 
+extern unsigned int ambient;
+
 typedef struct RGB_calib {
  unsigned int R;
  unsigned int G;
@@ -24115,6 +24117,11 @@ typedef struct RGBC_val {
 
 
 void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
 
 
 
@@ -24146,7 +24153,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n);
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
 
 
 
@@ -24200,7 +24207,7 @@ void color_click_init(void)
     I2C_2_Master_Init();
 
 
-  color_writetoaddr(0x00, 0x01);
+ color_writetoaddr(0x00, 0x01);
     _delay((unsigned long)((3)*(64000000/4000.0)));
 
 
@@ -24210,12 +24217,29 @@ void color_click_init(void)
  color_writetoaddr(0x01, 0xD5);
 
 
- color_writetoaddr(0x00, 0x13);
-    color_writetoaddr(0x07, 0x07);
-    color_writetoaddr(0x06, 0xD0);
-    color_writetoaddr(0x05, 0x00);
-    color_writetoaddr(0x04, 0x00);
+    color_clear_init_interrupts();
 
+}
+
+void color_clear_init_interrupts(void) {
+
+    I2C_2_Master_Start();
+    I2C_2_Master_Write(0x52 | 0x00);
+    I2C_2_Master_Write(0b11100110);
+    I2C_2_Master_Stop();
+
+
+    unsigned int high_threshold = ambient + 12;
+    unsigned int low_threshold = ambient - 12;
+
+
+ color_writetoaddr(0x00, 0x13);
+    _delay((unsigned long)((3)*(64000000/4000.0)));
+    color_writetoaddr(0x07, (high_threshold >> 8));
+    color_writetoaddr(0x06, (high_threshold & 0xFF));
+    color_writetoaddr(0x05, (low_threshold >> 8));
+    color_writetoaddr(0x04, (low_threshold & 0xFF));
+    color_writetoaddr(0x0C, 0b0100);
 }
 
 
@@ -24285,19 +24309,32 @@ void color_read(RGBC_val *RGBC)
 
 
 void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-# 115 "color.c"
+# 132 "color.c"
     RGBC_n->C = RGBC.C;
     RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }
 
-unsigned char color_detect(RGBC_val RGBC_n)
+unsigned char color_detect(RGBC_val RGBC_n,RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white)
 {
     unsigned char color=0;
-# 167 "color.c"
-    return color;
 
+    if ((red->R)-30 < RGBC_n.R && RGBC_n.G < (red->G)+30 && RGBC_n.B < (red->B)+30) {
+        color = 1;
+    }
+
+    else if ((green->R)-30 < RGBC_n.R && RGBC_n.R < (green->R)+30 && (green->G)-30 < RGBC_n.G && (green->B)-30 < RGBC_n.B && RGBC_n.B < (green->B)+30) {
+        color = 2;
+    }
+
+    else if ( RGBC_n.R < (blue->R)+30 && (blue->G)-30 < RGBC_n.G && RGBC_n.G < (blue->G)+30 && (blue->B)-30 < RGBC_n.B) {
+        color = 3;
+    }
+
+    else {color = 9;}
+# 204 "color.c"
+    return color;
 }
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
@@ -24337,60 +24374,5 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    yellow->R = RGBC_n->R;
-    yellow->G = RGBC_n->G;
-    yellow->B = RGBC_n->B;
-
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    pink->R = RGBC_n->R;
-    pink->G = RGBC_n->G;
-    pink->B = RGBC_n->B;
-
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    orange->R = RGBC_n->R;
-    orange->G = RGBC_n->G;
-    orange->B = RGBC_n->B;
-
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    lightblue->R = RGBC_n->R;
-    lightblue->G = RGBC_n->G;
-    lightblue->B = RGBC_n->B;
-
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
-    while (PORTFbits.RF2);
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    white->R = RGBC_n->R;
-    white->G = RGBC_n->G;
-    white->B = RGBC_n->B;
-
-    _delay((unsigned long)((500)*(64000000/4000.0)));
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
+# 300 "color.c"
 }

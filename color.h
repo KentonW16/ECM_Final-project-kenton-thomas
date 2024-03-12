@@ -62,7 +62,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
  *	Writes code (1-8) for color dependent on RGB values
  *  No color detected = 0
  ***********************************************/
-unsigned char color_detect(RGBC_val RGBC_n);
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
 
 /********************************************//**
  *  Function to calibrate color sensor by flashing each color one by one

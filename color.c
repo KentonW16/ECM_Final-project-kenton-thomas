@@ -32,8 +32,8 @@ void color_clear_init_interrupts(void) {
     I2C_2_Master_Stop();
    
     //set interrupt thresholds
-    unsigned int high_threshold = ambient + 15;
-    unsigned int low_threshold = ambient - 15;
+    unsigned int high_threshold = ambient + 12;
+    unsigned int low_threshold = ambient - 12;
     
     //initialise interrupt
 	color_writetoaddr(0x00, 0x13); //turn on RGBC interrupts
@@ -135,9 +135,24 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }
 
-unsigned char color_detect(RGBC_val RGBC_n)
+unsigned char color_detect(RGBC_val RGBC_n,RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white)
 {
     unsigned char color=0;
+    
+    if ((red.R)-40 < RGBC_n.R) { //red
+        color = 1;
+    }
+    
+    else if ((green.G)-25 < RGBC_n.G) { //green
+        color = 2;
+    }
+    
+    else if ((blue.B)-40 < RGBC_n.B) { //blue
+        color = 3;
+    }
+    
+    else {color = 9;}
+    
     /*
     if (RGBC_n.R > 500) { // red, yellow or orange
         if (RGBC_n.G < 200){color = 1;} //Red
@@ -185,9 +200,8 @@ unsigned char color_detect(RGBC_val RGBC_n)
     else {  //color not recognised
         color = 9;
     }
-    return color;
     */
-
+    return color;
 }
 
 void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
@@ -227,7 +241,7 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    
+    /*
     while (PORTFbits.RF2); //read yellow when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -282,5 +296,6 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    
+    */
 }
+

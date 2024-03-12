@@ -24374,7 +24374,7 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n);
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
 
 
 
@@ -24541,7 +24541,7 @@ void main(void){
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 105 "main.c"
+# 107 "main.c"
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
@@ -24576,8 +24576,8 @@ void main(void){
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);
             color_normalise(RGBC, &RGBC_n);
+            color = color_detect(RGBC_n, red, green, blue, yellow, pink, orange, lightblue, white);
 
-            color = testSequence[curMove];
             moveSequence[curMove] = color;
 
 

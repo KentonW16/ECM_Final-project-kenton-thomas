@@ -24097,6 +24097,7 @@ unsigned char __t3rd16on(void);
 
 
 extern char wall;
+extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
@@ -24177,6 +24178,11 @@ unsigned char I2C_2_Master_Read(unsigned char ack);
 
 extern unsigned int ambient;
 
+typedef struct RGB_calib {
+ unsigned int R;
+ unsigned int G;
+ unsigned int B;
+} RGB_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24185,11 +24191,6 @@ typedef struct RGBC_val {
     unsigned int C;
 } RGBC_val;
 
-typedef struct HSV_val {
- unsigned int H;
- unsigned int S;
- unsigned int V;
-} HSV_val;
 
 
 
@@ -24232,7 +24233,14 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n);
+unsigned char color_detect(RGBC_val RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+
+
+
+
+
+
+void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
 # 5 "interrupts.c" 2
 
 
@@ -24267,11 +24275,9 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
     if(PIR0bits.INT0IF){
-
-    wall = 1;
-    color_clear_init_interrupts();
-    PIR0bits.INT0IF = 0;
-
+        wall = 1;
+        color_clear_init_interrupts();
+        PIR0bits.INT0IF = 0;
 
 
 
@@ -24279,9 +24285,9 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
     if(TMR0IF){
+        lost = 1;
+        TMR0IF=0;
 
-    LATHbits.LATH3 = !LATHbits.LATH3;
- TMR0IF=0;
 
  }
 
@@ -24289,14 +24295,14 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
     if(PIR4bits.RC4IF){
 
-    putCharToRxBuf(RC4REG);
+        putCharToRxBuf(RC4REG);
 
  }
 
     if(PIR4bits.TX4IF){
 
-    TX4REG = getCharFromTxBuf();
-    if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
+        TX4REG = getCharFromTxBuf();
+        if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
 
  }
 
