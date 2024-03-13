@@ -58,12 +58,12 @@ void color_writetoaddr(char address, char value){
 
 void white_Light(char state)
 {
-    if (state){
+    if (state){ //Turn on all RGB LEDs on color click if 1 is passed into function
         LATGbits.LATG0 = 1;
         LATEbits.LATE7 = 1;
         LATAbits.LATA3 = 1;
     }
-    else {
+    else { //Turn off all RGB LEDs on color click if 0 is passed into function
         LATGbits.LATG0 = 0;
         LATEbits.LATE7 = 0;
         LATAbits.LATA3 = 0;
@@ -110,58 +110,39 @@ void color_read(RGBC_val *RGBC)
 	I2C_2_Master_Stop();                         //Stop condition
 }
 
-
-void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-    /*method 1 - normalising against C*/
-    /*
-    RGBC_n->C = RGBC.C/100;
-    RGBC_n->R = RGBC.R/RGBC_n->C;
-    RGBC_n->G = RGBC.G/RGBC_n->C;
-    RGBC_n->B = RGBC.B/RGBC_n->C;
-    */
-    
-    /*method 2 - normalising against C, increased precision by converting to longs*/
-    /*
-    RGBC_n->C = RGBC.C;
-    RGBC_n->R = 1000L*RGBC.R/RGBC.C;
-    RGBC_n->G = 1000L*RGBC.G/RGBC.C;
-    RGBC_n->B = 1000L*RGBC.B/RGBC.C;
-    */
-    
-    /*method 3 - normalising against sum of RGB*/
-    RGBC_n->C = RGBC.C;
-    RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
-    RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
-    RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
-}
-
 unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white)
 {
     unsigned char color=0;
     
     // Red (10 degrees tolerance on hue)
-    if ((red.H)-1000 < HSV.H && HSV.H < (red.H)+1000) {color = 1;}
-
-    // Green
-    else if ((green.H)-1000 < HSV.H && HSV.H < (green.H)+1000) {color = 2;}
-
-    // Blue
-    else if ((blue.H)-1000 < HSV.H && HSV.H < (blue.H)+1000) {color = 3;}
+    if (red.H > 30000){ //Somewhere between 350 and 360 degrees
+        if(((red.H)-1000 < HSV.H && HSV.H < 36000) || 0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
+    }
     
-    // Yellow
-    else if ((yellow.H)-1000 < HSV.H && HSV.H < (yellow.H)+1000) {color = 4;}
+    else if (red.H < 10000){
+        if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || 0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
+    }
+        
+    // Green or light blue
+    else if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
+        if (HSV.S > lightblue.S + 500){color = 2;} // Green has higher S value than light blue
+        else {color = 7;}
+    }
     
-    // Pink
-    else if ((pink.H)-1000 < HSV.H && HSV.H < (pink.H)+1000) {color = 5;}
+    // Blue (20 degree tolerance as no other colors near)
+    else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
     
-    // Orange
-    else if ((orange.H)-1000 < HSV.H && HSV.H < (orange.H)+1000) {color = 6;}
+    // Yellow or pink
+    else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {
+        if (HSV.S > pink.S + 500){color = 4;} // Yellow has higher S value than pink
+        else {color = 5;} // Pink
+    }
     
-    // Light blue
-    else if ((lightblue.H)-1000 < HSV.H && HSV.H < (lightblue.H)+1000) {color = 7;}
+    // Orange (5 degree tolerance)
+    else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
     
-    // White
-    else if ((white.H)-1000 < HSV.H && HSV.H < (white.H)+1000) {color = 8;}
+    // White (5 degree tolerance)
+    else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
     
     else {color = 9;}
    
@@ -170,21 +151,23 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
 {
-    white_Light(1);
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    white_Light(1); //Turn on color click LED in preparation to read values
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; // Turn on board LEDs to show color calibration routine started
 
-    while (PORTFbits.RF2); //read red when button pressed
-    LATDbits.LATD7 = LATHbits.LATH3 = 0;
-    color_read(RGBC);
-    rgb_2_hsv(*RGBC, HSV);
-    red->H = HSV->H;
+    // Read RED when button pressed
+    while (PORTFbits.RF2); 
+    LATDbits.LATD7 = LATHbits.LATH3 = 0; //Turn off board LEDs to show that color is being read
+    color_read(RGBC); // Obtain RGB values from color click
+    rgb_2_hsv(*RGBC, HSV); //Convert RGB values into HSV values
+    red->H = HSV->H; // Obtain converted values from HSV_val HSV struct and store into HSV_calib struct for each individual color
     red->S = HSV->S;
     red->V = HSV->V;
     
-    __delay_ms(500);
-    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+    __delay_ms(500); // Prevent multiple button press and allow visual confirmation that color has been read (board LEDs turning off)
+    LATDbits.LATD7 = LATHbits.LATH3 = 1; //Turn board LEDs back on to signal that it's ready and waiting for next color read
     
-    while (PORTFbits.RF2); //read green when button pressed
+    // Read GREEN when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -195,7 +178,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
     
-    while (PORTFbits.RF2); //read blue when button pressed
+    // Read BLUE when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -206,7 +190,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
     
-    while (PORTFbits.RF2); //read yellow when button pressed
+    // Read YELLOW when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -217,7 +202,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
     
-    while (PORTFbits.RF2); //read pink when button pressed
+    // Read PINK when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -228,7 +214,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
     
-    while (PORTFbits.RF2); //read orange when button pressed
+    // Read ORANGE when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -239,7 +226,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1; 
     
-    while (PORTFbits.RF2); //read light blue when button pressed
+    // Read LIGHT BLUE when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -250,7 +238,8 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1; 
     
-    while (PORTFbits.RF2); //read white when button pressed
+    // Read WHITE when button pressed
+    while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
     rgb_2_hsv(*RGBC, HSV);
@@ -260,46 +249,49 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    
 }
 
 unsigned int max (unsigned int a, unsigned int b){
-    if (a > b){return a;}
-    else {return b;}
+    if (a > b){return a;} // Check if a is greater than b, if so, then a is max val; return a
+    else {return b;} // Otherwise, b is greater (or equal to) a, then return b
 }
 
 unsigned int min (unsigned int a,unsigned int b){
-    if (a < b){return a;}
-    else {return b;}
+    if (a < b){return a;} // Check if a is smaller than b, if so, then a is min val; return a
+    else {return b;} // Otherwise, b is smaller (or equal to) a, then return b
 }
 
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
-    //Divide RGB values by maximum value that can be obtained from each sensor
-    // Change r to be value from 0-1, but multiply by power of 10 so int used
-    unsigned int r = (unsigned int)(RGBC.R*10000L/255); //Theoretical max=43008
-    unsigned int g = (unsigned int)(RGBC.G*10000L/255); //Range from 1-10000 (0-1 but 2 d.p.)
-    unsigned int b = (unsigned int)(RGBC.B*10000L/255);
+    // H:Hue S:Saturation V:Value
     
-    // h, s, v = hue, saturation, value 
-    unsigned int cmax = max(r, max(g, b)); // maximum of r, g, b 
-    unsigned int cmin = min(r, min(g, b)); // minimum of r, g, b 
-    unsigned long diff = cmax - cmin;
+    // Divide sensor RGB values by maximum value that each sensor can read 
+    // (Theoretical max. is 43008 from datasheet, but varies in testing)
+    // Each of the r g and b values will now vary from 0-1 (Ranges from 1-10000 in code for increased accuracy without using float)
+    unsigned int r = (unsigned int)(RGBC.R*10000L/1900); //Max value for R sensor found to be 1900
+    unsigned int g = (unsigned int)(RGBC.G*10000L/1400); //Max value for G sensor found to be 1400
+    unsigned int b = (unsigned int)(RGBC.B*10000L/1600); //Max value for B sensor found to be 1600
     
-    //Find H (hue) value
-    if (cmax == r){
+    
+    unsigned int cmax = max(r, max(g, b)); // Maximum between r, g, b 
+    unsigned int cmin = min(r, min(g, b)); // Minimum between r, g, b 
+    unsigned long diff = cmax - cmin; // Difference between max and min value
+    
+    // Find H (hue) value (Ranges from 0-360 degrees, 0-36000 in code for 2 d.p. accuracy)
+    if (cmax == r){ // If max value is red, need to also check if g > b to avoid negative degree readings as unsigned int used (wraparound)
         if (g > b){HSV->H = (unsigned int)((g-b)*6000L/diff);}
         else if (b > g){HSV->H = (unsigned int)((g + 6*diff -b)*6000L/diff);}
     }
-    else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);}
+    
+    else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);} // Negative number avoided by adding 2*diff before subtracting
         
     else if (cmax == b){HSV->H = (unsigned int)((r + 4*diff -g)*6000L/diff);}
     
-    //Find S (saturation) value
+    // Find S (saturation) value (Ranges from 0-100% , 0-10000 in code for 2 d.p. accuracy)
     HSV->S = (unsigned int)((diff * 10000)/cmax);
     
     if (HSV->S == 0){HSV->H = 0;}
     
-    //Find V (value) value
+    //Find V (value) value (Ranges from 0-100% , 0-10000 in code for 2 d.p. accuracy)
     HSV->V = cmax;
   
 }
