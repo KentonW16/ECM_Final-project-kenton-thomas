@@ -19,7 +19,7 @@ void Interrupts_init(void)
     
     // Turn on global interrupts, peripheral interrupts and the interrupt source 
 	// It's a good idea to turn on global interrupts last, once all other interrupt configuration is done.
-    TMR0IE=1;           //enable interrupts from timer
+    //TMR0IE=1;           //enable interrupts from timer  ********testing without timer
     PIE4bits.RC4IE=1;	//enable receive interrupt
     INTCONbits.PEIE=1;  //enable peripheral interrupts
     INTCONbits.GIE=1; 	//turn on interrupts globally

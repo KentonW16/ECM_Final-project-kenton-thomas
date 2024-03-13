@@ -35,7 +35,7 @@ void color_clear_init_interrupts(void) {
     //unsigned int high_threshold = ambient + 10;
     //unsigned int low_threshold = ambient - 10;
     
-    unsigned int high_threshold = ambient + (ambient/5);
+    unsigned int high_threshold = ambient + (ambient/3);
     unsigned int low_threshold = ambient - (ambient/20);
     
     //initialise interrupt
@@ -115,19 +115,10 @@ void color_read(RGBC_val *RGBC)
 
 unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white)
 {
-    unsigned char color=0;
+    unsigned char color=9;
     
-    // Red (10 degrees tolerance on hue)
-    if (red.H > 30000){ //Somewhere between 350 and 360 degrees
-        if(((red.H)-1000 < HSV.H && HSV.H < 36000) || 0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
-    }
-    
-    else if (red.H < 10000){
-        if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || 0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
-    }
-        
     // Green or light blue
-    else if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
+    if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
         if (HSV.S > lightblue.S + 500){color = 2;} // Green has higher S value than light blue
         else {color = 7;}
     }
@@ -147,7 +138,14 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     // White (5 degree tolerance)
     else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
     
-    else {color = 9;}
+    // Red (10 degrees tolerance on hue)
+    if (red.H > 30000){ //Somewhere between 350 and 360 degrees
+        if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
+    }
+    
+    if (red.H < 10000){
+        if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
+    }
    
     return color;
 }

@@ -62,9 +62,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "40176
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 40176: extern volatile INTCONbits_t INTCONbits __attribute__((address(0xFF2)));
 [v _INTCONbits `VS1984 ~T0 @X0 0 e@4082 ]
-"48761
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48761: extern volatile __bit TMR0IE __attribute__((address(0x714D)));
-[v _TMR0IE `Vb ~T0 @X0 0 e@29005 ]
 "4810
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 4810:     struct {
 [s S274 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -2185,9 +2182,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "18
 [; ;interrupts.c: 18:     INTCONbits.INT0EDG = 0;
 [e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
-"22
-[; ;interrupts.c: 22:     TMR0IE=1;
-[e = _TMR0IE -> -> 1 `i `b ]
 "23
 [; ;interrupts.c: 23:     PIE4bits.RC4IE=1;
 [e = . . _PIE4bits 0 3 -> -> 1 `i `uc ]

@@ -100,7 +100,7 @@ void main(void){
     
     // Flash color cards in front of buggy
     struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
-    //color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
     
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
@@ -160,8 +160,8 @@ void main(void){
             color_read(&RGBC);                     //read RGBC values
             //color_normalise(RGBC, &RGBC_n);        //normalise RGB values
             rgb_2_hsv(RGBC, &HSV);                 //convert to HSV
-            //color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
-            color = testSequence[curMove];         //***for testing without colors
+            color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
+            //color = testSequence[curMove];         //***for testing without colors
             moveSequence[curMove] = color;         //record movement
             
             // Carry out movement based on color detected
@@ -175,11 +175,12 @@ void main(void){
             
             curMove++;                             //increment current move number
             resetTimer();                          //reset timer
-            PIE0bits.INT0IE=TMR0IE=1;              //turn interrupts on
+            //PIE0bits.INT0IE=TMR0IE=1;              //turn interrupts on
+            PIE0bits.INT0IE=1;                     //***test without timer
             wall = 0;                              //reset flag
             
         }
-        
+        /*
         if (lost == 1) {  //if timer interrupt triggered (moving straight for > 8s)
             PIE0bits.INT0IE=0;                     //turn off color click interrupts (not timer)
             stop(&motorL, &motorR, straightRamp);  //stop
@@ -188,7 +189,7 @@ void main(void){
             lost = 0;
             break;
         }
-        
+        */
         if (color == 8 || color == 9) {break;} //color white or not recognised (returned home)
         
     }

@@ -24387,11 +24387,22 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
 
+
 void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+
+
 
 unsigned int max (unsigned int a, unsigned int b);
 
+
+
+
 unsigned int min (unsigned int a,unsigned int b);
+
+
+
+
 
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 14 "main.c" 2
@@ -24565,7 +24576,7 @@ void main(void){
 
 
     struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white;
-
+    color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
 
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
@@ -24617,8 +24628,8 @@ void main(void){
             color_read(&RGBC);
 
             rgb_2_hsv(RGBC, &HSV);
+            color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);
 
-            color = testSequence[curMove];
             moveSequence[curMove] = color;
 
 
@@ -24632,20 +24643,12 @@ void main(void){
 
             curMove++;
             resetTimer();
-            PIE0bits.INT0IE=TMR0IE=1;
+
+            PIE0bits.INT0IE=1;
             wall = 0;
 
         }
-
-        if (lost == 1) {
-            PIE0bits.INT0IE=0;
-            stop(&motorL, &motorR, straightRamp);
-            lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
-            PIE0bits.INT0IE=1;
-            lost = 0;
-            break;
-        }
-
+# 193 "main.c"
         if (color == 8 || color == 9) {break;}
 
     }

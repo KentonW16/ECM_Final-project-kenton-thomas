@@ -24246,11 +24246,22 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
 
+
 void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+
+
 
 unsigned int max (unsigned int a, unsigned int b);
 
+
+
+
 unsigned int min (unsigned int a,unsigned int b);
+
+
+
+
 
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 5 "interrupts.c" 2
@@ -24271,7 +24282,7 @@ void Interrupts_init(void)
 
 
 
-    TMR0IE=1;
+
     PIE4bits.RC4IE=1;
     INTCONbits.PEIE=1;
     INTCONbits.GIE=1;
