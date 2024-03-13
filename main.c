@@ -79,48 +79,34 @@ void main(void){
     batteryLevel();
     
     // Testing HSV function
+    /*
     RGBC.R = 200;
     RGBC.G = 50;
     RGBC.B = 170;
     
     rgb_2_hsv (RGBC, &HSV);
+    */
     
     // Wait for button press
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off 
-    
-    // Calibration mode, getting values through serial connection
-    /*
-    while (1){
-        while (!PORTFbits.RF2){
-            LATHbits.LATH1=LATDbits.LATD3=1;
-            white_Light(1);
-            color_read(&RGBC);              //read RGBC values
-            color_normalise(RGBC, &RGBC_n); //normalise RGB values
-            //color = color_detect(RGBC_n);
-            //sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  color: %d \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B,color);
-            sprintf(buf,"r=%d g=%d b=%d c=%d   n: r=%d g=%d b=%d  \r\n",RGBC.R,RGBC.G,RGBC.B,RGBC.C, RGBC_n.R,RGBC_n.G,RGBC_n.B);
-
-            sendTxBuf();
-            TxBufferedString(buf); //send string to PC
-            sendTxBuf();
-            TxBufferedString(""); 
-            __delay_ms(300);
-            }
-    }
-    */
-    
-    
+  
     // Turn on bright headlights to show buggy is on
     LATHbits.LATH1=LATDbits.LATD3=1;
     __delay_ms(500);
     
     // Flash color cards in front of buggy
-    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
-    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
+    color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
     
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+    
+    // Add color detect here for debugging with breakpoint after and watch on 'color'
+    color_read(&RGBC);                     //read RGBC values
+    rgb_2_hsv(RGBC, &HSV);
+    color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
+
     
     // Turn on white LED on color click 
     white_Light(1);
@@ -145,8 +131,9 @@ void main(void){
             // Stop and read color
             stop(&motorL, &motorR, straightRamp);  //stop
             color_read(&RGBC);                     //read RGBC values
-            color_normalise(RGBC, &RGBC_n);        //normalise RGB values
-            color = color_detect(RGBC_n, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
+            //color_normalise(RGBC, &RGBC_n);        //normalise RGB values
+            rgb_2_hsv(RGBC, &HSV);
+            color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
             //color = testSequence[curMove];         //***for testing without colors
             moveSequence[curMove] = color;         //record movement
             

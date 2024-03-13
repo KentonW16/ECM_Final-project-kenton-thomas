@@ -135,76 +135,40 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white)
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white)
 {
     unsigned char color=0;
     
-    if ((red.R)-40 < RGBC_n.R) { //red
-        color = 1;
-    }
+    // Red (10 degrees tolerance on hue)
+    if ((red.H)-1000 < HSV.H && HSV.H < (red.H)+1000) {color = 1;}
+
+    // Green
+    else if ((green.H)-1000 < HSV.H && HSV.H < (green.H)+1000) {color = 2;}
+
+    // Blue
+    else if ((blue.H)-1000 < HSV.H && HSV.H < (blue.H)+1000) {color = 3;}
     
-    else if ((green.G)-25 < RGBC_n.G) { //green
-        color = 2;
-    }
+    // Yellow
+    else if ((yellow.H)-1000 < HSV.H && HSV.H < (yellow.H)+1000) {color = 4;}
     
-    else if ((blue.B)-40 < RGBC_n.B) { //blue
-        color = 3;
-    }
+    // Pink
+    else if ((pink.H)-1000 < HSV.H && HSV.H < (pink.H)+1000) {color = 5;}
+    
+    // Orange
+    else if ((orange.H)-1000 < HSV.H && HSV.H < (orange.H)+1000) {color = 6;}
+    
+    // Light blue
+    else if ((lightblue.H)-1000 < HSV.H && HSV.H < (lightblue.H)+1000) {color = 7;}
+    
+    // White
+    else if ((white.H)-1000 < HSV.H && HSV.H < (white.H)+1000) {color = 8;}
     
     else {color = 9;}
-    
-    /*
-    if (RGBC_n.R > 500) { // red, yellow or orange
-        if (RGBC_n.G < 200){color = 1;} //Red
-        else if (255 < RGBC_n.G < 295) {color = 4;} //Yellow
-        else if (200 < RGBC_n.G < 250) {color = 6;} //Orange
-        else {color = 0;}
-    }
-    
-    else if (RGBC_n.R < 420) { // Blue or light blue
-        if (345 < RGBC_n.B < 385){color = 3;} //Blue
-        else if (290 < RGBC_n.B < 330) {color = 7;} //Light blue
-        else {color = 0;}
-    }
-    
-    else if (300 < RGBC_n.G) {color = 2;} // green
-        
-    else if (460 < RGBC_n.R < 500 && 240 < RGBC_n.G < 260) {color=5;} //Pink
-    
-    else if (430 < RGBC_n.R < 470 && 260 < RGBC_n.G < 300) {color=8;} //White
-
-    else if (RGBC_n.G > 290) { // green
-        color = 2;
-    }
-    else if (RGBC_n.B > 230) { // blue
-        color = 3;
-    }
-    
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // yellow
-        color = 4;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // pink
-        color = 5;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // orange
-        color = 6;
-    }
-    else if (RGBC_n.B > 300 && RGBC_n.B > 300) { // light blue
-        color = 7;
-    }
-    else if (RGBC_n.R > 300 && RGBC_n.G > 300 && RGBC_n.B > 300) { // white
-        color = 8;
-    }
-     
-    
-    else {  //color not recognised
-        color = 9;
-    }
-    */
+   
     return color;
 }
 
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
 {
     white_Light(1);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -212,10 +176,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read red when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    red->R = RGBC_n->R;
-    red->G = RGBC_n->G;
-    red->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    red->H = HSV->H;
+    red->S = HSV->S;
+    red->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -223,10 +187,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read green when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    green->R = RGBC_n->R;
-    green->G = RGBC_n->G;
-    green->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    green->H = HSV->H;
+    green->S = HSV->S;
+    green->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -234,21 +198,21 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read blue when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    blue->R = RGBC_n->R;
-    blue->G = RGBC_n->G;
-    blue->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    blue->H = HSV->H;
+    blue->S = HSV->S;
+    blue->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    /*
+    
     while (PORTFbits.RF2); //read yellow when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    yellow->R = RGBC_n->R;
-    yellow->G = RGBC_n->G;
-    yellow->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    yellow->H = HSV->H;
+    yellow->S = HSV->S;
+    yellow->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -256,10 +220,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read pink when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    pink->R = RGBC_n->R;
-    pink->G = RGBC_n->G;
-    pink->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    pink->H = HSV->H;
+    pink->S = HSV->S;
+    pink->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -267,10 +231,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read orange when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    orange->R = RGBC_n->R;
-    orange->G = RGBC_n->G;
-    orange->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    orange->H = HSV->H;
+    orange->S = HSV->S;
+    orange->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1; 
@@ -278,10 +242,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read light blue when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    lightblue->R = RGBC_n->R;
-    lightblue->G = RGBC_n->G;
-    lightblue->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    lightblue->H = HSV->H;
+    lightblue->S = HSV->S;
+    lightblue->V = HSV->V;
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1; 
@@ -289,14 +253,14 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2); //read white when button pressed
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    white->R = RGBC_n->R;
-    white->G = RGBC_n->G;
-    white->B = RGBC_n->B;  
+    rgb_2_hsv(*RGBC, HSV);
+    white->H = HSV->H;
+    white->S = HSV->S;
+    white->V = HSV->V;  
     
     __delay_ms(500);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-    */
+    
 }
 
 unsigned int max (unsigned int a, unsigned int b){

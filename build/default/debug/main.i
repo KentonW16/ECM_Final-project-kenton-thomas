@@ -24319,11 +24319,11 @@ unsigned int get16bitTMR0val(void);
 
 extern unsigned int ambient;
 
-typedef struct RGB_calib {
- unsigned int R;
- unsigned int G;
- unsigned int B;
-} RGB_calib;
+typedef struct HSV_calib {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24380,14 +24380,14 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white);
 
 
 
 
 
 
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
 
 unsigned int max (unsigned int a, unsigned int b);
 
@@ -24550,27 +24550,26 @@ void main(void){
 
 
     batteryLevel();
-
-
-    RGBC.R = 200;
-    RGBC.G = 50;
-    RGBC.B = 170;
-
-    rgb_2_hsv (RGBC, &HSV);
-
-
+# 91 "main.c"
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
-# 115 "main.c"
+
+
     LATHbits.LATH1=LATDbits.LATD3=1;
     _delay((unsigned long)((500)*(64000000/4000.0)));
 
 
-    struct RGB_calib red, green, blue, yellow, pink, orange, lightblue, white;
-    color_calibration(&RGBC, &RGBC_n, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white;
+    color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
 
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+
+
+    color_read(&RGBC);
+    rgb_2_hsv(RGBC, &HSV);
+    color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);
+
 
 
     white_Light(1);
@@ -24595,8 +24594,9 @@ void main(void){
 
             stop(&motorL, &motorR, straightRamp);
             color_read(&RGBC);
-            color_normalise(RGBC, &RGBC_n);
-            color = color_detect(RGBC_n, red, green, blue, yellow, pink, orange, lightblue, white);
+
+            rgb_2_hsv(RGBC, &HSV);
+            color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);
 
             moveSequence[curMove] = color;
 

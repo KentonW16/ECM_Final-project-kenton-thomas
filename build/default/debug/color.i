@@ -24098,11 +24098,11 @@ unsigned char __t3rd16on(void);
 
 extern unsigned int ambient;
 
-typedef struct RGB_calib {
- unsigned int R;
- unsigned int G;
- unsigned int B;
-} RGB_calib;
+typedef struct HSV_calib {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24159,14 +24159,14 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white);
 
 
 
 
 
 
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
 
 unsigned int max (unsigned int a, unsigned int b);
 
@@ -24328,28 +24328,40 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
     RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
 }
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white)
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white)
 {
     unsigned char color=0;
 
-    if ((red.R)-40 < RGBC_n.R) {
-        color = 1;
-    }
 
-    else if ((green.G)-25 < RGBC_n.G) {
-        color = 2;
-    }
+    if ((red.H)-1000 < HSV.H && HSV.H < (red.H)+1000) {color = 1;}
 
-    else if ((blue.B)-40 < RGBC_n.B) {
-        color = 3;
-    }
+
+    else if ((green.H)-1000 < HSV.H && HSV.H < (green.H)+1000) {color = 2;}
+
+
+    else if ((blue.H)-1000 < HSV.H && HSV.H < (blue.H)+1000) {color = 3;}
+
+
+    else if ((yellow.H)-1000 < HSV.H && HSV.H < (yellow.H)+1000) {color = 4;}
+
+
+    else if ((pink.H)-1000 < HSV.H && HSV.H < (pink.H)+1000) {color = 5;}
+
+
+    else if ((orange.H)-1000 < HSV.H && HSV.H < (orange.H)+1000) {color = 6;}
+
+
+    else if ((lightblue.H)-1000 < HSV.H && HSV.H < (lightblue.H)+1000) {color = 7;}
+
+
+    else if ((white.H)-1000 < HSV.H && HSV.H < (white.H)+1000) {color = 8;}
 
     else {color = 9;}
-# 204 "color.c"
+
     return color;
 }
 
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightblue, RGB_calib *white)
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
 {
     white_Light(1);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -24357,10 +24369,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    red->R = RGBC_n->R;
-    red->G = RGBC_n->G;
-    red->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    red->H = HSV->H;
+    red->S = HSV->S;
+    red->V = HSV->V;
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -24368,10 +24380,10 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    green->R = RGBC_n->R;
-    green->G = RGBC_n->G;
-    green->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    green->H = HSV->H;
+    green->S = HSV->S;
+    green->V = HSV->V;
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
@@ -24379,14 +24391,69 @@ void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_cal
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
-    color_normalise(*RGBC, RGBC_n);
-    blue->R = RGBC_n->R;
-    blue->G = RGBC_n->G;
-    blue->B = RGBC_n->B;
+    rgb_2_hsv(*RGBC, HSV);
+    blue->H = HSV->H;
+    blue->S = HSV->S;
+    blue->V = HSV->V;
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-# 300 "color.c"
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    rgb_2_hsv(*RGBC, HSV);
+    yellow->H = HSV->H;
+    yellow->S = HSV->S;
+    yellow->V = HSV->V;
+
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    rgb_2_hsv(*RGBC, HSV);
+    pink->H = HSV->H;
+    pink->S = HSV->S;
+    pink->V = HSV->V;
+
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    rgb_2_hsv(*RGBC, HSV);
+    orange->H = HSV->H;
+    orange->S = HSV->S;
+    orange->V = HSV->V;
+
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    rgb_2_hsv(*RGBC, HSV);
+    lightblue->H = HSV->H;
+    lightblue->S = HSV->S;
+    lightblue->V = HSV->V;
+
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
+    while (PORTFbits.RF2);
+    LATDbits.LATD7 = LATHbits.LATH3 = 0;
+    color_read(RGBC);
+    rgb_2_hsv(*RGBC, HSV);
+    white->H = HSV->H;
+    white->S = HSV->S;
+    white->V = HSV->V;
+
+    _delay((unsigned long)((500)*(64000000/4000.0)));
+    LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
 }
 
 unsigned int max (unsigned int a, unsigned int b){
