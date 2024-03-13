@@ -22,19 +22,22 @@
 
 // Declare global variables
 unsigned int ambient = 500;
-char wall = 0;
+char brightnessChange = 0;
 char lost = 0;
 
 void main(void){
     // Declare local variables
-    char buf[40] = {0};
+    char buf[40] = {0};         //****for serial comms
     unsigned int PWMcycle = 199;
+    
+    unsigned int ambientNew;
+    char wall = 0;
     unsigned char color = 0;
     unsigned char moveSequence[40] = {0}; //length is max number of moves
     unsigned int straightTime[41] = {0};
     char curMove = 0;
     
-    unsigned char testSequence[4] = {2,1,1,8}; //***for testing without colors
+    unsigned char testSequence[4] = {2,2,1,1,8}; //***for testing without colors
     
     // Declare structures
     struct RGBC_val RGBC, RGBC_n;
@@ -67,12 +70,12 @@ void main(void){
     
     // Calibration parameters for motor control (durations in 10ms increments)
     char straightSpeed=20;             //maximum power
-    unsigned char straightRamp=1;      //time between each power step
+    unsigned char straightRamp=2;      //time between each power step
     
-    unsigned char reverseDuration=200;  //adjust to length of one square
+    unsigned char reverseDuration=400; //adjust to length of one square
     
-    char turnSpeed=28;                 //maximum power
-    unsigned char turnDuration=13;      //time between ramp up and ramp down
+    char turnSpeed=40;                 //maximum power
+    unsigned char turnDuration=10;     //time between ramp up and ramp down
     unsigned char turnRamp=1;          //time between each power step 
     
     // Display battery voltage in binary on LEDs (before button press)
@@ -97,34 +100,57 @@ void main(void){
     
     // Flash color cards in front of buggy
     struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
-    color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
+    //color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
     
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
+    /*
     // Add color detect here for debugging with breakpoint after and watch on 'color'
     color_read(&RGBC);                     //read RGBC values
     rgb_2_hsv(RGBC, &HSV);
     color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
-
+    */
     
     // Turn on white LED on color click 
     white_Light(1);
     __delay_ms(1000);
     
-    // Calibrate to ambient light
+    // Read initial ambient light
     color_read(&RGBC);
     ambient=RGBC.C;
-    __delay_ms(500);
+    color_clear_init_interrupts();
+    __delay_ms(10);
     
+    // Go forward
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
     resetTimer();
     
-    wall=0;
+    // Ensure flags are reset
+    brightnessChange=0;
     lost=0;
     
     while(1) {
-        if (wall == 1) { //if wall interrupt triggered
+        if (brightnessChange == 1) {     //if color click interrupt triggered
+            
+            // Read current ambient light
+            color_read(&RGBC);           
+            ambientNew=RGBC.C;
+            
+            if (ambientNew <= ambient) { //if getting darker
+                ambient = ambientNew;    //set current ambient as ambient value
+                color_clear_init_interrupts();
+                __delay_ms(10);
+                brightnessChange = 0;    //reset flag
+            }
+            
+            else {                       //if getting lighter
+                wall = 1;                //set wall flag
+                brightnessChange = 0;    //reset flag
+            }
+        }
+        
+        if (wall == 1) { //if wall detected
             PIE0bits.INT0IE=TMR0IE=0;      //turn off interrupts so not triggered during movement
             straightTime[curMove] = get16bitTMR0val();
             
@@ -133,18 +159,19 @@ void main(void){
             wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);                     //read RGBC values
             //color_normalise(RGBC, &RGBC_n);        //normalise RGB values
-            rgb_2_hsv(RGBC, &HSV);
-            color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
-            //color = testSequence[curMove];         //***for testing without colors
+            rgb_2_hsv(RGBC, &HSV);                 //convert to HSV
+            //color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
+            color = testSequence[curMove];         //***for testing without colors
             moveSequence[curMove] = color;         //record movement
             
             // Carry out movement based on color detected
             move(&motorL, &motorR, color, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
 
-            // Calibrate to ambient light
+            // Read new ambient light
             color_read(&RGBC);
             ambient=RGBC.C;
-            __delay_ms(50);
+            color_clear_init_interrupts();         //reset interrupt with new ambient value
+            brightnessChange = 0;                  //ensure brightness flag is reset
             
             curMove++;                             //increment current move number
             resetTimer();                          //reset timer
@@ -154,10 +181,10 @@ void main(void){
         }
         
         if (lost == 1) {  //if timer interrupt triggered (moving straight for > 8s)
-            PIE0bits.INT0IE=0;                     // turn off color click interrupts (not timer)
+            PIE0bits.INT0IE=0;                     //turn off color click interrupts (not timer)
             stop(&motorL, &motorR, straightRamp);  //stop
             lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
-            PIE0bits.INT0IE=1;                     // turn back on color click interrupts
+            PIE0bits.INT0IE=1;                     //turn back on color click interrupts
             lost = 0;
             break;
         }

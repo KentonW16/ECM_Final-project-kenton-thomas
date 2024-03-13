@@ -32,14 +32,11 @@ void color_clear_init_interrupts(void) {
     I2C_2_Master_Stop();
    
     //set interrupt thresholds
-    //unsigned int high_threshold = ambient + 30;
-    //unsigned int low_threshold = ambient - 30;
+    //unsigned int high_threshold = ambient + 10;
+    //unsigned int low_threshold = ambient - 10;
     
-    //unsigned int high_threshold = ambient + (ambient/3);
-    //unsigned int low_threshold = ambient - (ambient/3);
-    
-    unsigned int high_threshold = 400;
-    unsigned int low_threshold = 200;
+    unsigned int high_threshold = ambient + (ambient/5);
+    unsigned int low_threshold = ambient - (ambient/20);
     
     //initialise interrupt
 	color_writetoaddr(0x00, 0x13); //turn on RGBC interrupts
@@ -48,7 +45,7 @@ void color_clear_init_interrupts(void) {
     color_writetoaddr(0x06, (high_threshold & 0xFF)); //high threshold lower
     color_writetoaddr(0x05, (low_threshold >> 8)); //low threshold upper
     color_writetoaddr(0x04, (low_threshold & 0xFF)); //low threshold lower
-    color_writetoaddr(0x0C, 0b0100); //persistence - requires [5] C readings outside threshold
+    color_writetoaddr(0x0C, 0b11); //persistence - requires [5] C readings outside threshold
 }
     
 

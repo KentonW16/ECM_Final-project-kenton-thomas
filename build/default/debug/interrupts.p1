@@ -90,12 +90,43 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 5102: extern volatile PIR0bits_t PIR0bits __attribute__((address(0xE33)));
 [v _PIR0bits `VS285 ~T0 @X0 0 e@3635 ]
 "8 ./interrupts.h
-[; ;./interrupts.h: 8: extern char wall;
-[v _wall `uc ~T0 @X0 0 e ]
+[; ;./interrupts.h: 8: extern char brightnessChange;
+[v _brightnessChange `uc ~T0 @X0 0 e ]
 "39 ./color.h
 [; ;./color.h: 39: void color_clear_init_interrupts(void);
 [v _color_clear_init_interrupts `(v ~T0 @X0 0 ef ]
-"48764 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
+"28912 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28912:     struct {
+[s S1361 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S1361 . LATH0 LATH1 LATH2 LATH3 ]
+"28918
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28918:     struct {
+[s S1362 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S1362 . LH0 LH1 LH2 LH3 ]
+"28924
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28924:     struct {
+[s S1363 :4 `uc 1 :1 `uc 1 ]
+[n S1363 . . LH4 ]
+"28928
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28928:     struct {
+[s S1364 :5 `uc 1 :1 `uc 1 ]
+[n S1364 . . LH5 ]
+"28932
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28932:     struct {
+[s S1365 :6 `uc 1 :1 `uc 1 ]
+[n S1365 . . LH6 ]
+"28936
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28936:     struct {
+[s S1366 :7 `uc 1 :1 `uc 1 ]
+[n S1366 . . LH7 ]
+"28911
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28911: typedef union {
+[u S1360 `S1361 1 `S1362 1 `S1363 1 `S1364 1 `S1365 1 `S1366 1 ]
+[n S1360 . . . . . . . ]
+"28941
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28941: extern volatile LATHbits_t LATHbits __attribute__((address(0xF80)));
+[v _LATHbits `VS1360 ~T0 @X0 0 e@3968 ]
+"48764
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48764: extern volatile __bit TMR0IF __attribute__((address(0x719D)));
 [v _TMR0IF `Vb ~T0 @X0 0 e@29085 ]
 "9 ./interrupts.h
@@ -2184,14 +2215,17 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e $ ! != -> . . _PIR0bits 0 0 `i -> 0 `i 2020  ]
 {
 "38
-[; ;interrupts.c: 38:         wall = 1;
-[e = _wall -> -> 1 `i `uc ]
+[; ;interrupts.c: 38:         brightnessChange = 1;
+[e = _brightnessChange -> -> 1 `i `uc ]
 "39
 [; ;interrupts.c: 39:         color_clear_init_interrupts();
 [e ( _color_clear_init_interrupts ..  ]
 "40
 [; ;interrupts.c: 40:         PIR0bits.INT0IF = 0;
 [e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
+"42
+[; ;interrupts.c: 42:         LATHbits.LATH3 = !LATHbits.LATH3;
+[e = . . _LATHbits 0 3 -> -> ! != -> . . _LATHbits 0 3 `i -> 0 `i `i `uc ]
 "44
 [; ;interrupts.c: 44:  }
 }

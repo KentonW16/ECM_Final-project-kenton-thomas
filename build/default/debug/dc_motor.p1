@@ -3595,8 +3595,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2098 ]
 {
 "399
-[; ;dc_motor.c: 399:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 399:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "400
 [; ;dc_motor.c: 400:         }
 }
@@ -3621,8 +3621,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2102 ]
 {
 "404
-[; ;dc_motor.c: 404:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 404:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "405
 [; ;dc_motor.c: 405:         }
 }
@@ -3659,8 +3659,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2109 ]
 {
 "413
-[; ;dc_motor.c: 413:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 413:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "414
 [; ;dc_motor.c: 414:         }
 }
@@ -3736,8 +3736,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2118 ]
 {
 "431
-[; ;dc_motor.c: 431:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 431:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "432
 [; ;dc_motor.c: 432:         }
 }
@@ -3762,8 +3762,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2122 ]
 {
 "436
-[; ;dc_motor.c: 436:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 436:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "437
 [; ;dc_motor.c: 437:         }
 }
@@ -3800,8 +3800,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2129 ]
 {
 "445
-[; ;dc_motor.c: 445:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 445:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "446
 [; ;dc_motor.c: 446:         }
 }
@@ -3876,8 +3876,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2138 ]
 {
 "463
-[; ;dc_motor.c: 463:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 463:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "464
 [; ;dc_motor.c: 464:         }
 }
@@ -3954,8 +3954,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2147 ]
 {
 "480
-[; ;dc_motor.c: 480:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 480:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "481
 [; ;dc_motor.c: 481:         }
 }
@@ -3980,8 +3980,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2151 ]
 {
 "485
-[; ;dc_motor.c: 485:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 485:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "486
 [; ;dc_motor.c: 486:         }
 }
@@ -4018,8 +4018,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2158 ]
 {
 "494
-[; ;dc_motor.c: 494:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 494:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "495
 [; ;dc_motor.c: 495:         }
 }
@@ -4062,9 +4062,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;dc_motor.c: 502: {
 [f ]
 "503
-[; ;dc_motor.c: 503:     unsigned char adjustDuration = 100;
+[; ;dc_motor.c: 503:     unsigned char adjustDuration = 50;
 [v _adjustDuration `uc ~T0 @X0 1 a ]
-[e = _adjustDuration -> -> 100 `i `uc ]
+[e = _adjustDuration -> -> 50 `i `uc ]
 "504
 [; ;dc_motor.c: 504:     unsigned char wallReverseDuration = 20;
 [v _wallReverseDuration `uc ~T0 @X0 1 a ]
@@ -4108,8 +4108,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2167 ]
 {
 "516
-[; ;dc_motor.c: 516:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 516:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "517
 [; ;dc_motor.c: 517:         }
 }
@@ -4134,8 +4134,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2171 ]
 {
 "521
-[; ;dc_motor.c: 521:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 521:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "522
 [; ;dc_motor.c: 522:         }
 }
@@ -4172,8 +4172,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2178 ]
 {
 "530
-[; ;dc_motor.c: 530:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 530:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "531
 [; ;dc_motor.c: 531:         }
 }
@@ -4222,8 +4222,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2186 ]
 {
 "542
-[; ;dc_motor.c: 542:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 542:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "543
 [; ;dc_motor.c: 543:         }
 }
@@ -4248,8 +4248,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2190 ]
 {
 "547
-[; ;dc_motor.c: 547:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 547:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "548
 [; ;dc_motor.c: 548:         }
 }
@@ -4286,8 +4286,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2197 ]
 {
 "556
-[; ;dc_motor.c: 556:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 556:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "557
 [; ;dc_motor.c: 557:         }
 }
@@ -4372,8 +4372,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2206 ]
 {
 "577
-[; ;dc_motor.c: 577:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 577:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "578
 [; ;dc_motor.c: 578:         }
 }
@@ -4398,8 +4398,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2210 ]
 {
 "582
-[; ;dc_motor.c: 582:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 582:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "583
 [; ;dc_motor.c: 583:         }
 }
@@ -4436,8 +4436,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 2217 ]
 {
 "591
-[; ;dc_motor.c: 591:             _delay((unsigned long)((10)*(64000000/4000.0)));
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
+[; ;dc_motor.c: 591:             _delay((unsigned long)((5)*(64000000/4000.0)));
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
 "592
 [; ;dc_motor.c: 592:         }
 }

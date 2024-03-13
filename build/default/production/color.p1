@@ -2174,13 +2174,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;color.c: 32:     I2C_2_Master_Stop();
 [e ( _I2C_2_Master_Stop ..  ]
 "38
-[; ;color.c: 38:     unsigned int high_threshold = ambient + (ambient/3);
+[; ;color.c: 38:     unsigned int high_threshold = ambient + (ambient/5);
 [v _high_threshold `ui ~T0 @X0 1 a ]
-[e = _high_threshold + _ambient / _ambient -> -> 3 `i `ui ]
+[e = _high_threshold + _ambient / _ambient -> -> 5 `i `ui ]
 "39
-[; ;color.c: 39:     unsigned int low_threshold = ambient - (ambient/3);
+[; ;color.c: 39:     unsigned int low_threshold = ambient - (ambient/20);
 [v _low_threshold `ui ~T0 @X0 1 a ]
-[e = _low_threshold - _ambient / _ambient -> -> 3 `i `ui ]
+[e = _low_threshold - _ambient / _ambient -> -> 20 `i `ui ]
 "42
 [; ;color.c: 42:  color_writetoaddr(0x00, 0x13);
 [e ( _color_writetoaddr (2 , -> -> 0 `i `uc -> -> 19 `i `uc ]
@@ -2200,8 +2200,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;color.c: 47:     color_writetoaddr(0x04, (low_threshold & 0xFF));
 [e ( _color_writetoaddr (2 , -> -> 4 `i `uc -> & _low_threshold -> -> 255 `i `ui `uc ]
 "48
-[; ;color.c: 48:     color_writetoaddr(0x0C, 0b0100);
-[e ( _color_writetoaddr (2 , -> -> 12 `i `uc -> -> 4 `i `uc ]
+[; ;color.c: 48:     color_writetoaddr(0x0C, 0b11);
+[e ( _color_writetoaddr (2 , -> -> 12 `i `uc -> -> 3 `i `uc ]
 "49
 [; ;color.c: 49: }
 [e :UE 2019 ]

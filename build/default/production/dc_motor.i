@@ -24532,12 +24532,12 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<turnDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -24546,7 +24546,7 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 }
@@ -24564,12 +24564,12 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<turnDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=turnSpeed;cur_power>=0;cur_power--) {
@@ -24578,7 +24578,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<turnRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 }
@@ -24596,7 +24596,7 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned cha
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 }
@@ -24613,12 +24613,12 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<reverseDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -24627,7 +24627,7 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
     mL->power = 0;
@@ -24636,7 +24636,7 @@ void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned c
 
 void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
 {
-    unsigned char adjustDuration = 100;
+    unsigned char adjustDuration = 200;
     unsigned char wallReverseDuration = 20;
 
     mL->direction = 1;
@@ -24649,12 +24649,12 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<adjustDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -24663,7 +24663,7 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
@@ -24675,12 +24675,12 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<wallReverseDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -24689,7 +24689,7 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
     mL->power = 0;
@@ -24698,7 +24698,7 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
 
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
 {
-    unsigned char reverseDuration = 30;
+    unsigned char reverseDuration = 20;
 
     mL->direction = 0;
     mR->direction = 0;
@@ -24710,12 +24710,12 @@ void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char 
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
 
     for (i=0;i<reverseDuration;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
 
     for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
@@ -24724,7 +24724,7 @@ void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char 
         setMotorPWM(mL);
         setMotorPWM(mR);
         for (i=0;i<straightRamp;i++) {
-            _delay((unsigned long)((10)*(64000000/4000.0)));
+            _delay((unsigned long)((5)*(64000000/4000.0)));
         }
     }
     mL->power = 0;

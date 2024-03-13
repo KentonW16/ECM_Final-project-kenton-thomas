@@ -34,12 +34,12 @@ void __interrupt(high_priority) HighISR()
 {
     
     // Wall detection interrupt
-    if(PIR0bits.INT0IF){ 			    //receive interrupt
-        wall = 1;                      //set flag to be read in main   
+    if(PIR0bits.INT0IF){ 			   //receive interrupt
+        brightnessChange = 1;          //set flag to be read in main   
         color_clear_init_interrupts(); //clear and re-initialise interrupt on color click
         PIR0bits.INT0IF = 0;           //clear interrupt flag
 
-        //LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
+        LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
         //__delay_ms(200);
 	}
     

@@ -5,7 +5,7 @@
 
 #define _XTAL_FREQ 64000000
 
-extern char wall;
+extern char brightnessChange;
 extern char lost;
 
 void Interrupts_init(void);

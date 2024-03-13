@@ -24096,7 +24096,7 @@ unsigned char __t3rd16on(void);
 
 
 
-extern char wall;
+extern char brightnessChange;
 extern char lost;
 
 void Interrupts_init(void);
@@ -24287,11 +24287,11 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
     if(PIR0bits.INT0IF){
-        wall = 1;
+        brightnessChange = 1;
         color_clear_init_interrupts();
         PIR0bits.INT0IF = 0;
 
-
+        LATHbits.LATH3 = !LATHbits.LATH3;
 
  }
 

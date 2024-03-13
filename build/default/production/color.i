@@ -24244,8 +24244,8 @@ void color_clear_init_interrupts(void) {
 
 
 
-    unsigned int high_threshold = ambient + (ambient/3);
-    unsigned int low_threshold = ambient - (ambient/3);
+    unsigned int high_threshold = ambient + (ambient/5);
+    unsigned int low_threshold = ambient - (ambient/20);
 
 
  color_writetoaddr(0x00, 0x13);
@@ -24254,7 +24254,7 @@ void color_clear_init_interrupts(void) {
     color_writetoaddr(0x06, (high_threshold & 0xFF));
     color_writetoaddr(0x05, (low_threshold >> 8));
     color_writetoaddr(0x04, (low_threshold & 0xFF));
-    color_writetoaddr(0x0C, 0b0100);
+    color_writetoaddr(0x0C, 0b11);
 }
 
 

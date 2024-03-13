@@ -24289,7 +24289,7 @@ void sendTxBuf(void);
 
 
 
-extern char wall;
+extern char brightnessChange;
 extern char lost;
 
 void Interrupts_init(void);
@@ -24497,13 +24497,16 @@ void batteryLevel(void);
 
 
 unsigned int ambient = 500;
-char wall = 0;
+char brightnessChange = 0;
 char lost = 0;
 
 void main(void){
 
     char buf[40] = {0};
     unsigned int PWMcycle = 199;
+
+    unsigned int ambientNew;
+    char wall = 0;
     unsigned char color = 0;
     unsigned char moveSequence[40] = {0};
     unsigned int straightTime[41] = {0};
@@ -24542,17 +24545,17 @@ void main(void){
 
 
     char straightSpeed=20;
-    unsigned char straightRamp=1;
+    unsigned char straightRamp=2;
 
-    unsigned char reverseDuration=200;
+    unsigned char reverseDuration=400;
 
-    char turnSpeed=28;
-    unsigned char turnDuration=13;
+    char turnSpeed=32;
+    unsigned char turnDuration=10;
     unsigned char turnRamp=1;
 
 
     batteryLevel();
-# 91 "main.c"
+# 94 "main.c"
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
@@ -24580,15 +24583,32 @@ void main(void){
 
     color_read(&RGBC);
     ambient=RGBC.C;
-    _delay((unsigned long)((500)*(64000000/4000.0)));
+    _delay((unsigned long)((100)*(64000000/4000.0)));
+    color_clear_init_interrupts();
 
     fullSpeedAhead(&motorL, &motorR, straightSpeed, straightRamp);
     resetTimer();
 
-    wall=0;
+    brightnessChange=0;
     lost=0;
 
     while(1) {
+        if (brightnessChange == 1) {
+            color_read(&RGBC);
+            ambientNew=RGBC.C;
+            if (ambientNew <= ambient) {
+                ambient = ambientNew;
+                color_clear_init_interrupts();
+                _delay((unsigned long)((10)*(64000000/4000.0)));
+                brightnessChange = 0;
+            }
+
+            else {
+                wall = 1;
+                brightnessChange = 0;
+            }
+        }
+
         if (wall == 1) {
             PIE0bits.INT0IE=TMR0IE=0;
             straightTime[curMove] = get16bitTMR0val();
@@ -24609,7 +24629,8 @@ void main(void){
 
             color_read(&RGBC);
             ambient=RGBC.C;
-            _delay((unsigned long)((50)*(64000000/4000.0)));
+            color_clear_init_interrupts();
+            brightnessChange = 0;
 
             curMove++;
             resetTimer();
