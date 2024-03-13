@@ -24474,6 +24474,8 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
+void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 17 "main.c" 2
 
@@ -24507,7 +24509,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {4,3,9,8};
+    unsigned char testSequence[4] = {2,1,1,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24518,7 +24520,7 @@ void main(void){
     Buggy_init();
     color_click_init();
     Timer0_init();
-
+    Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -24528,7 +24530,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
     motorL.PWMperiod=PWMcycle;
-    motorL.compensation=3;
+    motorL.compensation=0;
 
     motorR.power=0;
     motorR.direction=1;
@@ -24539,14 +24541,14 @@ void main(void){
     motorR.compensation=0;
 
 
-    char straightSpeed=25;
+    char straightSpeed=20;
     unsigned char straightRamp=1;
 
-    unsigned char reverseDuration=10;
+    unsigned char reverseDuration=200;
 
-    char turnSpeed=20;
-    unsigned char turnDuration=5;
-    unsigned char turnRamp=2;
+    char turnSpeed=28;
+    unsigned char turnDuration=13;
+    unsigned char turnRamp=1;
 
 
     batteryLevel();
@@ -24593,6 +24595,7 @@ void main(void){
 
 
             stop(&motorL, &motorR, straightRamp);
+            wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);
 
             rgb_2_hsv(RGBC, &HSV);
@@ -24606,6 +24609,7 @@ void main(void){
 
             color_read(&RGBC);
             ambient=RGBC.C;
+            _delay((unsigned long)((50)*(64000000/4000.0)));
 
             curMove++;
             resetTimer();

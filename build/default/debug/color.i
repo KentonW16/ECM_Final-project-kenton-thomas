@@ -24239,10 +24239,9 @@ void color_clear_init_interrupts(void) {
     I2C_2_Master_Write(0x52 | 0x00);
     I2C_2_Master_Write(0b11100110);
     I2C_2_Master_Stop();
-
-
-    unsigned int high_threshold = ambient + 12;
-    unsigned int low_threshold = ambient - 12;
+# 41 "color.c"
+    unsigned int high_threshold = 400;
+    unsigned int low_threshold = 200;
 
 
  color_writetoaddr(0x00, 0x13);
@@ -24321,7 +24320,7 @@ void color_read(RGBC_val *RGBC)
 
 
 void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-# 132 "color.c"
+# 138 "color.c"
     RGBC_n->C = RGBC.C;
     RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
     RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);

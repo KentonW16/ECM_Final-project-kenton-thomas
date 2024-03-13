@@ -24474,6 +24474,8 @@ void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDura
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
+void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 17 "main.c" 2
 
@@ -24518,7 +24520,7 @@ void main(void){
     Buggy_init();
     color_click_init();
     Timer0_init();
-
+    Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -24539,14 +24541,14 @@ void main(void){
     motorR.compensation=0;
 
 
-    char straightSpeed=25;
+    char straightSpeed=20;
     unsigned char straightRamp=1;
 
     unsigned char reverseDuration=200;
 
-    char turnSpeed=20;
-    unsigned char turnDuration=25;
-    unsigned char turnRamp=2;
+    char turnSpeed=28;
+    unsigned char turnDuration=13;
+    unsigned char turnRamp=1;
 
 
     batteryLevel();
@@ -24564,6 +24566,12 @@ void main(void){
 
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
+
+
+    color_read(&RGBC);
+    rgb_2_hsv(RGBC, &HSV);
+    color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);
+
 
 
     white_Light(1);
@@ -24587,6 +24595,7 @@ void main(void){
 
 
             stop(&motorL, &motorR, straightRamp);
+            wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);
 
             rgb_2_hsv(RGBC, &HSV);
@@ -24600,6 +24609,7 @@ void main(void){
 
             color_read(&RGBC);
             ambient=RGBC.C;
+            _delay((unsigned long)((50)*(64000000/4000.0)));
 
             curMove++;
             resetTimer();

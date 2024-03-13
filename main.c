@@ -45,7 +45,7 @@ void main(void){
     Buggy_init();
     color_click_init();
     Timer0_init();
-    //Interrupts_init();
+    Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -66,14 +66,14 @@ void main(void){
     motorR.compensation=0;                  //right motor run at lower power
     
     // Calibration parameters for motor control (durations in 10ms increments)
-    char straightSpeed=25;             //maximum power
+    char straightSpeed=20;             //maximum power
     unsigned char straightRamp=1;      //time between each power step
     
     unsigned char reverseDuration=200;  //adjust to length of one square
     
-    char turnSpeed=20;                 //maximum power
-    unsigned char turnDuration=25;      //time between ramp up and ramp down
-    unsigned char turnRamp=2;          //time between each power step 
+    char turnSpeed=28;                 //maximum power
+    unsigned char turnDuration=13;      //time between ramp up and ramp down
+    unsigned char turnRamp=1;          //time between each power step 
     
     // Display battery voltage in binary on LEDs (before button press)
     batteryLevel();
@@ -130,6 +130,7 @@ void main(void){
             
             // Stop and read color
             stop(&motorL, &motorR, straightRamp);  //stop
+            wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);                     //read RGBC values
             //color_normalise(RGBC, &RGBC_n);        //normalise RGB values
             rgb_2_hsv(RGBC, &HSV);
@@ -143,6 +144,7 @@ void main(void){
             // Calibrate to ambient light
             color_read(&RGBC);
             ambient=RGBC.C;
+            __delay_ms(50);
             
             curMove++;                             //increment current move number
             resetTimer();                          //reset timer
@@ -160,7 +162,7 @@ void main(void){
             break;
         }
         
-        if (color == 8 || color == 9) {break;} //color white or not recognised
+        if (color == 8 || color == 9) {break;} //color white or not recognised (returned home)
         
     }
     

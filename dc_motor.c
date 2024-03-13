@@ -91,6 +91,8 @@ void setMotorPWM(DC_motor *m)
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     if (color == 1) { //red - right 90
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -99,6 +101,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 2) { //green - left 90
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -107,6 +111,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 3) { //blue - 180
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -119,6 +125,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 4) { //yellow - reverse right 90
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
         __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -129,6 +137,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 5) { //pink - reverse left 90
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         reverseOneSquare(mL, mR, straightSpeed, reverseDuration, straightRamp);
         __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -139,6 +149,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 6) { //orange - right 135
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -149,6 +161,8 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 7) { //light blue - left 135
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
         turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -159,10 +173,14 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
     }
     
     else if (color == 8) { //white - return home
+        reverseShort(mL, mR, straightSpeed, straightRamp);
+        __delay_ms(50);
         returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     }
     
     else { //color not recognised (lost) - return home
+        reverseShort(mL, mR, straightSpeed, straightRamp); //**** this breaks return function??
+        __delay_ms(50);
         returnHome(mL, mR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
     }
 }
@@ -449,6 +467,103 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned cha
 
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp)
 {
+    mL->direction = 0;
+    mR->direction = 0;
+    int i;
+    int cur_power;
+    for (cur_power=1;cur_power<=straightSpeed;cur_power++) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    
+    for (i=0;i<reverseDuration;i++) {
+            __delay_ms(10);
+        }
+    
+    for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    mL->power = 0;
+    mR->power = 0;
+}
+
+void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
+{
+    unsigned char adjustDuration = 100;
+    unsigned char wallReverseDuration = 20;
+    
+    mL->direction = 1;
+    mR->direction = 1;
+    int i;
+    int cur_power;
+    for (cur_power=1;cur_power<=straightSpeed;cur_power++) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    
+    for (i=0;i<adjustDuration;i++) {
+            __delay_ms(10);
+        }
+    
+    for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    
+    mL->direction = 0;
+    mR->direction = 0;
+    for (cur_power=1;cur_power<=straightSpeed;cur_power++) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    
+    for (i=0;i<wallReverseDuration;i++) {
+            __delay_ms(10);
+        }
+    
+    for (cur_power=straightSpeed;cur_power>=0;cur_power--) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(10);
+        }
+    }
+    mL->power = 0;
+    mR->power = 0;
+}
+
+void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
+{
+    unsigned char reverseDuration = 30;
+    
     mL->direction = 0;
     mR->direction = 0;
     int i;
