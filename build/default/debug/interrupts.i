@@ -24178,11 +24178,11 @@ unsigned char I2C_2_Master_Read(unsigned char ack);
 
 extern unsigned int ambient;
 
-typedef struct RGB_calib {
- unsigned int R;
- unsigned int G;
- unsigned int B;
-} RGB_calib;
+typedef struct HSV_calib {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_calib;
 
 typedef struct RGBC_val {
  unsigned int R;
@@ -24190,6 +24190,12 @@ typedef struct RGBC_val {
  unsigned int B;
     unsigned int C;
 } RGBC_val;
+
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
 
 
 
@@ -24233,14 +24239,20 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
 
 
 
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white);
 
 
 
 
 
 
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 5 "interrupts.c" 2
 
 

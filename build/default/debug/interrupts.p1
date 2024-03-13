@@ -92,8 +92,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "8 ./interrupts.h
 [; ;./interrupts.h: 8: extern char wall;
 [v _wall `uc ~T0 @X0 0 e ]
-"33 ./color.h
-[; ;./color.h: 33: void color_clear_init_interrupts(void);
+"39 ./color.h
+[; ;./color.h: 39: void color_clear_init_interrupts(void);
 [v _color_clear_init_interrupts `(v ~T0 @X0 0 ef ]
 "48764 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48764: extern volatile __bit TMR0IF __attribute__((address(0x719D)));
@@ -2168,7 +2168,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e = . . _INTCONbits 1 2 -> -> 1 `i `uc ]
 "27
 [; ;interrupts.c: 27: }
-[e :UE 2017 ]
+[e :UE 2018 ]
 }
 [v $root$_HighISR `(v ~T0 @X0 0 e ]
 "33
@@ -2181,7 +2181,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [f ]
 "37
 [; ;interrupts.c: 37:     if(PIR0bits.INT0IF){
-[e $ ! != -> . . _PIR0bits 0 0 `i -> 0 `i 2019  ]
+[e $ ! != -> . . _PIR0bits 0 0 `i -> 0 `i 2020  ]
 {
 "38
 [; ;interrupts.c: 38:         wall = 1;
@@ -2195,10 +2195,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 "44
 [; ;interrupts.c: 44:  }
 }
-[e :U 2019 ]
+[e :U 2020 ]
 "47
 [; ;interrupts.c: 47:     if(TMR0IF){
-[e $ ! _TMR0IF 2020  ]
+[e $ ! _TMR0IF 2021  ]
 {
 "48
 [; ;interrupts.c: 48:         lost = 1;
@@ -2209,10 +2209,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 "52
 [; ;interrupts.c: 52:  }
 }
-[e :U 2020 ]
+[e :U 2021 ]
 "56
 [; ;interrupts.c: 56:     if(PIR4bits.RC4IF){
-[e $ ! != -> . . _PIR4bits 0 3 `i -> 0 `i 2021  ]
+[e $ ! != -> . . _PIR4bits 0 3 `i -> 0 `i 2022  ]
 {
 "58
 [; ;interrupts.c: 58:         putCharToRxBuf(RC4REG);
@@ -2220,26 +2220,26 @@ Version 4.0 HI-TECH Software Intermediate Code
 "60
 [; ;interrupts.c: 60:  }
 }
-[e :U 2021 ]
+[e :U 2022 ]
 "62
 [; ;interrupts.c: 62:     if(PIR4bits.TX4IF){
-[e $ ! != -> . . _PIR4bits 0 2 `i -> 0 `i 2022  ]
+[e $ ! != -> . . _PIR4bits 0 2 `i -> 0 `i 2023  ]
 {
 "64
 [; ;interrupts.c: 64:         TX4REG = getCharFromTxBuf();
 [e = _TX4REG -> ( _getCharFromTxBuf ..  `uc ]
 "65
 [; ;interrupts.c: 65:         if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
-[e $ ! ! != -> ( _isDataInTxBuf ..  `i -> 0 `i 2023  ]
+[e $ ! ! != -> ( _isDataInTxBuf ..  `i -> 0 `i 2024  ]
 {
 [e = . . _PIE4bits 0 2 -> -> 0 `i `uc ]
 }
-[e :U 2023 ]
+[e :U 2024 ]
 "67
 [; ;interrupts.c: 67:  }
 }
-[e :U 2022 ]
+[e :U 2023 ]
 "69
 [; ;interrupts.c: 69: }
-[e :UE 2018 ]
+[e :UE 2019 ]
 }

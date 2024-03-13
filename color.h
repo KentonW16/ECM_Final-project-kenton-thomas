@@ -7,11 +7,11 @@
 
 extern unsigned int ambient;
 
-typedef struct RGB_calib { //Structure to store calibrated RGB value
-	unsigned int R;
-	unsigned int G;
-	unsigned int B;
-} RGB_calib;
+typedef struct HSV_calib { //Structure to store calibrated RGB value
+	unsigned int H;
+	unsigned int S;
+	unsigned int V;
+} HSV_calib;
 
 typedef struct RGBC_val { //Structure to store RGB value
 	unsigned int R;
@@ -19,6 +19,12 @@ typedef struct RGBC_val { //Structure to store RGB value
 	unsigned int B;
     unsigned int C;
 } RGBC_val;
+
+typedef struct HSV_val { //Structure to store HSV value
+	unsigned int H; //Ranges from 0-36000
+	unsigned int S; //Ranges from 0-10000
+	unsigned int V; //Ranges from 0-10000
+} HSV_val;
 
 
 
@@ -62,13 +68,20 @@ void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
  *	Writes code (1-8) for color dependent on RGB values
  *  No color detected = 0
  ***********************************************/
-unsigned char color_detect(RGBC_val RGBC_n, RGB_calib red, RGB_calib green, RGB_calib blue, RGB_calib yellow, RGB_calib pink, RGB_calib orange, RGB_calib lightBlue, RGB_calib white);
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white);
 
 /********************************************//**
  *  Function to calibrate color sensor by flashing each color one by one
  *	Writes code (1-8) for color dependent on RGB values
  *  No color detected = 0
  ***********************************************/
-void color_calibration(RGBC_val *RGBC, RGBC_val *RGBC_n, RGB_calib *red, RGB_calib *green, RGB_calib *blue, RGB_calib *yellow, RGB_calib *pink, RGB_calib *orange, RGB_calib *lightBlue, RGB_calib *white);
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+unsigned int max (unsigned int a, unsigned int b);
+
+unsigned int min (unsigned int a,unsigned int b);
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
+
 
 #endif
