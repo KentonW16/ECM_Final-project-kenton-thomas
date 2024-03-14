@@ -91,13 +91,13 @@ void setMotorPWM(DC_motor *m)
 void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
     if (color == 1) { //red - right 90
-        reverseShort(mL, mR, straightSpeed, straightRamp);
+        reverseShort(mL, mR, straightSpeed, straightRamp); // Reverse a little away from wall to avoid bumping while turning
+        __delay_ms(50);
+        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp); //Carry out turn
         __delay_ms(50);
         turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
         __delay_ms(50);
-        turnRight(mL, mR, turnSpeed, turnDuration, turnRamp);
-        __delay_ms(50);
-        fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
+        fullSpeedAhead(mL, mR, straightSpeed, straightRamp); //Continue on straight
     }
     
     else if (color == 2) { //green - left 90
@@ -188,7 +188,7 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
 //function to return home if white or unrecognised wall encountered
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
-    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);  //turn 180 degrees to start re-tracing steps
     __delay_ms(50);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     __delay_ms(50);
@@ -201,7 +201,7 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     while (get16bitTMR0val() < straightTime[curMove]);
     stop(mL, mR, straightRamp);
     
-    char i=curMove;
+    char i=curMove; 
     while (i>0) {
         i--;
         

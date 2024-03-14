@@ -35,8 +35,8 @@ void color_clear_init_interrupts(void) {
     //unsigned int high_threshold = ambient + 10;
     //unsigned int low_threshold = ambient - 10;
     
-    unsigned int high_threshold = ambient + (ambient/3);
-    unsigned int low_threshold = ambient - (ambient/20);
+    unsigned int high_threshold = ambient + (ambient/3); //Set high threshold for interrupt
+    unsigned int low_threshold = ambient - (ambient/20); //Set low threshold for interrupt, see README for explanation for unsymmetrical threshold
     
     //initialise interrupt
 	color_writetoaddr(0x00, 0x13); //turn on RGBC interrupts
@@ -126,9 +126,10 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     // Blue (20 degree tolerance as no other colors near)
     else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
     
-    // Yellow or pink
+    // Yellow or pink or white
     else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {
-        if (HSV.S > pink.S + 500){color = 4;} // Yellow has higher S value than pink
+        if (HSV.H * 2 - HSV.S < HSV.H + 500 && HSV.H * 2 - HSV.S > HSV.H - 500) {color = 8;} //If H and S value are within 5% (500) from each other = white
+        else if (HSV.S > pink.S + 500){color = 4;} // Yellow has higher S value than pink
         else {color = 5;} // Pink
     }
     
@@ -136,14 +137,14 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
     
     // White (5 degree tolerance)
-    else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
+    //else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
     
-    // Red (10 degrees tolerance on hue)
-    if (red.H > 30000){ //Somewhere between 350 and 360 degrees
+    // Red (10 degrees tolerance on hue), need 2 conditions as red boundary crosses over 360 to 0 degree boundary
+    if (red.H > 30000){ //Somewhere between 300 and 360 degrees
         if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
     }
     
-    if (red.H < 10000){
+    if (red.H < 10000){ //Somewhere between 0 and 100 degrees
         if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
     }
    

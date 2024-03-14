@@ -40,8 +40,9 @@ void main(void){
     unsigned char testSequence[4] = {2,2,1,1,8}; //***for testing without colors
     
     // Declare structures
-    struct RGBC_val RGBC, RGBC_n;
-    struct HSV_val HSV;
+    struct RGBC_val RGBC;   //declare structure to store RGB values obtained from color click
+    struct HSV_val HSV;     //declare structure to store HSV values after being converted from RGB
+    struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
     struct DC_motor motorL, motorR; //declare two DC_motor structures 
     
     // Initialisation functions
@@ -49,7 +50,7 @@ void main(void){
     color_click_init();
     Timer0_init();
     Interrupts_init();
-    initUSART4();
+    //initUSART4();
     initDCmotorsPWM(PWMcycle);
 
     motorL.power=0; 						//zero power to start
@@ -99,18 +100,24 @@ void main(void){
     __delay_ms(500);
     
     // Flash color cards in front of buggy
-    struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
     color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
     
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
-    /*
+    /**/
+    // Testing HSV function
     // Add color detect here for debugging with breakpoint after and watch on 'color'
-    color_read(&RGBC);                     //read RGBC values
-    rgb_2_hsv(RGBC, &HSV);
-    color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
-    */
+    //color_read(&RGBC);                     //read RGBC values
+    //RGBC.R = 200;
+    //RGBC.G = 50;
+    //RGBC.B = 170;
+    //rgb_2_hsv(RGBC, &HSV);
+    HSV.H = 3400;
+    HSV.S = 4000;
+    HSV.V = 1100;
+    color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from HSV values
+    /**/
     
     // Turn on white LED on color click 
     white_Light(1);
@@ -135,7 +142,7 @@ void main(void){
             
             // Read current ambient light
             color_read(&RGBC);           
-            ambientNew=RGBC.C;
+            ambientNew=RGBC.C;      // Store value of ambient light to allow comparison with value later
             
             if (ambientNew <= ambient) { //if getting darker
                 ambient = ambientNew;    //set current ambient as ambient value

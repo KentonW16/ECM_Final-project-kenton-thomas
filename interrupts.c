@@ -59,6 +59,7 @@ void __interrupt(high_priority) HighISR()
         //cannot clear the interrupt flag
 	}
     
+    // Serial transfer interrupts
     if(PIR4bits.TX4IF){ 				//transmit interrupt
         //LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
         TX4REG = getCharFromTxBuf();

@@ -28,7 +28,6 @@ void Buggy_init(void)
     // Activate both M.BEAM and H.LAMPS at same time for brighter head lights
     // Activate both BRAKE and H.LAMPS at same time for brighter stop lights -DOESNT SEEM TO WORK
     
-    
     // setup pin for H.LAMPS
     LATHbits.LATH1=0;   //set initial output state
     TRISHbits.TRISH1=0; //set TRIS value for pin (output)
