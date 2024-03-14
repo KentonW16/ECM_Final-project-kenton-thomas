@@ -24120,6 +24120,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp);
 void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseWallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 2 "dc_motor.c" 2
@@ -24136,6 +24137,104 @@ void Timer0_init(void);
 void resetTimer(void);
 unsigned int get16bitTMR0val(void);
 # 3 "dc_motor.c" 2
+
+# 1 "./color.h" 1
+
+
+
+
+
+
+
+extern unsigned int ambient;
+
+typedef struct HSV_calib {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_calib;
+
+typedef struct RGBC_val {
+ unsigned int R;
+ unsigned int G;
+ unsigned int B;
+    unsigned int C;
+} RGBC_val;
+
+typedef struct HSV_val {
+ unsigned int H;
+ unsigned int S;
+ unsigned int V;
+} HSV_val;
+
+
+
+
+
+
+void color_click_init(void);
+
+
+
+
+void color_clear_init_interrupts(void);
+
+
+
+
+
+
+void color_writetoaddr(char address, char value);
+
+
+
+
+
+void white_Light(char state);
+
+
+
+
+
+void color_read(RGBC_val *RGBC);
+
+
+
+
+
+void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n);
+
+
+
+
+
+
+unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white);
+
+
+
+
+
+
+
+void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+
+
+
+unsigned int max (unsigned int a, unsigned int b);
+
+
+
+
+unsigned int min (unsigned int a,unsigned int b);
+
+
+
+
+
+void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
+# 4 "dc_motor.c" 2
 
 
 
@@ -24324,6 +24423,7 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
 
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
+    white_Light(0);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     _delay((unsigned long)((50)*(64000000/4000.0)));
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -24331,10 +24431,12 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     _delay((unsigned long)((50)*(64000000/4000.0)));
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    _delay((unsigned long)((50)*(64000000/4000.0)));
+    reverseWallAdjust(mL, mR, straightSpeed, straightRamp);
     _delay((unsigned long)((50)*(64000000/4000.0)));
     fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
     resetTimer();
-    while (get16bitTMR0val() < straightTime[curMove] + 6000);
+    while (get16bitTMR0val() < straightTime[curMove] + 7000);
     stop(mL, mR, straightRamp);
 
     char i=curMove;
@@ -24402,9 +24504,11 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
             _delay((unsigned long)((50)*(64000000/4000.0)));
         }
 
+        reverseWallAdjust(mL, mR, straightSpeed, straightRamp);
+        _delay((unsigned long)((50)*(64000000/4000.0)));
         fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
         resetTimer();
-        while (get16bitTMR0val() < straightTime[i]-2000);
+        while (get16bitTMR0val() < straightTime[i] + 3500);
         stop(mL, mR, straightRamp);
     }
 }
@@ -24697,9 +24801,45 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
     mR->power = 0;
 }
 
+void reverseWallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
+{
+    unsigned char reverseAdjustDuration = 60;
+    unsigned char reverseWallSpeed = 40;
+
+    mL->direction = 0;
+    mR->direction = 0;
+    int i;
+    int cur_power;
+    for (cur_power=1;cur_power<=reverseWallSpeed;cur_power++) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            _delay((unsigned long)((5)*(64000000/4000.0)));
+        }
+    }
+
+    for (i=0;i<reverseAdjustDuration;i++) {
+            _delay((unsigned long)((5)*(64000000/4000.0)));
+        }
+
+    for (cur_power=reverseWallSpeed;cur_power>=0;cur_power--) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            _delay((unsigned long)((5)*(64000000/4000.0)));
+        }
+    }
+    mL->power = 0;
+    mR->power = 0;
+}
+
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
 {
-    unsigned char shortReverseDuration = 20;
+    unsigned char shortReverseDuration = 30;
 
     mL->direction = 0;
     mR->direction = 0;

@@ -111,8 +111,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "79
 [; ;./color.h: 79: void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
 [v _color_calibration `(v ~T0 @X0 0 ef10`*S2018`*S2019`*S2017`*S2017`*S2017`*S2017`*S2017`*S2017`*S2017`*S2017 ]
-"33 ./dc_motor.h
-[; ;./dc_motor.h: 33: void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
+"34 ./dc_motor.h
+[; ;./dc_motor.h: 34: void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 [v _calibration `(v ~T0 @X0 0 ef5`*S2020`*S2020`uc`*uc`uc ]
 "52 ./color.h
 [; ;./color.h: 52: void white_Light(char state);
@@ -2204,8 +2204,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 {
 [e :U _main ]
 [f ]
-[v F14651 `uc ~T0 @X0 -> 40 `i s ]
-[i F14651
+[v F14656 `uc ~T0 @X0 -> 40 `i s ]
+[i F14656
 :U ..
 "30
 [; ;main.c: 30:     char buf[40] = {0};
@@ -2213,7 +2213,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 [v _buf `uc ~T0 @X0 -> 40 `i a ]
-[e = _buf F14651 ]
+[e = _buf F14656 ]
 "31
 [; ;main.c: 31:     unsigned int PWMcycle = 199;
 [v _PWMcycle `ui ~T0 @X0 1 a ]
@@ -2229,8 +2229,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 35:     unsigned char color = 0;
 [v _color `uc ~T0 @X0 1 a ]
 [e = _color -> -> 0 `i `uc ]
-[v F14657 `uc ~T0 @X0 -> 40 `i s ]
-[i F14657
+[v F14662 `uc ~T0 @X0 -> 40 `i s ]
+[i F14662
 :U ..
 "36
 [; ;main.c: 36:     unsigned char moveSequence[40] = {0};
@@ -2238,9 +2238,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 [v _moveSequence `uc ~T0 @X0 -> 40 `i a ]
-[e = _moveSequence F14657 ]
-[v F14659 `ui ~T0 @X0 -> 41 `i s ]
-[i F14659
+[e = _moveSequence F14662 ]
+[v F14664 `ui ~T0 @X0 -> 41 `i s ]
+[i F14664
 :U ..
 "37
 [; ;main.c: 37:     unsigned int straightTime[41] = {0};
@@ -2248,13 +2248,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 [v _straightTime `ui ~T0 @X0 -> 41 `i a ]
-[e = _straightTime F14659 ]
+[e = _straightTime F14664 ]
 "38
 [; ;main.c: 38:     char curMove = 0;
 [v _curMove `uc ~T0 @X0 1 a ]
 [e = _curMove -> -> 0 `i `uc ]
-[v F14662 `uc ~T0 @X0 -> 4 `i s ]
-[i F14662
+[v F14667 `uc ~T0 @X0 -> 4 `i s ]
+[i F14667
 :U ..
 "40
 [; ;main.c: 40:     unsigned char testSequence[4] = {4,4,1,1,8};
@@ -2265,7 +2265,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 [v _testSequence `uc ~T0 @X0 -> 4 `i a ]
-[e = _testSequence F14662 ]
+[e = _testSequence F14667 ]
 "43
 [; ;main.c: 43:     struct RGBC_val RGBC, RGBC_n;
 [v _RGBC `S2018 ~T0 @X0 1 a ]

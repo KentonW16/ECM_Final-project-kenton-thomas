@@ -119,7 +119,7 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     
     // Green or light blue
     if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
-        if (HSV.S > lightblue.S + 500){color = 2;} // Green has higher S value than light blue
+        if (HSV.S > lightblue.S + 1000){color = 2;} // Green has higher S value than light blue
         else {color = 7;}
     }
     

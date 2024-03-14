@@ -1,6 +1,7 @@
 #include <xc.h>
 #include "dc_motor.h"
 #include "timers.h"
+#include "color.h"
 
 
 
@@ -188,6 +189,7 @@ void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, u
 //function to return home if white or unrecognised wall encountered
 void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp)
 {
+    white_Light(0);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     __delay_ms(50);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -195,17 +197,19 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
     __delay_ms(50);
     turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
+    __delay_ms(50);
+    reverseWallAdjust(mL, mR, straightSpeed, straightRamp); //reverse into wall to ensure perpendicular alignment
     __delay_ms(50);
     fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
     resetTimer();
-    while (get16bitTMR0val() < straightTime[curMove] + 6000);
+    while (get16bitTMR0val() < straightTime[curMove] + 7000);
     stop(mL, mR, straightRamp);
     
     char i=curMove;
     while (i>0) {
         i--;
         
-        if (moveSequence[i] == 1) { 
+        if (moveSequence[i] == 1) { //red - turn left as opposite of initial right turn
             turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
             __delay_ms(50);
             turnLeft(mL, mR, turnSpeed, turnDuration, turnRamp);
@@ -266,9 +270,11 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
             __delay_ms(50);
         }
         
+        reverseWallAdjust(mL, mR, straightSpeed, straightRamp); //reverse into wall to ensure perpendicular alignment
+        __delay_ms(50);
         fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
         resetTimer();
-        while (get16bitTMR0val() < straightTime[i]-2000);
+        while (get16bitTMR0val() < straightTime[i] + 3500); //add to account for reverse before movement
         stop(mL, mR, straightRamp);
     }
 }
@@ -561,9 +567,45 @@ void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char st
     mR->power = 0;
 }
 
+void reverseWallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
+{
+    unsigned char reverseAdjustDuration = 60;
+    unsigned char reverseWallSpeed = 40;
+    
+    mL->direction = 0;
+    mR->direction = 0;
+    int i;
+    int cur_power;
+    for (cur_power=1;cur_power<=reverseWallSpeed;cur_power++) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(5);
+        }
+    }
+    
+    for (i=0;i<reverseAdjustDuration;i++) {
+            __delay_ms(5);
+        }
+    
+    for (cur_power=reverseWallSpeed;cur_power>=0;cur_power--) {
+        mL->power = cur_power+mL->compensation;
+        mR->power = cur_power+mR->compensation;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        for (i=0;i<straightRamp;i++) {
+            __delay_ms(5);
+        }
+    }
+    mL->power = 0;
+    mR->power = 0;
+}
+
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp)
 {
-    unsigned char shortReverseDuration = 20;
+    unsigned char shortReverseDuration = 30;
     
     mL->direction = 0;
     mR->direction = 0;

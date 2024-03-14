@@ -24487,6 +24487,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp);
 void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseWallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 17 "main.c" 2
