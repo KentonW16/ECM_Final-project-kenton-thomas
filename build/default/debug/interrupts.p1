@@ -62,9 +62,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 "40176
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 40176: extern volatile INTCONbits_t INTCONbits __attribute__((address(0xFF2)));
 [v _INTCONbits `VS1984 ~T0 @X0 0 e@4082 ]
-"48761
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48761: extern volatile __bit TMR0IE __attribute__((address(0x714D)));
-[v _TMR0IE `Vb ~T0 @X0 0 e@29005 ]
+"48767
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48767: extern volatile __bit TMR0IP __attribute__((address(0x70FD)));
+[v _TMR0IP `Vb ~T0 @X0 0 e@28925 ]
 "4810
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 4810:     struct {
 [s S274 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -77,7 +77,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 4819: extern volatile PIE4bits_t PIE4bits __attribute__((address(0xE2D)));
 [v _PIE4bits `VS273 ~T0 @X0 0 e@3629 ]
 [t ~ __interrupt . k ]
-[t T2 __interrupt high_priority ]
+[t T3 __interrupt high_priority ]
 "5093
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 5093:     struct {
 [s S286 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -95,43 +95,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "39 ./color.h
 [; ;./color.h: 39: void color_clear_init_interrupts(void);
 [v _color_clear_init_interrupts `(v ~T0 @X0 0 ef ]
-"28912 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28912:     struct {
-[s S1361 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S1361 . LATH0 LATH1 LATH2 LATH3 ]
-"28918
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28918:     struct {
-[s S1362 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S1362 . LH0 LH1 LH2 LH3 ]
-"28924
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28924:     struct {
-[s S1363 :4 `uc 1 :1 `uc 1 ]
-[n S1363 . . LH4 ]
-"28928
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28928:     struct {
-[s S1364 :5 `uc 1 :1 `uc 1 ]
-[n S1364 . . LH5 ]
-"28932
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28932:     struct {
-[s S1365 :6 `uc 1 :1 `uc 1 ]
-[n S1365 . . LH6 ]
-"28936
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28936:     struct {
-[s S1366 :7 `uc 1 :1 `uc 1 ]
-[n S1366 . . LH7 ]
-"28911
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28911: typedef union {
-[u S1360 `S1361 1 `S1362 1 `S1363 1 `S1364 1 `S1365 1 `S1366 1 ]
-[n S1360 . . . . . . . ]
-"28941
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 28941: extern volatile LATHbits_t LATHbits __attribute__((address(0xF80)));
-[v _LATHbits `VS1360 ~T0 @X0 0 e@3968 ]
-"48764
-[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48764: extern volatile __bit TMR0IF __attribute__((address(0x719D)));
-[v _TMR0IF `Vb ~T0 @X0 0 e@29085 ]
-"9 ./interrupts.h
-[; ;./interrupts.h: 9: extern char lost;
-[v _lost `uc ~T0 @X0 0 e ]
 "5323 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 5323:     struct {
 [s S297 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -158,6 +121,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 "36
 [; ;./serial.h: 36: char isDataInTxBuf (void);
 [v _isDataInTxBuf `(uc ~T0 @X0 0 ef ]
+[t T4 __interrupt low_priority ]
+"48764 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
+[; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 48764: extern volatile __bit TMR0IF __attribute__((address(0x719D)));
+[v _TMR0IF `Vb ~T0 @X0 0 e@29085 ]
+"9 ./interrupts.h
+[; ;./interrupts.h: 9: extern char lost;
+[v _lost `uc ~T0 @X0 0 e ]
 "54 C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18F-K_DFP/1.11.281/xc8\pic\include\proc\pic18f67k40.h: 54: __asm("PPSLOCK equ 0DEFh");
 [; <" PPSLOCK equ 0DEFh ;# ">
@@ -2180,100 +2150,110 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;interrupts.c: 16:     PIE0bits.INT0IE=1;
 [e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
 "17
-[; ;interrupts.c: 17:     IPR0bits.INT0IP = 1;
+[; ;interrupts.c: 17:     IPR0bits.INT0IP=1;
 [e = . . _IPR0bits 0 0 -> -> 1 `i `uc ]
 "18
-[; ;interrupts.c: 18:     INTCONbits.INT0EDG = 0;
+[; ;interrupts.c: 18:     INTCONbits.INT0EDG=0;
 [e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
 "22
-[; ;interrupts.c: 22:     TMR0IE=1;
-[e = _TMR0IE -> -> 1 `i `b ]
-"23
-[; ;interrupts.c: 23:     PIE4bits.RC4IE=1;
+[; ;interrupts.c: 22:     TMR0IP=0;
+[e = _TMR0IP -> -> 0 `i `b ]
+"26
+[; ;interrupts.c: 26:     PIE4bits.RC4IE=1;
 [e = . . _PIE4bits 0 3 -> -> 1 `i `uc ]
-"24
-[; ;interrupts.c: 24:     INTCONbits.PEIE=1;
-[e = . . _INTCONbits 1 1 -> -> 1 `i `uc ]
-"25
-[; ;interrupts.c: 25:     INTCONbits.GIE=1;
-[e = . . _INTCONbits 1 2 -> -> 1 `i `uc ]
 "27
-[; ;interrupts.c: 27: }
+[; ;interrupts.c: 27:     INTCONbits.PEIE=1;
+[e = . . _INTCONbits 1 1 -> -> 1 `i `uc ]
+"28
+[; ;interrupts.c: 28:     INTCONbits.GIE=1;
+[e = . . _INTCONbits 1 2 -> -> 1 `i `uc ]
+"30
+[; ;interrupts.c: 30: }
 [e :UE 2018 ]
 }
 [v $root$_HighISR `(v ~T0 @X0 0 e ]
-"33
-[; ;interrupts.c: 33: void __attribute__((picinterrupt(("high_priority")))) HighISR()
-[v _HighISR `(v ~T2 @X0 1 ef ]
-"34
-[; ;interrupts.c: 34: {
+"36
+[; ;interrupts.c: 36: void __attribute__((picinterrupt(("high_priority")))) HighISR()
+[v _HighISR `(v ~T3 @X0 1 ef ]
+"37
+[; ;interrupts.c: 37: {
 {
 [e :U _HighISR ]
 [f ]
-"37
-[; ;interrupts.c: 37:     if(PIR0bits.INT0IF){
+"40
+[; ;interrupts.c: 40:     if(PIR0bits.INT0IF){
 [e $ ! != -> . . _PIR0bits 0 0 `i -> 0 `i 2020  ]
 {
-"38
-[; ;interrupts.c: 38:         brightnessChange = 1;
+"41
+[; ;interrupts.c: 41:         brightnessChange = 1;
 [e = _brightnessChange -> -> 1 `i `uc ]
-"39
-[; ;interrupts.c: 39:         color_clear_init_interrupts();
-[e ( _color_clear_init_interrupts ..  ]
-"40
-[; ;interrupts.c: 40:         PIR0bits.INT0IF = 0;
-[e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
 "42
-[; ;interrupts.c: 42:         LATHbits.LATH3 = !LATHbits.LATH3;
-[e = . . _LATHbits 0 3 -> -> ! != -> . . _LATHbits 0 3 `i -> 0 `i `i `uc ]
-"44
-[; ;interrupts.c: 44:  }
+[; ;interrupts.c: 42:         color_clear_init_interrupts();
+[e ( _color_clear_init_interrupts ..  ]
+"43
+[; ;interrupts.c: 43:         PIR0bits.INT0IF = 0;
+[e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
+"47
+[; ;interrupts.c: 47:  }
 }
 [e :U 2020 ]
-"47
-[; ;interrupts.c: 47:     if(TMR0IF){
-[e $ ! _TMR0IF 2021  ]
+"51
+[; ;interrupts.c: 51:     if(PIR4bits.RC4IF){
+[e $ ! != -> . . _PIR4bits 0 3 `i -> 0 `i 2021  ]
 {
-"48
-[; ;interrupts.c: 48:         lost = 1;
-[e = _lost -> -> 1 `i `uc ]
-"49
-[; ;interrupts.c: 49:         TMR0IF=0;
-[e = _TMR0IF -> -> 0 `i `b ]
-"52
-[; ;interrupts.c: 52:  }
+"53
+[; ;interrupts.c: 53:         putCharToRxBuf(RC4REG);
+[e ( _putCharToRxBuf (1 -> _RC4REG `uc ]
+"55
+[; ;interrupts.c: 55:  }
 }
 [e :U 2021 ]
-"56
-[; ;interrupts.c: 56:     if(PIR4bits.RC4IF){
-[e $ ! != -> . . _PIR4bits 0 3 `i -> 0 `i 2022  ]
+"57
+[; ;interrupts.c: 57:     if(PIR4bits.TX4IF){
+[e $ ! != -> . . _PIR4bits 0 2 `i -> 0 `i 2022  ]
 {
-"58
-[; ;interrupts.c: 58:         putCharToRxBuf(RC4REG);
-[e ( _putCharToRxBuf (1 -> _RC4REG `uc ]
-"60
-[; ;interrupts.c: 60:  }
-}
-[e :U 2022 ]
-"62
-[; ;interrupts.c: 62:     if(PIR4bits.TX4IF){
-[e $ ! != -> . . _PIR4bits 0 2 `i -> 0 `i 2023  ]
-{
-"64
-[; ;interrupts.c: 64:         TX4REG = getCharFromTxBuf();
+"59
+[; ;interrupts.c: 59:         TX4REG = getCharFromTxBuf();
 [e = _TX4REG -> ( _getCharFromTxBuf ..  `uc ]
-"65
-[; ;interrupts.c: 65:         if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
-[e $ ! ! != -> ( _isDataInTxBuf ..  `i -> 0 `i 2024  ]
+"60
+[; ;interrupts.c: 60:         if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
+[e $ ! ! != -> ( _isDataInTxBuf ..  `i -> 0 `i 2023  ]
 {
 [e = . . _PIE4bits 0 2 -> -> 0 `i `uc ]
 }
-[e :U 2024 ]
-"67
-[; ;interrupts.c: 67:  }
-}
 [e :U 2023 ]
-"69
-[; ;interrupts.c: 69: }
+"62
+[; ;interrupts.c: 62:  }
+}
+[e :U 2022 ]
+"64
+[; ;interrupts.c: 64: }
 [e :UE 2019 ]
+}
+[v $root$_LowISR `(v ~T0 @X0 0 e ]
+"67
+[; ;interrupts.c: 67: void __attribute__((picinterrupt(("low_priority")))) LowISR()
+[v _LowISR `(v ~T4 @X0 1 ef ]
+"68
+[; ;interrupts.c: 68: {
+{
+[e :U _LowISR ]
+[f ]
+"71
+[; ;interrupts.c: 71:     if(TMR0IF){
+[e $ ! _TMR0IF 2025  ]
+{
+"72
+[; ;interrupts.c: 72:         lost = 1;
+[e = _lost -> -> 1 `i `uc ]
+"73
+[; ;interrupts.c: 73:         TMR0IF=0;
+[e = _TMR0IF -> -> 0 `i `b ]
+"76
+[; ;interrupts.c: 76:  }
+}
+[e :U 2025 ]
+"78
+[; ;interrupts.c: 78: }
+[e :UE 2024 ]
 }

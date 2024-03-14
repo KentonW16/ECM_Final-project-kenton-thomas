@@ -2451,9 +2451,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2029  ]
 "127
-[; ;color.c: 127:     else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
+[; ;color.c: 127:     else if ((blue.H)-3000 < HSV.H && HSV.H < (blue.H)+3000) {color = 3;}
 [e :U 2026 ]
-[e $ ! && < - . _blue 0 -> -> 2000 `i `ui . _HSV 0 < . _HSV 0 + . _blue 0 -> -> 2000 `i `ui 2030  ]
+[e $ ! && < - . _blue 0 -> -> 3000 `i `ui . _HSV 0 < . _HSV 0 + . _blue 0 -> -> 3000 `i `ui 2030  ]
 {
 [e = _color -> -> 3 `i `uc ]
 }

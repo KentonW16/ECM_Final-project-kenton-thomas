@@ -24101,6 +24101,7 @@ extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
+void __attribute__((picinterrupt(("low_priority")))) LowISR();
 # 2 "interrupts.c" 2
 
 # 1 "./serial.h" 1
@@ -24277,13 +24278,9 @@ void Interrupts_init(void)
     TRISBbits.TRISB0=1;
     ANSELBbits.ANSELB0=0;
     PIE0bits.INT0IE=1;
-    IPR0bits.INT0IP = 1;
-    INTCONbits.INT0EDG = 0;
-
-
-
-
-    PIE4bits.RC4IE=1;
+    IPR0bits.INT0IP=1;
+    INTCONbits.INT0EDG=0;
+# 29 "interrupts.c"
     INTCONbits.PEIE=1;
     INTCONbits.GIE=1;
 
@@ -24302,30 +24299,23 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
         color_clear_init_interrupts();
         PIR0bits.INT0IF = 0;
 
-        LATHbits.LATH3 = !LATHbits.LATH3;
+
 
  }
+# 66 "interrupts.c"
+}
 
 
-    if(TMR0IF){
+void __attribute__((picinterrupt(("low_priority")))) LowISR()
+{
+
+
+    if(PIR0bits.TMR0IF){
         lost = 1;
-        TMR0IF=0;
+        TMR0H=0;
+        TMR0L=0;
+        PIR0bits.TMR0IF=0;
 
-
- }
-
-
-
-    if(PIR4bits.RC4IF){
-
-        putCharToRxBuf(RC4REG);
-
- }
-
-    if(PIR4bits.TX4IF){
-
-        TX4REG = getCharFromTxBuf();
-        if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
 
  }
 

@@ -24101,6 +24101,7 @@ extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
+void __attribute__((picinterrupt(("low_priority")))) LowISR();
 # 2 "interrupts.c" 2
 
 # 1 "./serial.h" 1
@@ -24246,11 +24247,22 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
 
+
 void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+
+
 
 unsigned int max (unsigned int a, unsigned int b);
 
+
+
+
 unsigned int min (unsigned int a,unsigned int b);
+
+
+
+
 
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 5 "interrupts.c" 2
@@ -24266,12 +24278,15 @@ void Interrupts_init(void)
     TRISBbits.TRISB0=1;
     ANSELBbits.ANSELB0=0;
     PIE0bits.INT0IE=1;
-    IPR0bits.INT0IP = 1;
-    INTCONbits.INT0EDG = 0;
+    IPR0bits.INT0IP=1;
+    INTCONbits.INT0EDG=0;
 
 
 
-    TMR0IE=1;
+    TMR0IP=0;
+
+
+
     PIE4bits.RC4IE=1;
     INTCONbits.PEIE=1;
     INTCONbits.GIE=1;
@@ -24291,14 +24306,6 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
         color_clear_init_interrupts();
         PIR0bits.INT0IF = 0;
 
-        LATHbits.LATH3 = !LATHbits.LATH3;
-
- }
-
-
-    if(TMR0IF){
-        lost = 1;
-        TMR0IF=0;
 
 
  }
@@ -24315,6 +24322,20 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
         TX4REG = getCharFromTxBuf();
         if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
+
+ }
+
+}
+
+
+void __attribute__((picinterrupt(("low_priority")))) LowISR()
+{
+
+
+    if(TMR0IF){
+        lost = 1;
+        TMR0IF=0;
+
 
  }
 

@@ -24344,7 +24344,7 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     }
 
 
-    else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
+    else if ((blue.H)-3000 < HSV.H && HSV.H < (blue.H)+3000) {color = 3;}
 
 
     else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {

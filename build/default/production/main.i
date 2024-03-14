@@ -24294,6 +24294,7 @@ extern char lost;
 
 void Interrupts_init(void);
 void __attribute__((picinterrupt(("high_priority")))) HighISR();
+void __attribute__((picinterrupt(("low_priority")))) LowISR();
 # 12 "main.c" 2
 
 # 1 "./timers.h" 1
@@ -24477,14 +24478,14 @@ typedef struct DC_motor {
 
 void initDCmotorsPWM(unsigned int PWMperiod);
 void setMotorPWM(DC_motor *m);
-void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
-void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void move(DC_motor *mL, DC_motor *mR, char color, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
+void lostReturnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigned int *straightTime, char curMove, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void stop(DC_motor *mL, DC_motor *mR, unsigned char straightRamp);
 void turnLeft(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDuration, unsigned char turnRamp);
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
-void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char reverseDuration, unsigned char straightRamp);
+void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp);
 void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
@@ -24523,7 +24524,7 @@ void main(void){
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {2,2,1,1,8};
+    unsigned char testSequence[4] = {4,4,1,1,8};
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24533,8 +24534,6 @@ void main(void){
 
     Buggy_init();
     color_click_init();
-    Timer0_init();
-    Interrupts_init();
     initUSART4();
     initDCmotorsPWM(PWMcycle);
 
@@ -24544,7 +24543,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
     motorL.PWMperiod=PWMcycle;
-    motorL.compensation=0;
+    motorL.compensation=1;
 
     motorR.power=0;
     motorR.direction=1;
@@ -24558,7 +24557,7 @@ void main(void){
     char straightSpeed=20;
     unsigned char straightRamp=2;
 
-    unsigned char reverseDuration=400;
+    unsigned int reverseDuration=800;
 
     char turnSpeed=40;
     unsigned char turnDuration=10;
@@ -24566,7 +24565,7 @@ void main(void){
 
 
     batteryLevel();
-# 94 "main.c"
+# 92 "main.c"
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
@@ -24580,9 +24579,14 @@ void main(void){
 
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
-# 116 "main.c"
+# 114 "main.c"
     white_Light(1);
     _delay((unsigned long)((1000)*(64000000/4000.0)));
+
+
+    Timer0_init();
+    resetTimer();
+    Interrupts_init();
 
 
     color_read(&RGBC);
@@ -24619,7 +24623,8 @@ void main(void){
         }
 
         if (wall == 1) {
-            PIE0bits.INT0IE=TMR0IE=0;
+
+            PIE0bits.INT0IE=0;
             straightTime[curMove] = get16bitTMR0val();
 
 
@@ -24648,7 +24653,16 @@ void main(void){
             wall = 0;
 
         }
-# 193 "main.c"
+
+        if (lost == 1) {
+            PIE0bits.INT0IE=0;
+            stop(&motorL, &motorR, straightRamp);
+            lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
+            PIE0bits.INT0IE=1;
+            lost = 0;
+            break;
+        }
+
         if (color == 8 || color == 9) {break;}
 
     }
