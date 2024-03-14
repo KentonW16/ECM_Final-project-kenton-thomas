@@ -24166,11 +24166,22 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
 
+
 void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white);
+
+
+
 
 unsigned int max (unsigned int a, unsigned int b);
 
+
+
+
 unsigned int min (unsigned int a,unsigned int b);
+
+
+
+
 
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV);
 # 2 "color.c" 2
@@ -24254,7 +24265,7 @@ void color_clear_init_interrupts(void) {
     color_writetoaddr(0x06, (high_threshold & 0xFF));
     color_writetoaddr(0x05, (low_threshold >> 8));
     color_writetoaddr(0x04, (low_threshold & 0xFF));
-    color_writetoaddr(0x0C, 0b0100);
+    color_writetoaddr(0x0C, 0b11);
 }
 
 
@@ -24322,44 +24333,39 @@ void color_read(RGBC_val *RGBC)
  I2C_2_Master_Stop();
 }
 
-
-void color_normalise(RGBC_val RGBC, RGBC_val *RGBC_n) {
-# 135 "color.c"
-    RGBC_n->C = RGBC.C;
-    RGBC_n->R = 1000L*RGBC.R/(RGBC.R+RGBC.G+RGBC.B);
-    RGBC_n->G = 1000L*RGBC.G/(RGBC.R+RGBC.G+RGBC.B);
-    RGBC_n->B = 1000L*RGBC.B/(RGBC.R+RGBC.G+RGBC.B);
-}
-
 unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_calib blue, HSV_calib yellow, HSV_calib pink, HSV_calib orange, HSV_calib lightblue, HSV_calib white)
 {
-    unsigned char color=0;
+    unsigned char color=9;
 
 
-    if ((red.H)-1000 < HSV.H && HSV.H < (red.H)+1000) {color = 1;}
+    if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
+        if (HSV.S > lightblue.S + 500){color = 2;}
+        else {color = 7;}
+    }
 
 
-    else if ((green.H)-1000 < HSV.H && HSV.H < (green.H)+1000) {color = 2;}
+    else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
 
 
-    else if ((blue.H)-1000 < HSV.H && HSV.H < (blue.H)+1000) {color = 3;}
+    else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {
+        if (HSV.S > pink.S + 500){color = 4;}
+        else {color = 5;}
+    }
 
 
-    else if ((yellow.H)-1000 < HSV.H && HSV.H < (yellow.H)+1000) {color = 4;}
+    else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
 
 
-    else if ((pink.H)-1000 < HSV.H && HSV.H < (pink.H)+1000) {color = 5;}
+    else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
 
 
-    else if ((orange.H)-1000 < HSV.H && HSV.H < (orange.H)+1000) {color = 6;}
+    if (red.H > 30000){
+        if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
+    }
 
-
-    else if ((lightblue.H)-1000 < HSV.H && HSV.H < (lightblue.H)+1000) {color = 7;}
-
-
-    else if ((white.H)-1000 < HSV.H && HSV.H < (white.H)+1000) {color = 8;}
-
-    else {color = 9;}
+    if (red.H < 10000){
+        if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
+    }
 
     return color;
 }
@@ -24368,6 +24374,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
 {
     white_Light(1);
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
@@ -24380,6 +24387,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -24390,6 +24398,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
@@ -24402,6 +24411,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -24412,6 +24422,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
@@ -24424,6 +24435,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -24434,6 +24446,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+
 
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
@@ -24446,6 +24459,7 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
     color_read(RGBC);
@@ -24456,7 +24470,6 @@ void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *
 
     _delay((unsigned long)((500)*(64000000/4000.0)));
     LATDbits.LATD7 = LATHbits.LATH3 = 1;
-
 }
 
 unsigned int max (unsigned int a, unsigned int b){
@@ -24472,9 +24485,12 @@ unsigned int min (unsigned int a,unsigned int b){
 void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
 
 
-    unsigned int r = (unsigned int)(RGBC.R*10000L/255);
-    unsigned int g = (unsigned int)(RGBC.G*10000L/255);
-    unsigned int b = (unsigned int)(RGBC.B*10000L/255);
+
+
+
+    unsigned int r = (unsigned int)(RGBC.R*10000L/1900);
+    unsigned int g = (unsigned int)(RGBC.G*10000L/1400);
+    unsigned int b = (unsigned int)(RGBC.B*10000L/1600);
 
 
     unsigned int cmax = max(r, max(g, b));
@@ -24486,6 +24502,7 @@ void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
         if (g > b){HSV->H = (unsigned int)((g-b)*6000L/diff);}
         else if (b > g){HSV->H = (unsigned int)((g + 6*diff -b)*6000L/diff);}
     }
+
     else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);}
 
     else if (cmax == b){HSV->H = (unsigned int)((r + 4*diff -g)*6000L/diff);}
