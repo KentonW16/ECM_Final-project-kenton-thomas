@@ -10,8 +10,6 @@
 - [Resources and project submission](#resources-and-project-submission)
 - [Supplementary technical information](#supplementary-technical-information)
 
-ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
-
 ## Functionality Overview
 1. Traverse maze by controlling the 4 motors on the buggy
 
@@ -61,6 +59,8 @@ Wall detection at a consistent distance is challenging, as the light level varie
 We noticed that the clear channel light level always decreases as the buggy approaches a wall and then sharply increases when the buggy is within a few centimetres from the wall (as the light from the LED reflects off the card). We used this minimum as the point at which the buggy detects that it is near the wall. The clear channel reading is taken when the color click interrupt triggers, which is at a given percentage above or below the previous reading. A lower reading is taken at 5% below the previous, so that the decrease in light level is tracked closely, whereas a higher reading (which indicates a wall) is only taken when at 33% above the previous, to avoid accidental triggers due to small changes in the ambient light and so it detects the sharp increase near the wall. 
 
 When the interrupt flag is raised, code in main is run to determine whether an increase or decrease has been detected. A decrease causes the ambient value to be updated, and an increase causes the wall detect flag to be set.
+
+![clear_channel_threshold](gifs/clear_channel_threshold.jpg)
 
 ### Color Detection
 For more reliable color detection, RGB values are converted to HSV (hue, saturation, value). Though this requires slightly more computation compared to just using the RGB values, we believed that the benefits outweighed the extra computational complexity:
