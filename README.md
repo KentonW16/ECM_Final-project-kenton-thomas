@@ -1,6 +1,10 @@
 # Course project - Mine navigation search and rescue - Kenton Wong & Thomas Lawson
 ## Table of contents
 - [Functionality Overview](#functionality-overview)
+- [User Instructions](#user-instructions)
+- [Key Features](#key-features)
+- [Reflections and Future Improvements](#reflections-and-future-improvements)
+- [Code Structure](#code-structure)
 - [Challenge brief](#challenge-brief)
 - ["Mine" environment specification](#mine-environment-specification)
 - [Resources and project submission](#resources-and-project-submission)
@@ -14,6 +18,7 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 
 1. Detect when approaching a color card/wall
 	-  Achieved through interpreting interrupt on the RGBC clear channel with a moving threshold
+	-  Additional movement into the wall, followed by a short reverse, is made to align buggy perpendicular to wall and ensure color sensing is carried out at a consistent distance
 
 1. Read the color card on the wall and determine color of card
 	-  Read the Red, Green and Blue values from the color click
@@ -21,18 +26,19 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 	-  The HSV value is compared against thresholds determined during the color calibration routine, and a decision is made on the color
 
 1. Carry out the instruction indicated by the color
+	- Buggy reverses further to ensure ample room for maneuvering 
 	-  Motor calibration routine allows buggy to make accurate turns on different surfaces
 
-1. Return home if white color card read
+1. Return home if white color card read or if color of card could not be determined
+	-  Time moving and color read recorded for each step, to allow the buggy to retrace its path
 
-1. Return home if color of card could not be determined
 
 ## User Instructions
-1. When buggy is turned on, the battery level is indicated through the two LEDs on the clicker board.
+1. When buggy is turned on, the battery level is indicated as a 2 bit value through the two LEDs on the clicker board.
 
-	2 LEDs | 1 LED | 0 LEDs
-	---------|---------|---------
-	Above 75% charge | 50% - 75% charge | Below 50% charge
+	Both LEDs | LED 2 only | LED 1 only | No LEDs
+	---------|---------|---------|---------
+	Above 75% charge | 50% - 75% charge | 25% - 50% charge | Below 25% charge
 
 1. Press button 1 to activate buggy, headlights and color click LED will turn on, and the buggy will enter the [Color Calibration Sequence](#color-calibration).
 
@@ -44,36 +50,46 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 
 ## Key Features
 ### Wall Detection
+Wall detection at a consistent disatnce is challenging, as the light level varies depending on the direction that the buggy is pointing relative to light sources and the color of the card pointed at. 
+
+We noticed that the clear channel light level always decreases as the buggy approaches a wall and then sharply increases when the buggy is within a few centimetres from the wall (as the light from the LED reflects off the card). We used this minimum as the point at which the buggy detects that it is near the wall. The clear channel reading is taken when the color click interrupt triggers, which is at a given percentage above or below the previous reading. A lower reading is taken at 5% below the previous, so that the decrease in light level is tracked closely, whereas a higher reading (which indicates a wall) is only taken when at 33% above the previous, to avoid accidental triggers due to small changes in the ambient light and so it detects the sharp increase near the wall. 
+
+When the interrupt flag is raised, code in main is run to determine whether an increase or decrease has been detected. A decrease causes the ambient value to be updated, and an increase causes the wall detect flag to be set.
+
 
 ### Color Detection
+For more reliable color detection, RGB values are converted to HSV. 
 
 ### Lost Function
+When a color is not recognised, for example when the buggy reaches a black wall, the buggy will return to its starting position. The time taken for each straight movement, as well as the sequence of moves performed, are stored in arrays, which can be read back to retrace the path taken. On its return, the buggy will ensure that it is aligned correctly by reversing into the wall after each turn.
 
-### Code Optimisation (variables)
-not using floats or negative numbers
-using char where possible
-pointers where possible, read only pointers where possible
+### Code Optimisation
+The use of floats and negative numbers are avoided entirely to ensure memory is utilised efficiently. Variables are also declared as chars where possible to conserve memory, with ints only needed here when dealing with timer and color values, as these must exceed the limits of int capacity. 
+
+Global variables are kept to a minimum and are only used when values are set by interrupts. Therefore pointers are used when variables need to be changed in other functions, which minimises opportunities for values to be changed by mistake.
 
 ## Reflections and Future Improvements
-Route optimisation
+1. A major issue we encountered, and didn't have time to fix, was the use of a low priority timer interrupt as an alternative method to initiate the lost function. This would have meant that the buggy would return home after no wall had been detected in >16 seconds, which would ensure that it could return home if the wall detection failed and avoid any timer overflow issues. This worked in isolation but could not be made to function with the final full system. With more time this could be fixed and the functions to operate it are left (commented out) in the code.
+
+1. In the final test, the buggy performed mostly as expected. A hair stuck in one wheel affected turning performance in one maze, but the ambient light in the test room provided a greater challenge. The wall detection functionality was compromised by this, meaning that it was less reliable than in previous tests. This could be fixed with further calibration of the interrupt thresholds in the test room conditions.
+
+1. Further work could be carried out to improve performane overall. Optimisation of return routes could be implemented to avoid doubling back on itself once the route is known. Physical improvements to the buggy, for example to the wheel surface, could allow more consistent turning, especially on the rough floors that it was tested on.
 
 ## Code Structure
 Source Files | Functions Defined
 ---------|---------
-```main.c``` | adfadf
+```main.c``` | Overall system operation
 ```color.c/h``` | Contains functions to initialise and control LEDs on the color click, obtain RGBC readings, process the RGBC readings into HSV values and determine color based on these values
 ```i2c.c/h``` | Contains functions to enable I2C communication between the color click and the clicker board
-```dc_motor.c/h``` | adfadf
-```interrupts.c/h``` | adfadf
-```timers.c/h``` | adfadf
+```dc_motor.c/h``` | Contains functions to initialise motors, define individual movements, call sets of movements depending on color detected, return to starting position and calibrate the turning angle
+```interrupts.c/h``` | Contains functions to initialise interrupts and define high and low priority ISRs
+```timers.c/h``` | Contains functions to initialise timer, reset and read timer values
 ```buggysetup.c/h``` | Contains functions to initialise all LEDs and buttons on clicker board, and all headlights and taillights on buggy
-```battery.c/h``` | Contains functions to obtain battery charge level and to display
-```serial.c/h``` | Contains functions enabling serial communication with computer to allow for easy debugging
+```battery.c/h``` | Contains functions to obtain battery charge level and to display (calls functions from ADC.c) 
+```serial.c/h``` | Contains functions enabling serial communication with computer to allow for easy debugging (unused in operation)
 
 
-## Calibration Routines
-### Motor Calibration
-### Color Calibration
+
 
 
 
