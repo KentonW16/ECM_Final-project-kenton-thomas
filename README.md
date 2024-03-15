@@ -32,6 +32,7 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 	-  Time moving and color read recorded for each step, to allow the buggy to retrace its path
 
 ### Flow Chart
+Below is a flowchart demonstrating the logic flow of the buggy's operation
 
 ![code_flowchart](gifs/code_flowchart.jpg)
 
@@ -50,23 +51,30 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 
 1. Once the angle is satisfactory, a long press of button 2 begins the main navigation function.
 
+Link to video showing calibration routine:
+https://imperiallondon-my.sharepoint.com/:f:/g/personal/khw121_ic_ac_uk/ElhzdluG545Nvhx_GZEV6rABJHsDoW-Rxq6_Fvrupplgjg?e=K78ZXv
+
 ## Key Features
 ### Wall Detection
-Wall detection at a consistent disatnce is challenging, as the light level varies depending on the direction that the buggy is pointing relative to light sources and the color of the card pointed at. 
+Wall detection at a consistent distance is challenging, as the light level varies depending on the direction that the buggy is pointing relative to light sources and the color of the card pointed at. 
 
 We noticed that the clear channel light level always decreases as the buggy approaches a wall and then sharply increases when the buggy is within a few centimetres from the wall (as the light from the LED reflects off the card). We used this minimum as the point at which the buggy detects that it is near the wall. The clear channel reading is taken when the color click interrupt triggers, which is at a given percentage above or below the previous reading. A lower reading is taken at 5% below the previous, so that the decrease in light level is tracked closely, whereas a higher reading (which indicates a wall) is only taken when at 33% above the previous, to avoid accidental triggers due to small changes in the ambient light and so it detects the sharp increase near the wall. 
 
 When the interrupt flag is raised, code in main is run to determine whether an increase or decrease has been detected. A decrease causes the ambient value to be updated, and an increase causes the wall detect flag to be set.
 
-
 ### Color Detection
-For more reliable color detection, RGB values are converted to HSV. This requires thresholds to be set only in hue and sometimes saturation to achieve accurate color detection. 
+For more reliable color detection, RGB values are converted to HSV (hue, saturation, value). Though this requires slightly more computation compared to just using the RGB values, we believed that the benefits outweighed the extra computational complexity:
+1. Most of the colors can be distinguished from each other just by comparing the hue value (and also the saturation value in a few limited cases) which are all quite distinct from each other. This makes threshold setting for color recognition much simpler than using RGB, where 3 variables need to be altered. 
+
+1. During testing we found that RGB readings for the same color card fluctuated greatly depending on ambient light levels, whereas the use of HSV values eliminated this problem as the values were consistent regardless of
+
+The ```rgb_2_hsv``` function achieves this, by converting the inputted RGB values into HSV values and storing it in a structure. Extreme care was taken during the conversion arithmetic to ensure that were no negative numbers or floats at all to avoid casting errors.
 
 ### Lost Function
 When a color is not recognised, for example when the buggy reaches a black wall, the buggy will return to its starting position. The time taken for each straight movement, as well as the sequence of moves performed, are stored in arrays, which can be read back to retrace the path taken. On its return, the buggy will ensure that it is aligned correctly by reversing into the wall after each turn.
 
 ### Code Optimisation
-The use of floats and negative numbers are avoided entirely to ensure memory is utilised efficiently. Variables are also declared as chars where possible to conserve memory, with ints only needed here when dealing with timer and color values, as these must exceed the limits of int capacity. 
+The use of floats and negative numbers are avoided entirely to ensure memory is utilised efficiently and avoid errors in casting negative numbers into an unsigned int for example. Variables are also declared as chars where possible to conserve memory, with ints only needed here when dealing with timer and color values, as these must exceed the limits of int capacity.
 
 Global variables are kept to a minimum and are only used when values are set by interrupts. Therefore pointers are used when variables need to be changed in other functions, which minimises opportunities for values to be changed by mistake.
 
@@ -75,7 +83,9 @@ Global variables are kept to a minimum and are only used when values are set by 
 
 1. In the final test, the buggy performed mostly as expected. When correctly positioned, all colors were identified correctly, and the movement, return and lost functions worked as expected. A hair stuck in one wheel affected turning performance in one maze, but the ambient light in the test room provided a greater challenge. The wall detection functionality was compromised by this, meaning that it was less reliable than in previous tests. This could be fixed with further calibration of the interrupt thresholds in the test room conditions.
 
-1. Further work could be carried out to improve performace overall. Optimisation of return routes could be implemented to avoid doubling back on itself once the route is known. Physical improvements to the buggy, for example to the wheel surface, could allow more consistent turning, especially on the rough floors that it was tested on.
+1. Further work could be carried out to improve performace overall. Optimisation of return routes could be implemented to avoid doubling back on itself once the route is known.
+   
+1. Physical improvements to the buggy, for example to the wheel surface, could allow more consistent turning, especially on the rough floors that it was tested on.
 
 ## Code Details
 ### File Structure
