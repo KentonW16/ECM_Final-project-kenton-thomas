@@ -1,5 +1,53 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/c8ng1gdc)
-# Course project - Mine navigation search and rescue
+# Course project - Mine navigation search and rescue - Kenton Wong & Thomas Lawson
+## Table of contents
+- [Functionality Overview](#functionality-overview)
+- [Challenge brief](#challenge-brief)
+- ["Mine" environment specification](#mine-environment-specification)
+- [Resources and project submission](#resources-and-project-submission)
+- [Supplementary technical information](#supplementary-technical-information)
+
+ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
+
+## Functionality Overview
+1. Traverse maze by controlling the 4 motors on the buggy
+	-  Accurate turns on varying surfaces achieved through motor calibration routine
+
+1. Detect when approaching a color card/wall
+	-  Achieved through interpreting interrupt on the clear channel on the color click RGBC sensor
+
+1. Read the color card on the wall and determine color of card
+	-  Read the Red, Green and Blue values from the color click
+	-  RGB (red, green, blue) values converted into HSV (hue, saturation, value) values to reduce sensitivity to ambient light conditions
+	-  The HSV value is compared against thresholds determined during the color calibration routine, and a decision is made on the color
+
+1. Carry out the instruction indicated by the color
+	-  Motor calibration routine allows buggy to make accurate turns on different surfaces
+
+1. Return home if white color card read
+
+1. Return home if color of card could not be determined
+
+## User Instructions
+Button 1 press to activate buggy 
+
+Color cards are read by holding each in front of the sensor, each separated by a press of button 1. The order is as follows and is consistent throughout code: red, green, blue, yellow, pink, orange, light blue, white. Calibration gives a reference value for each color in the operational lighting conditions (and illuminated by color click LED) 
+
+After all colors have been read, the turning angle is adjusted by running a test sequence (90 degrees left followed by 90 degrees right). The angle of turning is increased by a press of button 2 or decreased by button 1. Once the angle is set correctly, a long press of button 2 begins the key navigation function 
+
+## Code Structure
+
+## Calibration Routines
+### Motor Calibration
+### Color Calibration
+
+## Wall Detection
+
+## Code Optimisation (variables)
+not using floats or negative numbers
+
+## Future Improvements
+Route optimisation
+
 
 ## Challenge brief
 
