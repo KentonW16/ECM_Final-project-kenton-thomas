@@ -21,34 +21,39 @@
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 // Declare global variables
-unsigned int ambient = 500;
-char brightnessChange = 0;
-char lost = 0;
+unsigned int ambient = 500; //previous ambient value (updated to new value after comparison)
+char brightnessChange = 0;  //flag for color click interrupt (change in brightness)
+char lost = 0;              //flag for timer interrupt (no wall detected => lost)
 
 void main(void){
     // Declare local variables
-    char buf[40] = {0};         //****for serial comms
-    unsigned int PWMcycle = 199;
+    //char buf[40] = {0};         //***for serial comms
+    unsigned int PWMcycle = 199;  //base period of PWM cycle
     
-    unsigned int ambientNew;
-    char wall = 0;
-    unsigned char color = 0;
+    // For wall and color detection
+    unsigned int ambientNew;              //most recent ambient reading
+    char wall = 0;                        //flag for wall detection
+    unsigned char color = 0;              //color detected
+    
+    // For return function
     unsigned char moveSequence[40] = {0}; //length is max number of moves
-    unsigned int straightTime[41] = {0};
-    char curMove = 0;
+    unsigned int straightTime[41] = {0};  //length is max number of moves+1 (to store final straight)
+    char curMove = 0;                     //current move counter
     
-    unsigned char testSequence[4] = {4,4,1,1,8}; //***for testing without colors
+    //unsigned char testSequence[4] = {4,4,1,1,8}; //***for testing without colors
     
     // Declare structures
-    struct RGBC_val RGBC, RGBC_n;
-    struct HSV_val HSV;
-    struct DC_motor motorL, motorR; //declare two DC_motor structures 
+    struct RGBC_val RGBC, RGBC_n;   //RGBC readings
+    struct HSV_val HSV;             //HSV readings
+    struct DC_motor motorL, motorR; //left and right DC_motor structures 
     
     // Initialisation functions
     Buggy_init();
     color_click_init();
-    initUSART4();
+    //initUSART4();  //***for serial comms
     initDCmotorsPWM(PWMcycle);
+    Timer0_init();
+    Interrupts_init();
 
     motorL.power=0; 						//zero power to start
     motorL.direction=1; 					//set default motor direction
@@ -56,7 +61,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);  //store address of CCP1 duty high byte
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);  //store address of CCP2 duty high byte
     motorL.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
-    motorL.compensation=1;                  //left motor run at higher power
+    motorL.compensation=2;                  //left motor run at higher power (compensating for power imbalance)
 
     motorR.power=0; 						//zero power to start
     motorR.direction=1; 					//set default motor direction
@@ -79,15 +84,6 @@ void main(void){
     // Display battery voltage in binary on LEDs (before button press)
     batteryLevel();
     
-    // Testing HSV function
-    /*
-    RGBC.R = 200;
-    RGBC.G = 50;
-    RGBC.B = 170;
-    
-    rgb_2_hsv (RGBC, &HSV);
-    */
-    
     // Wait for button press
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0; // both LEDs off 
@@ -96,13 +92,14 @@ void main(void){
     LATHbits.LATH1=LATDbits.LATD3=1;
     __delay_ms(500);
     
-    // Flash color cards in front of buggy
+    // Calibration for colors (flash color cards in front of buggy)
     struct HSV_calib red, green, blue, yellow, pink, orange, lightblue, white; 		//declare 8 color calibration structures to store RBG values of each color
     color_calibration(&RGBC, &HSV, &red, &green, &blue, &yellow, &pink, &orange, &lightblue, &white);
     
     // Calibration for turning angle
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
     
+    //***Color sense testing
     /*
     // Add color detect here for debugging with breakpoint after and watch on 'color'
     color_read(&RGBC);                     //read RGBC values
@@ -113,11 +110,6 @@ void main(void){
     // Turn on white LED on color click 
     white_Light(1);
     __delay_ms(1000);
-    
-    // Turn on interrupts
-    Timer0_init();
-    resetTimer();       //ensure timer at zero
-    Interrupts_init();
     
     // Read initial ambient light
     color_read(&RGBC);
@@ -154,18 +146,17 @@ void main(void){
         }
         
         if (wall == 1) { //if wall detected
-            //PIE0bits.INT0IE=PIE0bits.TMR0IE=0;      //turn off interrupts so not triggered during movement
-            PIE0bits.INT0IE=0;
+            //PIE0bits.INT0IE=PIE0bits.TMR0IE=0;  //***timer interrupt deactivated
+            PIE0bits.INT0IE=0;                    //turn off interrupts so not triggered during movement
             straightTime[curMove] = get16bitTMR0val();
             
             // Stop and read color
             stop(&motorL, &motorR, straightRamp);  //stop
             wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);                     //read RGBC values
-            //color_normalise(RGBC, &RGBC_n);        //normalise RGB values
             rgb_2_hsv(RGBC, &HSV);                 //convert to HSV
             color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);          //determine color from RGBC values
-            //color = testSequence[curMove];         //***for testing without colors
+            //color = testSequence[curMove];       //***for testing without colors
             moveSequence[curMove] = color;         //record movement
             
             // Carry out movement based on color detected
@@ -179,13 +170,16 @@ void main(void){
             
             curMove++;                             //increment current move number
             resetTimer();                          //reset timer
-            //PIE0bits.INT0IE=PIE0bits.TMR0IE=1;              //turn interrupts on
-            PIE0bits.INT0IE=1;                     //***test without timer
+            //PIE0bits.INT0IE=PIE0bits.TMR0IE=1;   //***timer interrupt deactivated
+            PIE0bits.INT0IE=1;                     //turn interrupts on
             wall = 0;                              //reset flag
             
         }
         
-        if (lost == 1) {  //if timer interrupt triggered (moving straight for > 8s)
+        // Lost after moving straight for > 16s
+        //***Timer interrupt deactivated
+        /*
+        if (lost == 1) {  //if timer interrupt triggered (moving straight for > 16s)
             PIE0bits.INT0IE=0;                     //turn off color click interrupts (not timer)
             stop(&motorL, &motorR, straightRamp);  //stop
             lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
@@ -193,6 +187,7 @@ void main(void){
             lost = 0;
             break;
         }
+        */
         
         if (color == 8 || color == 9) {break;} //color white or not recognised (returned home)
         

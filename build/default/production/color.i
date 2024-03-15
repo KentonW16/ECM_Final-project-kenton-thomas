@@ -24348,7 +24348,8 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
     else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {
-        if (HSV.S > pink.S + 500){color = 4;}
+        if (HSV.H * 2 - HSV.S < HSV.H + 500 && HSV.H * 2 - HSV.S > HSV.H - 500) {color = 8;}
+        else if (HSV.S > pink.S + 500){color = 4;}
         else {color = 5;}
     }
 
@@ -24356,7 +24357,7 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
 
 
-    else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
+
 
 
     if (red.H > 30000){

@@ -2433,8 +2433,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e $ ! && < - ( _min (2 , . _green 0 . _lightblue 0 -> -> 2000 `i `ui . _HSV 0 < . _HSV 0 + ( _max (2 , . _green 0 . _lightblue 0 -> -> 2000 `i `ui 2026  ]
 {
 "122
-[; ;color.c: 122:         if (HSV.S > lightblue.S + 500){color = 2;}
-[e $ ! > . _HSV 1 + . _lightblue 1 -> -> 500 `i `ui 2027  ]
+[; ;color.c: 122:         if (HSV.S > lightblue.S + 1000){color = 2;}
+[e $ ! > . _HSV 1 + . _lightblue 1 -> -> 1000 `i `ui 2027  ]
 {
 [e = _color -> -> 2 `i `uc ]
 }
@@ -2451,9 +2451,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2029  ]
 "127
-[; ;color.c: 127:     else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
+[; ;color.c: 127:     else if ((blue.H)-3000 < HSV.H && HSV.H < (blue.H)+3000) {color = 3;}
 [e :U 2026 ]
-[e $ ! && < - . _blue 0 -> -> 2000 `i `ui . _HSV 0 < . _HSV 0 + . _blue 0 -> -> 2000 `i `ui 2030  ]
+[e $ ! && < - . _blue 0 -> -> 3000 `i `ui . _HSV 0 < . _HSV 0 + . _blue 0 -> -> 3000 `i `ui 2030  ]
 {
 [e = _color -> -> 3 `i `uc ]
 }
@@ -2464,90 +2464,90 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e $ ! && < - ( _min (2 , . _yellow 0 . _pink 0 -> -> 1000 `i `ui . _HSV 0 < . _HSV 0 + ( _max (2 , . _yellow 0 . _pink 0 -> -> 1000 `i `ui 2032  ]
 {
 "131
-[; ;color.c: 131:         if (HSV.S > pink.S + 500){color = 4;}
-[e $ ! > . _HSV 1 + . _pink 1 -> -> 500 `i `ui 2033  ]
-{
-[e = _color -> -> 4 `i `uc ]
-}
-[e $U 2034  ]
-"132
-[; ;color.c: 132:         else {color = 5;}
-[e :U 2033 ]
-{
-[e = _color -> -> 5 `i `uc ]
-}
-[e :U 2034 ]
-"133
-[; ;color.c: 133:     }
-}
-[e $U 2035  ]
-"136
-[; ;color.c: 136:     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
-[e :U 2032 ]
-[e $ ! && < - . _orange 0 -> -> 500 `i `ui . _HSV 0 < . _HSV 0 + . _orange 0 -> -> 500 `i `ui 2036  ]
-{
-[e = _color -> -> 6 `i `uc ]
-}
-[e $U 2037  ]
-"139
-[; ;color.c: 139:     else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
-[e :U 2036 ]
-[e $ ! && < - . _white 0 -> -> 500 `i `ui . _HSV 0 < . _HSV 0 + . _white 0 -> -> 500 `i `ui 2038  ]
+[; ;color.c: 131:         if (HSV.H * 2 - HSV.S < HSV.H + 500 && HSV.H * 2 - HSV.S > HSV.H - 500) {color = 8;}
+[e $ ! && < - * . _HSV 0 -> -> 2 `i `ui . _HSV 1 + . _HSV 0 -> -> 500 `i `ui > - * . _HSV 0 -> -> 2 `i `ui . _HSV 1 - . _HSV 0 -> -> 500 `i `ui 2033  ]
 {
 [e = _color -> -> 8 `i `uc ]
 }
+[e $U 2034  ]
+"132
+[; ;color.c: 132:         else if (HSV.S > pink.S + 500){color = 4;}
+[e :U 2033 ]
+[e $ ! > . _HSV 1 + . _pink 1 -> -> 500 `i `ui 2035  ]
+{
+[e = _color -> -> 4 `i `uc ]
+}
+[e $U 2036  ]
+"133
+[; ;color.c: 133:         else {color = 5;}
+[e :U 2035 ]
+{
+[e = _color -> -> 5 `i `uc ]
+}
+[e :U 2036 ]
+[e :U 2034 ]
+"134
+[; ;color.c: 134:     }
+}
+[e $U 2037  ]
+"137
+[; ;color.c: 137:     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
+[e :U 2032 ]
+[e $ ! && < - . _orange 0 -> -> 500 `i `ui . _HSV 0 < . _HSV 0 + . _orange 0 -> -> 500 `i `ui 2038  ]
+{
+[e = _color -> -> 6 `i `uc ]
+}
 [e :U 2038 ]
 [e :U 2037 ]
-[e :U 2035 ]
 [e :U 2031 ]
 [e :U 2029 ]
-"142
-[; ;color.c: 142:     if (red.H > 30000){
+"140
+[; ;color.c: 140:     if (red.H > 30000){
 [e $ ! > . _red 0 -> -> 30000 `i `ui 2039  ]
 {
-"143
-[; ;color.c: 143:         if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
+"141
+[; ;color.c: 141:         if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
 [e $ ! || && < - . _red 0 -> -> 1000 `i `ui . _HSV 0 < -> . _HSV 0 `l -> 36000 `l && < -> -> 0 `i `ui . _HSV 0 < -> . _HSV 0 `l - -> + -> -> 1000 `i `ui . _red 0 `l -> 36000 `l 2040  ]
 {
 [e = _color -> -> 1 `i `uc ]
 }
 [e :U 2040 ]
-"144
-[; ;color.c: 144:     }
+"142
+[; ;color.c: 142:     }
 }
 [e :U 2039 ]
-"146
-[; ;color.c: 146:     if (red.H < 10000){
+"144
+[; ;color.c: 144:     if (red.H < 10000){
 [e $ ! < . _red 0 -> -> 10000 `i `ui 2041  ]
 {
-"147
-[; ;color.c: 147:         if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
+"145
+[; ;color.c: 145:         if((36000 - 1000 + (red.H) < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < red.H + 1000)) {color = 1;}
 [e $ ! || && < + - -> 36000 `l -> -> 1000 `i `l -> . _red 0 `l -> . _HSV 0 `l < -> . _HSV 0 `l -> 36000 `l && < -> -> 0 `i `ui . _HSV 0 < . _HSV 0 + . _red 0 -> -> 1000 `i `ui 2042  ]
 {
 [e = _color -> -> 1 `i `uc ]
 }
 [e :U 2042 ]
-"148
-[; ;color.c: 148:     }
+"146
+[; ;color.c: 146:     }
 }
 [e :U 2041 ]
-"150
-[; ;color.c: 150:     return color;
+"148
+[; ;color.c: 148:     return color;
 [e ) _color ]
 [e $UE 2025  ]
-"151
-[; ;color.c: 151: }
+"149
+[; ;color.c: 149: }
 [e :UE 2025 ]
 }
-"153
-[; ;color.c: 153: void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
+"151
+[; ;color.c: 151: void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
 [v _color_calibration `(v ~T0 @X0 1 ef10`*S2016`*S2017`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015`*S2015 ]
-"154
-[; ;color.c: 154: {
+"152
+[; ;color.c: 152: {
 {
 [e :U _color_calibration ]
-"153
-[; ;color.c: 153: void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
+"151
+[; ;color.c: 151: void color_calibration(RGBC_val *RGBC, HSV_val *HSV, HSV_calib *red, HSV_calib *green, HSV_calib *blue, HSV_calib *yellow, HSV_calib *pink, HSV_calib *orange, HSV_calib *lightblue, HSV_calib *white)
 [v _RGBC `*S2016 ~T0 @X0 1 r1 ]
 [v _HSV `*S2017 ~T0 @X0 1 r2 ]
 [v _red `*S2015 ~T0 @X0 1 r3 ]
@@ -2558,411 +2558,411 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _orange `*S2015 ~T0 @X0 1 r8 ]
 [v _lightblue `*S2015 ~T0 @X0 1 r9 ]
 [v _white `*S2015 ~T0 @X0 1 r10 ]
-"154
-[; ;color.c: 154: {
+"152
+[; ;color.c: 152: {
 [f ]
-"155
-[; ;color.c: 155:     white_Light(1);
+"153
+[; ;color.c: 153:     white_Light(1);
 [e ( _white_Light (1 -> -> 1 `i `uc ]
-"156
-[; ;color.c: 156:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"154
+[; ;color.c: 154:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"159
-[; ;color.c: 159:     while (PORTFbits.RF2);
+"157
+[; ;color.c: 157:     while (PORTFbits.RF2);
 [e $U 2044  ]
 [e :U 2045 ]
 [e :U 2044 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2045  ]
 [e :U 2046 ]
-"160
-[; ;color.c: 160:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"158
+[; ;color.c: 158:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"161
-[; ;color.c: 161:     color_read(RGBC);
+"159
+[; ;color.c: 159:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"162
-[; ;color.c: 162:     rgb_2_hsv(*RGBC, HSV);
+"160
+[; ;color.c: 160:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"163
-[; ;color.c: 163:     red->H = HSV->H;
+"161
+[; ;color.c: 161:     red->H = HSV->H;
 [e = . *U _red 0 . *U _HSV 0 ]
-"164
-[; ;color.c: 164:     red->S = HSV->S;
+"162
+[; ;color.c: 162:     red->S = HSV->S;
 [e = . *U _red 1 . *U _HSV 1 ]
-"165
-[; ;color.c: 165:     red->V = HSV->V;
+"163
+[; ;color.c: 163:     red->V = HSV->V;
 [e = . *U _red 2 . *U _HSV 2 ]
-"167
-[; ;color.c: 167:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"165
+[; ;color.c: 165:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"168
-[; ;color.c: 168:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"166
+[; ;color.c: 166:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"171
-[; ;color.c: 171:     while (PORTFbits.RF2);
+"169
+[; ;color.c: 169:     while (PORTFbits.RF2);
 [e $U 2047  ]
 [e :U 2048 ]
 [e :U 2047 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2048  ]
 [e :U 2049 ]
-"172
-[; ;color.c: 172:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"170
+[; ;color.c: 170:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"173
-[; ;color.c: 173:     color_read(RGBC);
+"171
+[; ;color.c: 171:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"174
-[; ;color.c: 174:     rgb_2_hsv(*RGBC, HSV);
+"172
+[; ;color.c: 172:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"175
-[; ;color.c: 175:     green->H = HSV->H;
+"173
+[; ;color.c: 173:     green->H = HSV->H;
 [e = . *U _green 0 . *U _HSV 0 ]
-"176
-[; ;color.c: 176:     green->S = HSV->S;
+"174
+[; ;color.c: 174:     green->S = HSV->S;
 [e = . *U _green 1 . *U _HSV 1 ]
-"177
-[; ;color.c: 177:     green->V = HSV->V;
+"175
+[; ;color.c: 175:     green->V = HSV->V;
 [e = . *U _green 2 . *U _HSV 2 ]
-"179
-[; ;color.c: 179:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"177
+[; ;color.c: 177:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"180
-[; ;color.c: 180:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"178
+[; ;color.c: 178:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"183
-[; ;color.c: 183:     while (PORTFbits.RF2);
+"181
+[; ;color.c: 181:     while (PORTFbits.RF2);
 [e $U 2050  ]
 [e :U 2051 ]
 [e :U 2050 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2051  ]
 [e :U 2052 ]
-"184
-[; ;color.c: 184:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"182
+[; ;color.c: 182:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"185
-[; ;color.c: 185:     color_read(RGBC);
+"183
+[; ;color.c: 183:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"186
-[; ;color.c: 186:     rgb_2_hsv(*RGBC, HSV);
+"184
+[; ;color.c: 184:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"187
-[; ;color.c: 187:     blue->H = HSV->H;
+"185
+[; ;color.c: 185:     blue->H = HSV->H;
 [e = . *U _blue 0 . *U _HSV 0 ]
-"188
-[; ;color.c: 188:     blue->S = HSV->S;
+"186
+[; ;color.c: 186:     blue->S = HSV->S;
 [e = . *U _blue 1 . *U _HSV 1 ]
-"189
-[; ;color.c: 189:     blue->V = HSV->V;
+"187
+[; ;color.c: 187:     blue->V = HSV->V;
 [e = . *U _blue 2 . *U _HSV 2 ]
-"191
-[; ;color.c: 191:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"189
+[; ;color.c: 189:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"192
-[; ;color.c: 192:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"190
+[; ;color.c: 190:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"195
-[; ;color.c: 195:     while (PORTFbits.RF2);
+"193
+[; ;color.c: 193:     while (PORTFbits.RF2);
 [e $U 2053  ]
 [e :U 2054 ]
 [e :U 2053 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2054  ]
 [e :U 2055 ]
-"196
-[; ;color.c: 196:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"194
+[; ;color.c: 194:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"197
-[; ;color.c: 197:     color_read(RGBC);
+"195
+[; ;color.c: 195:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"198
-[; ;color.c: 198:     rgb_2_hsv(*RGBC, HSV);
+"196
+[; ;color.c: 196:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"199
-[; ;color.c: 199:     yellow->H = HSV->H;
+"197
+[; ;color.c: 197:     yellow->H = HSV->H;
 [e = . *U _yellow 0 . *U _HSV 0 ]
-"200
-[; ;color.c: 200:     yellow->S = HSV->S;
+"198
+[; ;color.c: 198:     yellow->S = HSV->S;
 [e = . *U _yellow 1 . *U _HSV 1 ]
-"201
-[; ;color.c: 201:     yellow->V = HSV->V;
+"199
+[; ;color.c: 199:     yellow->V = HSV->V;
 [e = . *U _yellow 2 . *U _HSV 2 ]
-"203
-[; ;color.c: 203:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"201
+[; ;color.c: 201:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"204
-[; ;color.c: 204:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"202
+[; ;color.c: 202:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"207
-[; ;color.c: 207:     while (PORTFbits.RF2);
+"205
+[; ;color.c: 205:     while (PORTFbits.RF2);
 [e $U 2056  ]
 [e :U 2057 ]
 [e :U 2056 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2057  ]
 [e :U 2058 ]
-"208
-[; ;color.c: 208:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"206
+[; ;color.c: 206:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"209
-[; ;color.c: 209:     color_read(RGBC);
+"207
+[; ;color.c: 207:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"210
-[; ;color.c: 210:     rgb_2_hsv(*RGBC, HSV);
+"208
+[; ;color.c: 208:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"211
-[; ;color.c: 211:     pink->H = HSV->H;
+"209
+[; ;color.c: 209:     pink->H = HSV->H;
 [e = . *U _pink 0 . *U _HSV 0 ]
-"212
-[; ;color.c: 212:     pink->S = HSV->S;
+"210
+[; ;color.c: 210:     pink->S = HSV->S;
 [e = . *U _pink 1 . *U _HSV 1 ]
-"213
-[; ;color.c: 213:     pink->V = HSV->V;
+"211
+[; ;color.c: 211:     pink->V = HSV->V;
 [e = . *U _pink 2 . *U _HSV 2 ]
-"215
-[; ;color.c: 215:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"213
+[; ;color.c: 213:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"216
-[; ;color.c: 216:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"214
+[; ;color.c: 214:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"219
-[; ;color.c: 219:     while (PORTFbits.RF2);
+"217
+[; ;color.c: 217:     while (PORTFbits.RF2);
 [e $U 2059  ]
 [e :U 2060 ]
 [e :U 2059 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2060  ]
 [e :U 2061 ]
-"220
-[; ;color.c: 220:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"218
+[; ;color.c: 218:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"221
-[; ;color.c: 221:     color_read(RGBC);
+"219
+[; ;color.c: 219:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"222
-[; ;color.c: 222:     rgb_2_hsv(*RGBC, HSV);
+"220
+[; ;color.c: 220:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"223
-[; ;color.c: 223:     orange->H = HSV->H;
+"221
+[; ;color.c: 221:     orange->H = HSV->H;
 [e = . *U _orange 0 . *U _HSV 0 ]
-"224
-[; ;color.c: 224:     orange->S = HSV->S;
+"222
+[; ;color.c: 222:     orange->S = HSV->S;
 [e = . *U _orange 1 . *U _HSV 1 ]
-"225
-[; ;color.c: 225:     orange->V = HSV->V;
+"223
+[; ;color.c: 223:     orange->V = HSV->V;
 [e = . *U _orange 2 . *U _HSV 2 ]
-"227
-[; ;color.c: 227:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"225
+[; ;color.c: 225:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"228
-[; ;color.c: 228:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"226
+[; ;color.c: 226:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"231
-[; ;color.c: 231:     while (PORTFbits.RF2);
+"229
+[; ;color.c: 229:     while (PORTFbits.RF2);
 [e $U 2062  ]
 [e :U 2063 ]
 [e :U 2062 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2063  ]
 [e :U 2064 ]
-"232
-[; ;color.c: 232:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"230
+[; ;color.c: 230:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"233
-[; ;color.c: 233:     color_read(RGBC);
+"231
+[; ;color.c: 231:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"234
-[; ;color.c: 234:     rgb_2_hsv(*RGBC, HSV);
+"232
+[; ;color.c: 232:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"235
-[; ;color.c: 235:     lightblue->H = HSV->H;
+"233
+[; ;color.c: 233:     lightblue->H = HSV->H;
 [e = . *U _lightblue 0 . *U _HSV 0 ]
-"236
-[; ;color.c: 236:     lightblue->S = HSV->S;
+"234
+[; ;color.c: 234:     lightblue->S = HSV->S;
 [e = . *U _lightblue 1 . *U _HSV 1 ]
-"237
-[; ;color.c: 237:     lightblue->V = HSV->V;
+"235
+[; ;color.c: 235:     lightblue->V = HSV->V;
 [e = . *U _lightblue 2 . *U _HSV 2 ]
-"239
-[; ;color.c: 239:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"237
+[; ;color.c: 237:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"240
-[; ;color.c: 240:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"238
+[; ;color.c: 238:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"243
-[; ;color.c: 243:     while (PORTFbits.RF2);
+"241
+[; ;color.c: 241:     while (PORTFbits.RF2);
 [e $U 2065  ]
 [e :U 2066 ]
 [e :U 2065 ]
 [e $ != -> . . _PORTFbits 0 2 `i -> 0 `i 2066  ]
 [e :U 2067 ]
-"244
-[; ;color.c: 244:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
+"242
+[; ;color.c: 242:     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"245
-[; ;color.c: 245:     color_read(RGBC);
+"243
+[; ;color.c: 243:     color_read(RGBC);
 [e ( _color_read (1 _RGBC ]
-"246
-[; ;color.c: 246:     rgb_2_hsv(*RGBC, HSV);
+"244
+[; ;color.c: 244:     rgb_2_hsv(*RGBC, HSV);
 [e ( _rgb_2_hsv (2 , *U _RGBC _HSV ]
-"247
-[; ;color.c: 247:     white->H = HSV->H;
+"245
+[; ;color.c: 245:     white->H = HSV->H;
 [e = . *U _white 0 . *U _HSV 0 ]
-"248
-[; ;color.c: 248:     white->S = HSV->S;
+"246
+[; ;color.c: 246:     white->S = HSV->S;
 [e = . *U _white 1 . *U _HSV 1 ]
-"249
-[; ;color.c: 249:     white->V = HSV->V;
+"247
+[; ;color.c: 247:     white->V = HSV->V;
 [e = . *U _white 2 . *U _HSV 2 ]
-"251
-[; ;color.c: 251:     _delay((unsigned long)((500)*(64000000/4000.0)));
+"249
+[; ;color.c: 249:     _delay((unsigned long)((500)*(64000000/4000.0)));
 [e ( __delay (1 -> * -> -> 500 `i `d / -> -> 64000000 `l `d .4000.0 `ul ]
-"252
-[; ;color.c: 252:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
+"250
+[; ;color.c: 250:     LATDbits.LATD7 = LATHbits.LATH3 = 1;
 [e = . . _LATDbits 0 7 = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"253
-[; ;color.c: 253: }
+"251
+[; ;color.c: 251: }
 [e :UE 2043 ]
 }
-"255
-[; ;color.c: 255: unsigned int max (unsigned int a, unsigned int b){
+"253
+[; ;color.c: 253: unsigned int max (unsigned int a, unsigned int b){
 [v _max `(ui ~T0 @X0 1 ef2`ui`ui ]
 {
 [e :U _max ]
 [v _a `ui ~T0 @X0 1 r1 ]
 [v _b `ui ~T0 @X0 1 r2 ]
 [f ]
-"256
-[; ;color.c: 256:     if (a > b){return a;}
+"254
+[; ;color.c: 254:     if (a > b){return a;}
 [e $ ! > _a _b 2069  ]
 {
 [e ) _a ]
 [e $UE 2068  ]
 }
 [e $U 2070  ]
-"257
-[; ;color.c: 257:     else {return b;}
+"255
+[; ;color.c: 255:     else {return b;}
 [e :U 2069 ]
 {
 [e ) _b ]
 [e $UE 2068  ]
 }
 [e :U 2070 ]
-"258
-[; ;color.c: 258: }
+"256
+[; ;color.c: 256: }
 [e :UE 2068 ]
 }
-"260
-[; ;color.c: 260: unsigned int min (unsigned int a,unsigned int b){
+"258
+[; ;color.c: 258: unsigned int min (unsigned int a,unsigned int b){
 [v _min `(ui ~T0 @X0 1 ef2`ui`ui ]
 {
 [e :U _min ]
 [v _a `ui ~T0 @X0 1 r1 ]
 [v _b `ui ~T0 @X0 1 r2 ]
 [f ]
-"261
-[; ;color.c: 261:     if (a < b){return a;}
+"259
+[; ;color.c: 259:     if (a < b){return a;}
 [e $ ! < _a _b 2072  ]
 {
 [e ) _a ]
 [e $UE 2071  ]
 }
 [e $U 2073  ]
-"262
-[; ;color.c: 262:     else {return b;}
+"260
+[; ;color.c: 260:     else {return b;}
 [e :U 2072 ]
 {
 [e ) _b ]
 [e $UE 2071  ]
 }
 [e :U 2073 ]
-"263
-[; ;color.c: 263: }
+"261
+[; ;color.c: 261: }
 [e :UE 2071 ]
 }
-"265
-[; ;color.c: 265: void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
+"263
+[; ;color.c: 263: void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
 [v _rgb_2_hsv `(v ~T0 @X0 1 ef2`S2016`*S2017 ]
 {
 [e :U _rgb_2_hsv ]
 [v _RGBC `S2016 ~T0 @X0 1 r1 ]
 [v _HSV `*S2017 ~T0 @X0 1 r2 ]
 [f ]
-"271
-[; ;color.c: 271:     unsigned int r = (unsigned int)(RGBC.R*10000L/1900);
+"269
+[; ;color.c: 269:     unsigned int r = (unsigned int)(RGBC.R*10000L/1900);
 [v _r `ui ~T0 @X0 1 a ]
 [e = _r -> / * -> . _RGBC 0 `l -> 10000 `l -> -> 1900 `i `l `ui ]
-"272
-[; ;color.c: 272:     unsigned int g = (unsigned int)(RGBC.G*10000L/1400);
+"270
+[; ;color.c: 270:     unsigned int g = (unsigned int)(RGBC.G*10000L/1400);
 [v _g `ui ~T0 @X0 1 a ]
 [e = _g -> / * -> . _RGBC 1 `l -> 10000 `l -> -> 1400 `i `l `ui ]
-"273
-[; ;color.c: 273:     unsigned int b = (unsigned int)(RGBC.B*10000L/1600);
+"271
+[; ;color.c: 271:     unsigned int b = (unsigned int)(RGBC.B*10000L/1600);
 [v _b `ui ~T0 @X0 1 a ]
 [e = _b -> / * -> . _RGBC 2 `l -> 10000 `l -> -> 1600 `i `l `ui ]
-"276
-[; ;color.c: 276:     unsigned int cmax = max(r, max(g, b));
+"274
+[; ;color.c: 274:     unsigned int cmax = max(r, max(g, b));
 [v _cmax `ui ~T0 @X0 1 a ]
 [e = _cmax ( _max (2 , _r ( _max (2 , _g _b ]
-"277
-[; ;color.c: 277:     unsigned int cmin = min(r, min(g, b));
+"275
+[; ;color.c: 275:     unsigned int cmin = min(r, min(g, b));
 [v _cmin `ui ~T0 @X0 1 a ]
 [e = _cmin ( _min (2 , _r ( _min (2 , _g _b ]
-"278
-[; ;color.c: 278:     unsigned long diff = cmax - cmin;
-[v _diff `ul ~T0 @X0 1 a ]
-[e = _diff -> - _cmax _cmin `ul ]
-"281
-[; ;color.c: 281:     if (cmax == r){
+"276
+[; ;color.c: 276:     unsigned int diff = cmax - cmin;
+[v _diff `ui ~T0 @X0 1 a ]
+[e = _diff - _cmax _cmin ]
+"279
+[; ;color.c: 279:     if (cmax == r){
 [e $ ! == _cmax _r 2075  ]
 {
-"282
-[; ;color.c: 282:         if (g > b){HSV->H = (unsigned int)((g-b)*6000L/diff);}
+"280
+[; ;color.c: 280:         if (g > b){HSV->H = (unsigned int)((g-b)*6000L/diff);}
 [e $ ! > _g _b 2076  ]
 {
-[e = . *U _HSV 0 -> / -> * -> - _g _b `l -> 6000 `l `ul _diff `ui ]
+[e = . *U _HSV 0 -> / * -> - _g _b `l -> 6000 `l -> _diff `l `ui ]
 }
 [e $U 2077  ]
-"283
-[; ;color.c: 283:         else if (b > g){HSV->H = (unsigned int)((g + 6*diff -b)*6000L/diff);}
+"281
+[; ;color.c: 281:         else if (b > g){HSV->H = (unsigned int)((g + 6*diff -b)*6000L/diff);}
 [e :U 2076 ]
 [e $ ! > _b _g 2078  ]
 {
-[e = . *U _HSV 0 -> / * - + -> _g `ul * -> -> -> 6 `i `l `ul _diff -> _b `ul -> -> 6000 `l `ul _diff `ui ]
+[e = . *U _HSV 0 -> / * -> - + _g * -> -> 6 `i `ui _diff _b `l -> 6000 `l -> _diff `l `ui ]
 }
 [e :U 2078 ]
 [e :U 2077 ]
-"284
-[; ;color.c: 284:     }
+"282
+[; ;color.c: 282:     }
 }
 [e $U 2079  ]
-"286
-[; ;color.c: 286:     else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);}
+"284
+[; ;color.c: 284:     else if (cmax == g){HSV->H = (unsigned int)((b + 2*diff -r)*6000L/diff);}
 [e :U 2075 ]
 [e $ ! == _cmax _g 2080  ]
 {
-[e = . *U _HSV 0 -> / * - + -> _b `ul * -> -> -> 2 `i `l `ul _diff -> _r `ul -> -> 6000 `l `ul _diff `ui ]
+[e = . *U _HSV 0 -> / * -> - + _b * -> -> 2 `i `ui _diff _r `l -> 6000 `l -> _diff `l `ui ]
 }
 [e $U 2081  ]
-"288
-[; ;color.c: 288:     else if (cmax == b){HSV->H = (unsigned int)((r + 4*diff -g)*6000L/diff);}
+"286
+[; ;color.c: 286:     else if (cmax == b){HSV->H = (unsigned int)((r + 4*diff -g)*6000L/diff);}
 [e :U 2080 ]
 [e $ ! == _cmax _b 2082  ]
 {
-[e = . *U _HSV 0 -> / * - + -> _r `ul * -> -> -> 4 `i `l `ul _diff -> _g `ul -> -> 6000 `l `ul _diff `ui ]
+[e = . *U _HSV 0 -> / * -> - + _r * -> -> 4 `i `ui _diff _g `l -> 6000 `l -> _diff `l `ui ]
 }
 [e :U 2082 ]
 [e :U 2081 ]
 [e :U 2079 ]
+"289
+[; ;color.c: 289:     HSV->S = (unsigned int)((diff * 10000)/cmax);
+[e = . *U _HSV 1 / * _diff -> -> 10000 `i `ui _cmax ]
 "291
-[; ;color.c: 291:     HSV->S = (unsigned int)((diff * 10000)/cmax);
-[e = . *U _HSV 1 -> / * _diff -> -> -> 10000 `i `l `ul -> _cmax `ul `ui ]
-"293
-[; ;color.c: 293:     if (HSV->S == 0){HSV->H = 0;}
+[; ;color.c: 291:     if (HSV->S == 0){HSV->H = 0;}
 [e $ ! == . *U _HSV 1 -> -> 0 `i `ui 2083  ]
 {
 [e = . *U _HSV 0 -> -> 0 `i `ui ]
 }
 [e :U 2083 ]
-"296
-[; ;color.c: 296:     HSV->V = cmax;
+"294
+[; ;color.c: 294:     HSV->V = cmax;
 [e = . *U _HSV 2 _cmax ]
-"298
-[; ;color.c: 298: }
+"296
+[; ;color.c: 296: }
 [e :UE 2074 ]
 }

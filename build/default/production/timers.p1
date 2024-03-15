@@ -2032,8 +2032,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;timers.c: 10:     T0CON1bits.T0ASYNC=1;
 [e = . . _T0CON1bits 0 1 -> -> 1 `i `uc ]
 "11
-[; ;timers.c: 11:     T0CON1bits.T0CKPS=0b1011;
-[e = . . _T0CON1bits 0 0 -> -> 11 `i `uc ]
+[; ;timers.c: 11:     T0CON1bits.T0CKPS=0b1100;
+[e = . . _T0CON1bits 0 0 -> -> 12 `i `uc ]
 "12
 [; ;timers.c: 12:     T0CON0bits.T016BIT=1;
 [e = . . _T0CON0bits 0 1 -> -> 1 `i `uc ]

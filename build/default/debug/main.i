@@ -24487,6 +24487,7 @@ void turnRight(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char turnDur
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseOneSquare(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned int reverseDuration, unsigned char straightRamp);
 void wallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
+void reverseWallAdjust(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void reverseShort(DC_motor *mL, DC_motor *mR, char straightSpeed, unsigned char straightRamp);
 void calibration(DC_motor *mL, DC_motor *mR, char turnSpeed, unsigned char *turnDuration, unsigned char turnRamp);
 # 17 "main.c" 2
@@ -24514,17 +24515,20 @@ char lost = 0;
 
 void main(void){
 
-    char buf[40] = {0};
+
     unsigned int PWMcycle = 199;
+
 
     unsigned int ambientNew;
     char wall = 0;
     unsigned char color = 0;
+
+
     unsigned char moveSequence[40] = {0};
     unsigned int straightTime[41] = {0};
     char curMove = 0;
 
-    unsigned char testSequence[4] = {2,2,1,1,8};
+
 
 
     struct RGBC_val RGBC, RGBC_n;
@@ -24534,9 +24538,10 @@ void main(void){
 
     Buggy_init();
     color_click_init();
-    Timer0_init();
-    initUSART4();
+
     initDCmotorsPWM(PWMcycle);
+    Timer0_init();
+    Interrupts_init();
 
     motorL.power=0;
     motorL.direction=1;
@@ -24544,7 +24549,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
     motorL.PWMperiod=PWMcycle;
-    motorL.compensation=0;
+    motorL.compensation=2;
 
     motorR.power=0;
     motorR.direction=1;
@@ -24558,7 +24563,7 @@ void main(void){
     char straightSpeed=20;
     unsigned char straightRamp=2;
 
-    unsigned int reverseDuration=400;
+    unsigned int reverseDuration=800;
 
     char turnSpeed=40;
     unsigned char turnDuration=10;
@@ -24566,7 +24571,8 @@ void main(void){
 
 
     batteryLevel();
-# 93 "main.c"
+
+
     while (PORTFbits.RF2);
     LATDbits.LATD7 = LATHbits.LATH3 = 0;
 
@@ -24580,13 +24586,9 @@ void main(void){
 
 
     calibration(&motorL, &motorR, turnSpeed, &turnDuration, turnRamp);
-# 115 "main.c"
+# 111 "main.c"
     white_Light(1);
     _delay((unsigned long)((1000)*(64000000/4000.0)));
-
-
-    resetTimer();
-    Interrupts_init();
 
 
     color_read(&RGBC);
@@ -24623,14 +24625,14 @@ void main(void){
         }
 
         if (wall == 1) {
-            PIE0bits.INT0IE=TMR0IE=0;
+
+            PIE0bits.INT0IE=0;
             straightTime[curMove] = get16bitTMR0val();
 
 
             stop(&motorL, &motorR, straightRamp);
             wallAdjust(&motorL, &motorR, straightSpeed, straightRamp);
             color_read(&RGBC);
-
             rgb_2_hsv(RGBC, &HSV);
             color = color_detect(HSV, red, green, blue, yellow, pink, orange, lightblue, white);
 
@@ -24652,16 +24654,7 @@ void main(void){
             wall = 0;
 
         }
-
-        if (lost == 1) {
-            PIE0bits.INT0IE=0;
-            stop(&motorL, &motorR, straightRamp);
-            lostReturnHome(&motorL, &motorR, moveSequence, straightTime, curMove, straightSpeed, reverseDuration, straightRamp, turnSpeed, turnDuration, turnRamp);
-            PIE0bits.INT0IE=1;
-            lost = 0;
-            break;
-        }
-
+# 192 "main.c"
         if (color == 8 || color == 9) {break;}
 
     }

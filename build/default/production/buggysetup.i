@@ -24110,7 +24110,7 @@ void Buggy_init(void)
 
     TRISFbits.TRISF3=1;
     ANSELFbits.ANSELF3=0;
-# 33 "buggysetup.c"
+# 32 "buggysetup.c"
     LATHbits.LATH1=0;
     TRISHbits.TRISH1=0;
 

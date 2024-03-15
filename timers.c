@@ -8,7 +8,7 @@ void Timer0_init(void)
 {
     T0CON1bits.T0CS=0b010; // Fosc/4
     T0CON1bits.T0ASYNC=1; // see datasheet errata - needed to ensure correct operation when Fosc/4 used as clock source
-    T0CON1bits.T0CKPS=0b1011; // 1:2048 (increments every 0.13 ms, overflow after 8.4 seconds)
+    T0CON1bits.T0CKPS=0b1100; // 1:4096 (increments every 0.26 ms, overflow after ~16 seconds)
     T0CON0bits.T016BIT=1;	//16bit mode	
 	
     // initialise the timer registers to 0

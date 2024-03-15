@@ -24114,13 +24114,18 @@ unsigned char ADC_getval(void);
 
 
 
+
+
 void batteryLevel(void){
     ADC_init();
     unsigned char batteryVoltage;
     unsigned char batteryQuarter;
 
+
     batteryVoltage = ADC_getval();
     batteryQuarter = batteryVoltage/24;
+
+
     if (batteryQuarter & 0b10) {LATDbits.LATD7=1;} else {LATDbits.LATD7=0;}
     if (batteryQuarter & 0b01) {LATHbits.LATH3=1;} else {LATHbits.LATH3=0;}
 }

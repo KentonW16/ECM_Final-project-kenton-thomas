@@ -2938,11 +2938,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;dc_motor.c: 204:     resetTimer();
 [e ( _resetTimer ..  ]
 "205
-[; ;dc_motor.c: 205:     while (get16bitTMR0val() < straightTime[curMove] + 7000);
+[; ;dc_motor.c: 205:     while (get16bitTMR0val() < straightTime[curMove] + 3500);
 [e $U 2043  ]
 [e :U 2044 ]
 [e :U 2043 ]
-[e $ < ( _get16bitTMR0val ..  + *U + _straightTime * -> _curMove `ux -> -> # *U _straightTime `ui `ux -> -> 7000 `i `ui 2044  ]
+[e $ < ( _get16bitTMR0val ..  + *U + _straightTime * -> _curMove `ux -> -> # *U _straightTime `ui `ux -> -> 3500 `i `ui 2044  ]
 [e :U 2045 ]
 "206
 [; ;dc_motor.c: 206:     stop(mL, mR, straightRamp);
@@ -3160,11 +3160,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;dc_motor.c: 276:         resetTimer();
 [e ( _resetTimer ..  ]
 "277
-[; ;dc_motor.c: 277:         while (get16bitTMR0val() < straightTime[i] + 3500);
+[; ;dc_motor.c: 277:         while (get16bitTMR0val() < straightTime[i] + 1750);
 [e $U 2062  ]
 [e :U 2063 ]
 [e :U 2062 ]
-[e $ < ( _get16bitTMR0val ..  + *U + _straightTime * -> _i `ux -> -> # *U _straightTime `ui `ux -> -> 3500 `i `ui 2063  ]
+[e $ < ( _get16bitTMR0val ..  + *U + _straightTime * -> _i `ux -> -> # *U _straightTime `ui `ux -> -> 1750 `i `ui 2063  ]
 [e :U 2064 ]
 "278
 [; ;dc_motor.c: 278:         stop(mL, mR, straightRamp);

@@ -24544,7 +24544,7 @@ void main(void){
     motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);
     motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);
     motorL.PWMperiod=PWMcycle;
-    motorL.compensation=1;
+    motorL.compensation=2;
 
     motorR.power=0;
     motorR.direction=1;

@@ -24339,24 +24339,22 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
 
 
     if (min(green.H,lightblue.H)-2000 < HSV.H && HSV.H < max(green.H,lightblue.H)+2000) {
-        if (HSV.S > lightblue.S + 500){color = 2;}
+        if (HSV.S > lightblue.S + 1000){color = 2;}
         else {color = 7;}
     }
 
 
-    else if ((blue.H)-2000 < HSV.H && HSV.H < (blue.H)+2000) {color = 3;}
+    else if ((blue.H)-3000 < HSV.H && HSV.H < (blue.H)+3000) {color = 3;}
 
 
     else if (min(yellow.H, pink.H)-1000 < HSV.H && HSV.H < max(yellow.H, pink.H)+1000) {
-        if (HSV.S > pink.S + 500){color = 4;}
+        if (HSV.H * 2 - HSV.S < HSV.H + 500 && HSV.H * 2 - HSV.S > HSV.H - 500) {color = 8;}
+        else if (HSV.S > pink.S + 500){color = 4;}
         else {color = 5;}
     }
 
 
     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
-
-
-    else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
 
 
     if (red.H > 30000){
@@ -24495,7 +24493,7 @@ void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
 
     unsigned int cmax = max(r, max(g, b));
     unsigned int cmin = min(r, min(g, b));
-    unsigned long diff = cmax - cmin;
+    unsigned int diff = cmax - cmin;
 
 
     if (cmax == r){

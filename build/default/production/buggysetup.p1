@@ -2199,58 +2199,58 @@ Version 4.0 HI-TECH Software Intermediate Code
 "23
 [; ;buggysetup.c: 23:     ANSELFbits.ANSELF3=0;
 [e = . . _ANSELFbits 0 3 -> -> 0 `i `uc ]
-"33
-[; ;buggysetup.c: 33:     LATHbits.LATH1=0;
+"32
+[; ;buggysetup.c: 32:     LATHbits.LATH1=0;
 [e = . . _LATHbits 0 1 -> -> 0 `i `uc ]
-"34
-[; ;buggysetup.c: 34:     TRISHbits.TRISH1=0;
+"33
+[; ;buggysetup.c: 33:     TRISHbits.TRISH1=0;
 [e = . . _TRISHbits 0 1 -> -> 0 `i `uc ]
-"37
-[; ;buggysetup.c: 37:     LATDbits.LATD4=0;
+"36
+[; ;buggysetup.c: 36:     LATDbits.LATD4=0;
 [e = . . _LATDbits 0 4 -> -> 0 `i `uc ]
-"38
-[; ;buggysetup.c: 38:     TRISDbits.TRISD4=0;
+"37
+[; ;buggysetup.c: 37:     TRISDbits.TRISD4=0;
 [e = . . _TRISDbits 0 4 -> -> 0 `i `uc ]
-"41
-[; ;buggysetup.c: 41:     LATDbits.LATD3=0;
+"40
+[; ;buggysetup.c: 40:     LATDbits.LATD3=0;
 [e = . . _LATDbits 0 3 -> -> 0 `i `uc ]
-"42
-[; ;buggysetup.c: 42:     TRISDbits.TRISD3=0;
+"41
+[; ;buggysetup.c: 41:     TRISDbits.TRISD3=0;
 [e = . . _TRISDbits 0 3 -> -> 0 `i `uc ]
-"43
-[; ;buggysetup.c: 43:     ANSELDbits.ANSELD3=0;
+"42
+[; ;buggysetup.c: 42:     ANSELDbits.ANSELD3=0;
 [e = . . _ANSELDbits 0 3 -> -> 0 `i `uc ]
-"46
-[; ;buggysetup.c: 46:     LATHbits.LATH0=0;
+"45
+[; ;buggysetup.c: 45:     LATHbits.LATH0=0;
 [e = . . _LATHbits 0 0 -> -> 0 `i `uc ]
-"47
-[; ;buggysetup.c: 47:     TRISHbits.TRISH0=0;
+"46
+[; ;buggysetup.c: 46:     TRISHbits.TRISH0=0;
 [e = . . _TRISHbits 0 0 -> -> 0 `i `uc ]
-"50
-[; ;buggysetup.c: 50:     LATFbits.LATF0=0;
+"49
+[; ;buggysetup.c: 49:     LATFbits.LATF0=0;
 [e = . . _LATFbits 0 0 -> -> 0 `i `uc ]
-"51
-[; ;buggysetup.c: 51:     TRISFbits.TRISF0=0;
+"50
+[; ;buggysetup.c: 50:     TRISFbits.TRISF0=0;
 [e = . . _TRISFbits 0 0 -> -> 0 `i `uc ]
-"54
-[; ;buggysetup.c: 54:     LATGbits.LATG0 = 0;
+"53
+[; ;buggysetup.c: 53:     LATGbits.LATG0 = 0;
 [e = . . _LATGbits 0 0 -> -> 0 `i `uc ]
-"55
-[; ;buggysetup.c: 55:     TRISGbits.TRISG0 = 0;
+"54
+[; ;buggysetup.c: 54:     TRISGbits.TRISG0 = 0;
 [e = . . _TRISGbits 0 0 -> -> 0 `i `uc ]
-"57
-[; ;buggysetup.c: 57:     LATEbits.LATE7 = 0;
+"56
+[; ;buggysetup.c: 56:     LATEbits.LATE7 = 0;
 [e = . . _LATEbits 0 7 -> -> 0 `i `uc ]
-"58
-[; ;buggysetup.c: 58:     TRISEbits.TRISE7 = 0;
+"57
+[; ;buggysetup.c: 57:     TRISEbits.TRISE7 = 0;
 [e = . . _TRISEbits 0 7 -> -> 0 `i `uc ]
-"60
-[; ;buggysetup.c: 60:     LATAbits.LATA3 = 0;
+"59
+[; ;buggysetup.c: 59:     LATAbits.LATA3 = 0;
 [e = . . _LATAbits 0 3 -> -> 0 `i `uc ]
-"61
-[; ;buggysetup.c: 61:     TRISAbits.TRISA3 = 0;
+"60
+[; ;buggysetup.c: 60:     TRISAbits.TRISA3 = 0;
 [e = . . _TRISAbits 0 3 -> -> 0 `i `uc ]
-"63
-[; ;buggysetup.c: 63: }
+"62
+[; ;buggysetup.c: 62: }
 [e :UE 2015 ]
 }

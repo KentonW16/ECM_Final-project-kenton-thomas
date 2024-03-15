@@ -17,15 +17,16 @@ void Interrupts_init(void)
     IPR0bits.INT0IP=1;    //high priority
     INTCONbits.INT0EDG=0; //trigger on falling edge
     
-    /*
     // Set up interrupts from timer
+    //***Disabled due to bug
+    /*
     PIE0bits.TMR0IE=1;  //enable interrupts from timer
     IPR0bits.TMR0IP=0;           //low priority 
     */
     
     // Turn on global interrupts, peripheral interrupts and the interrupt source 
 	// It's a good idea to turn on global interrupts last, once all other interrupt configuration is done.
-    //PIE4bits.RC4IE=1;	//***enable receive interrupt for serial
+    //PIE4bits.RC4IE=1;	//***enable receive interrupt for serial (for testing)
     INTCONbits.PEIE=1;  //enable peripheral interrupts
     INTCONbits.GIE=1; 	//turn on interrupts globally
 
@@ -48,8 +49,9 @@ void __interrupt(high_priority) HighISR()
         //__delay_ms(200);
 	}
     
+    // Serial communication interrupts
+    //***Used for testing
     /*
-    // Serial transfer interrupts
     if(PIR4bits.RC4IF){ 			    //receive interrupt
         //LATHbits.LATH3 = !LATHbits.LATH3;   //toggle LED
         putCharToRxBuf(RC4REG);

@@ -136,9 +136,6 @@ unsigned char color_detect(HSV_val HSV, HSV_calib red, HSV_calib green, HSV_cali
     // Orange (5 degree tolerance)
     else if ((orange.H)-500 < HSV.H && HSV.H < (orange.H)+500) {color = 6;}
     
-    // White (5 degree tolerance)
-    //else if ((white.H)-500 < HSV.H && HSV.H < (white.H)+500) {color = 8;}
-    
     // Red (10 degrees tolerance on hue), need 2 conditions as red boundary crosses over 360 to 0 degree boundary
     if (red.H > 30000){ //Somewhere between 300 and 360 degrees
         if(((red.H)-1000 < HSV.H && HSV.H < 36000) || (0 < HSV.H && HSV.H < 1000 + red.H -36000)) {color = 1;}
@@ -276,7 +273,7 @@ void rgb_2_hsv(RGBC_val RGBC, HSV_val *HSV) {
     
     unsigned int cmax = max(r, max(g, b)); // Maximum between r, g, b 
     unsigned int cmin = min(r, min(g, b)); // Minimum between r, g, b 
-    unsigned long diff = cmax - cmin; // Difference between max and min value
+    unsigned int diff = cmax - cmin; // Difference between max and min value
     
     // Find H (hue) value (Ranges from 0-360 degrees, 0-36000 in code for 2 d.p. accuracy)
     if (cmax == r){ // If max value is red, need to also check if g > b to avoid negative degree readings as unsigned int used (wraparound)

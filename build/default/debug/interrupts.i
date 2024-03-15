@@ -24280,14 +24280,7 @@ void Interrupts_init(void)
     PIE0bits.INT0IE=1;
     IPR0bits.INT0IP=1;
     INTCONbits.INT0EDG=0;
-
-
-
-    TMR0IP=0;
-
-
-
-    PIE4bits.RC4IE=1;
+# 30 "interrupts.c"
     INTCONbits.PEIE=1;
     INTCONbits.GIE=1;
 
@@ -24309,22 +24302,7 @@ void __attribute__((picinterrupt(("high_priority")))) HighISR()
 
 
  }
-
-
-
-    if(PIR4bits.RC4IF){
-
-        putCharToRxBuf(RC4REG);
-
- }
-
-    if(PIR4bits.TX4IF){
-
-        TX4REG = getCharFromTxBuf();
-        if (!isDataInTxBuf()) {PIE4bits.TX4IE=0;}
-
- }
-
+# 69 "interrupts.c"
 }
 
 
@@ -24332,9 +24310,11 @@ void __attribute__((picinterrupt(("low_priority")))) LowISR()
 {
 
 
-    if(TMR0IF){
+    if(PIR0bits.TMR0IF){
         lost = 1;
-        TMR0IF=0;
+        TMR0H=0;
+        TMR0L=0;
+        PIR0bits.TMR0IF=0;
 
 
  }

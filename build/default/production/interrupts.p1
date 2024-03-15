@@ -2154,40 +2154,40 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;interrupts.c: 49:  }
 }
 [e :U 2020 ]
-"66
-[; ;interrupts.c: 66: }
+"67
+[; ;interrupts.c: 67: }
 [e :UE 2019 ]
 }
 [v $root$_LowISR `(v ~T0 @X0 0 e ]
-"69
-[; ;interrupts.c: 69: void __attribute__((picinterrupt(("low_priority")))) LowISR()
-[v _LowISR `(v ~T4 @X0 1 ef ]
 "70
-[; ;interrupts.c: 70: {
+[; ;interrupts.c: 70: void __attribute__((picinterrupt(("low_priority")))) LowISR()
+[v _LowISR `(v ~T4 @X0 1 ef ]
+"71
+[; ;interrupts.c: 71: {
 {
 [e :U _LowISR ]
 [f ]
-"73
-[; ;interrupts.c: 73:     if(PIR0bits.TMR0IF){
+"74
+[; ;interrupts.c: 74:     if(PIR0bits.TMR0IF){
 [e $ ! != -> . . _PIR0bits 0 5 `i -> 0 `i 2022  ]
 {
-"74
-[; ;interrupts.c: 74:         lost = 1;
-[e = _lost -> -> 1 `i `uc ]
 "75
-[; ;interrupts.c: 75:         TMR0H=0;
-[e = _TMR0H -> -> 0 `i `uc ]
+[; ;interrupts.c: 75:         lost = 1;
+[e = _lost -> -> 1 `i `uc ]
 "76
-[; ;interrupts.c: 76:         TMR0L=0;
-[e = _TMR0L -> -> 0 `i `uc ]
+[; ;interrupts.c: 76:         TMR0H=0;
+[e = _TMR0H -> -> 0 `i `uc ]
 "77
-[; ;interrupts.c: 77:         PIR0bits.TMR0IF=0;
+[; ;interrupts.c: 77:         TMR0L=0;
+[e = _TMR0L -> -> 0 `i `uc ]
+"78
+[; ;interrupts.c: 78:         PIR0bits.TMR0IF=0;
 [e = . . _PIR0bits 0 5 -> -> 0 `i `uc ]
-"80
-[; ;interrupts.c: 80:  }
+"81
+[; ;interrupts.c: 81:  }
 }
 [e :U 2022 ]
-"82
-[; ;interrupts.c: 82: }
+"83
+[; ;interrupts.c: 83: }
 [e :UE 2021 ]
 }

@@ -2308,8 +2308,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 58:     motorL.PWMperiod=PWMcycle;
 [e = . _motorL 3 _PWMcycle ]
 "59
-[; ;main.c: 59:     motorL.compensation=1;
-[e = . _motorL 6 -> -> 1 `i `uc ]
+[; ;main.c: 59:     motorL.compensation=2;
+[e = . _motorL 6 -> -> 2 `i `uc ]
 "61
 [; ;main.c: 61:     motorR.power=0;
 [e = . _motorR 0 -> -> 0 `i `uc ]

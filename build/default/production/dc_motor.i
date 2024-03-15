@@ -24436,7 +24436,7 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
     _delay((unsigned long)((50)*(64000000/4000.0)));
     fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
     resetTimer();
-    while (get16bitTMR0val() < straightTime[curMove] + 7000);
+    while (get16bitTMR0val() < straightTime[curMove] + 3500);
     stop(mL, mR, straightRamp);
 
     char i=curMove;
@@ -24508,7 +24508,7 @@ void returnHome(DC_motor *mL, DC_motor *mR, unsigned char *moveSequence, unsigne
         _delay((unsigned long)((50)*(64000000/4000.0)));
         fullSpeedAhead(mL, mR, straightSpeed, straightRamp);
         resetTimer();
-        while (get16bitTMR0val() < straightTime[i] + 3500);
+        while (get16bitTMR0val() < straightTime[i] + 1750);
         stop(mL, mR, straightRamp);
     }
 }
