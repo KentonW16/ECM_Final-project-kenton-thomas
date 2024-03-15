@@ -32,6 +32,7 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 1. Return home if white color card read or if color of card could not be determined
 	-  Time moving and color read recorded for each step, to allow the buggy to retrace its path
 
+![code_flowchart](gifs/code_flowchart.jpg)
 
 ## User Instructions
 1. When buggy is turned on, the battery level is indicated as a 2 bit value through the two LEDs on the clicker board.
