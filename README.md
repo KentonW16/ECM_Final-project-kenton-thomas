@@ -13,7 +13,7 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 	-  Accurate turns on varying surfaces achieved through motor calibration routine
 
 1. Detect when approaching a color card/wall
-	-  Achieved through interpreting interrupt on the clear channel on the color click RGBC sensor
+	-  Achieved through interpreting interrupt on the RGBC clear channel with a moving threshold
 
 1. Read the color card on the wall and determine color of card
 	-  Read the Red, Green and Blue values from the color click
@@ -28,25 +28,62 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 1. Return home if color of card could not be determined
 
 ## User Instructions
-Button 1 press to activate buggy 
+1. When buggy is turned on, the battery level is indicated through the two LEDs on the clicker board.
 
-Color cards are read by holding each in front of the sensor, each separated by a press of button 1. The order is as follows and is consistent throughout code: red, green, blue, yellow, pink, orange, light blue, white. Calibration gives a reference value for each color in the operational lighting conditions (and illuminated by color click LED) 
+	2 LEDs | 1 LED | 0 LEDs
+	---------|---------|---------
+	Above 75% charge | 50% - 75% charge | Below 50% charge
 
-After all colors have been read, the turning angle is adjusted by running a test sequence (90 degrees left followed by 90 degrees right). The angle of turning is increased by a press of button 2 or decreased by button 1. Once the angle is set correctly, a long press of button 2 begins the key navigation function 
+1. Press button 1 to activate buggy, headlights and color click LED will turn on, and the buggy will enter the [Color Calibration Sequence](#color-calibration).
+
+1. Color cards are read by holding each in front of the sensor at about 3cm distance in front of the buggy, then pressing button 1 to read and proceed to the next color. The order is as follows: red, green, blue, yellow, pink, orange, light blue, white. [Color Calibration Sequence](#color-calibration) gives a reference value for each color in the operational lighting conditions.
+
+1. After all colors have been read, the buggy enters the [Motor Calibration Sequence](#motor-calibration) to adjust the turning angle. is adjusted by running a test sequence (90 degrees left followed by 90 degrees right). The angle of turning is increased by a press of button 2 or decreased by button 1.
+
+1. Once the angle is satisfactory, a long press of button 2 begins the main navigation function.
+
+## Key Features
+### Wall Detection
+
+### Color Detection
+
+### Lost Function
+
+### Code Optimisation (variables)
+not using floats or negative numbers
+using char where possible
+pointers where possible, read only pointers where possible
+
+## Reflections and Future Improvements
+Route optimisation
 
 ## Code Structure
+Source Files | Functions Defined
+---------|---------
+```main.c``` | adfadf
+```color.c/h``` | Contains functions to initialise and control LEDs on the color click, obtain RGBC readings, process the RGBC readings into HSV values and determine color based on these values
+```i2c.c/h``` | Contains functions to enable I2C communication between the color click and the clicker board
+```dc_motor.c/h``` | adfadf
+```interrupts.c/h``` | adfadf
+```timers.c/h``` | adfadf
+```buggysetup.c/h``` | Contains functions to initialise all LEDs and buttons on clicker board, and all headlights and taillights on buggy
+```battery.c/h``` | Contains functions to obtain battery charge level and to display
+```serial.c/h``` | Contains functions enabling serial communication with computer to allow for easy debugging
+
 
 ## Calibration Routines
 ### Motor Calibration
 ### Color Calibration
 
-## Wall Detection
 
-## Code Optimisation (variables)
-not using floats or negative numbers
 
-## Future Improvements
-Route optimisation
+
+
+
+
+
+
+
 
 
 ## Challenge brief
