@@ -4,7 +4,7 @@
 - [User Instructions](#user-instructions)
 - [Key Features](#key-features)
 - [Reflections and Future Improvements](#reflections-and-future-improvements)
-- [Code Structure](#code-structure)
+- [Code Details](#code-details) <br/><br/>
 - [Challenge brief](#challenge-brief)
 - ["Mine" environment specification](#mine-environment-specification)
 - [Resources and project submission](#resources-and-project-submission)
@@ -14,11 +14,10 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 
 ## Functionality Overview
 1. Traverse maze by controlling the 4 motors on the buggy
-	-  Accurate turns on varying surfaces achieved through motor calibration routine
 
 1. Detect when approaching a color card/wall
 	-  Achieved through interpreting interrupt on the RGBC clear channel with a moving threshold
-	-  Additional movement into the wall, followed by a short reverse, is made to align buggy perpendicular to wall and ensure color sensing is carried out at a consistent distance
+	-  Additional movement into the wall, followed by a short reverse,  made to align buggy perpendicular to wall and ensure color sensing is carried out at a consistent distance
 
 1. Read the color card on the wall and determine color of card
 	-  Read the Red, Green and Blue values from the color click
@@ -32,6 +31,8 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 1. Return home if white color card read or if color of card could not be determined
 	-  Time moving and color read recorded for each step, to allow the buggy to retrace its path
 
+### Flow Chart
+
 ![code_flowchart](gifs/code_flowchart.jpg)
 
 ## User Instructions
@@ -41,11 +42,11 @@ ADD PICTURE OF BUGGY HERE WITH MODIFIED FRONT
 	---------|---------|---------|---------
 	Above 75% charge | 50% - 75% charge | 25% - 50% charge | Below 25% charge
 
-1. Press button 1 to activate buggy, headlights and color click LED will turn on, and the buggy will enter the [Color Calibration Sequence](#color-calibration).
+1. Press button 1 to activate buggy, headlights and color click LED will turn on, and the buggy will enter the color calibration sequence.
 
-1. Color cards are read by holding each in front of the sensor at about 3cm distance in front of the buggy, then pressing button 1 to read and proceed to the next color. The order is as follows: red, green, blue, yellow, pink, orange, light blue, white. [Color Calibration Sequence](#color-calibration) gives a reference value for each color in the operational lighting conditions.
+1. Color cards are read by holding each in front of the sensor at about 3cm distance in front of the buggy, then pressing button 1 to read and proceed to the next color. The order is as follows: red, green, blue, yellow, pink, orange, light blue, white. This gives a reference value for each color in the operational lighting conditions.
 
-1. After all colors have been read, the buggy enters the [Motor Calibration Sequence](#motor-calibration) to adjust the turning angle. is adjusted by running a test sequence (90 degrees left followed by 90 degrees right). The angle of turning is increased by a press of button 2 or decreased by button 1.
+1. After all colors have been read, the buggy enters the motor calibration sequence to adjust the turning angle. is adjusted by running a test sequence (90 degrees left followed by 90 degrees right). The angle of turning is increased by a press of button 2 or decreased by button 1.
 
 1. Once the angle is satisfactory, a long press of button 2 begins the main navigation function.
 
@@ -59,7 +60,7 @@ When the interrupt flag is raised, code in main is run to determine whether an i
 
 
 ### Color Detection
-For more reliable color detection, RGB values are converted to HSV. 
+For more reliable color detection, RGB values are converted to HSV. This requires thresholds to be set only in hue and sometimes saturation to achieve accurate color detection. 
 
 ### Lost Function
 When a color is not recognised, for example when the buggy reaches a black wall, the buggy will return to its starting position. The time taken for each straight movement, as well as the sequence of moves performed, are stored in arrays, which can be read back to retrace the path taken. On its return, the buggy will ensure that it is aligned correctly by reversing into the wall after each turn.
@@ -72,22 +73,37 @@ Global variables are kept to a minimum and are only used when values are set by 
 ## Reflections and Future Improvements
 1. A major issue we encountered, and didn't have time to fix, was the use of a low priority timer interrupt as an alternative method to initiate the lost function. This would have meant that the buggy would return home after no wall had been detected in >16 seconds, which would ensure that it could return home if the wall detection failed and avoid any timer overflow issues. This worked in isolation but could not be made to function with the final full system. With more time this could be fixed and the functions to operate it are left (commented out) in the code.
 
-1. In the final test, the buggy performed mostly as expected. A hair stuck in one wheel affected turning performance in one maze, but the ambient light in the test room provided a greater challenge. The wall detection functionality was compromised by this, meaning that it was less reliable than in previous tests. This could be fixed with further calibration of the interrupt thresholds in the test room conditions.
+1. In the final test, the buggy performed mostly as expected. When correctly positioned, all colors were identified correctly, and the movement, return and lost functions worked as expected. A hair stuck in one wheel affected turning performance in one maze, but the ambient light in the test room provided a greater challenge. The wall detection functionality was compromised by this, meaning that it was less reliable than in previous tests. This could be fixed with further calibration of the interrupt thresholds in the test room conditions.
 
-1. Further work could be carried out to improve performane overall. Optimisation of return routes could be implemented to avoid doubling back on itself once the route is known. Physical improvements to the buggy, for example to the wheel surface, could allow more consistent turning, especially on the rough floors that it was tested on.
+1. Further work could be carried out to improve performace overall. Optimisation of return routes could be implemented to avoid doubling back on itself once the route is known. Physical improvements to the buggy, for example to the wheel surface, could allow more consistent turning, especially on the rough floors that it was tested on.
 
-## Code Structure
-Source Files | Functions Defined
+## Code Details
+### File Structure
+Source Files | Key Functionality
 ---------|---------
-```main.c``` | Overall system operation
-```color.c/h``` | Contains functions to initialise and control LEDs on the color click, obtain RGBC readings, process the RGBC readings into HSV values and determine color based on these values
-```i2c.c/h``` | Contains functions to enable I2C communication between the color click and the clicker board
-```dc_motor.c/h``` | Contains functions to initialise motors, define individual movements, call sets of movements depending on color detected, return to starting position and calibrate the turning angle
-```interrupts.c/h``` | Contains functions to initialise interrupts and define high and low priority ISRs
-```timers.c/h``` | Contains functions to initialise timer, reset and read timer values
-```buggysetup.c/h``` | Contains functions to initialise all LEDs and buttons on clicker board, and all headlights and taillights on buggy
-```battery.c/h``` | Contains functions to obtain battery charge level and to display (calls functions from ADC.c) 
-```serial.c/h``` | Contains functions enabling serial communication with computer to allow for easy debugging (unused in operation)
+```main.c``` | <ul><li>Declare global variables</li><li>Call initialisation functions</li><li>Overall system operation (see flow chart above)</li></ul>
+```color.c/h``` | <ul><li>```color_click_init```: Initialise the color click</li><li>```color_read```: Obtain RGBC readings</li><li>```rgb_2_hsv```: Process the RGBC readings into HSV values</li><li>```color_detect```: Determine color based on these values</li></ul>
+```i2c.c/h``` | <ul><li>Enable I2C communication between the color click and the clicker board</li></ul>
+```dc_motor.c/h``` | <ul><li>```initDCmotorsPWM```: Initialise motors</li><li>```turnLeft```,```fullSpeedAhead```,etc.: Define individual movements</li><li>```move```: Call sets of movements depending on color detected</li><li>```returnHome```: Return to starting position</li><li>```calibration```: Calibrate the turning angle</li></ul>
+```interrupts.c/h``` | <ul><li>```Interrupts_init```: Initialise interrupts </li><li>```__interrupt(high_priority)```,```__interrupt(low_priority)```: Define high and low priority ISRs</li></ul>
+```timers.c/h``` | <ul><li>```Timer0_init```: Initialise timer</li><li>```get16bitTMR0val```: Read timer values</li></ul>
+```buggysetup.c/h``` | <ul><li>```Buggy_init```: Initialise all LEDs and buttons on clicker board and all headlights and taillights on buggy</li></ul>
+```battery.c/h``` | <ul><li>```batteryLevel```: Obtain battery charge level and display on LEDs </li><li>Calls functions from ```ADC.c```: </li></ul>
+```serial.c/h``` | <ul><li>Enables serial communication with computer to allow for easy debugging (unused in operation)</li></ul>
+
+### Structures
+Structure | Purpose
+---------|---------
+```DC_motor``` | <ul><li>Contains motor control parameters required for ```setMotorPWM``` function</li><li>Separate structure declared for each motor</li></ul>
+```RGBC_val``` | <ul><li>Contains red, green, blue and clear channel values obtained from color click</li></ul>
+```HSV_val``` | <ul><li>Contains hue, saturation and value calculated</li></ul>
+```HSV_calib``` | <ul><li>Contains hue, saturation and value measured for color cards during calibration</li><li>Separate structure declared for each color of card</li></ul>
+
+### Interrupts
+Interrupt | Priority | Purpose
+---------|---------|---------
+Color Click | High | <ul><li>Triggered when clear channel value falls outside of threshold, indicating that the light level has changed</li><li>Sets ```brightnessChange = 1```, causing the ambient reading to be updated and checked against the previous ambient reading</li><li>See Key Features section above for details on wall detection</li></ul>
+Timer | Low | <ul><li>Triggered on timer overflow (16 seconds since last timer reset)</li><li>Sets ```lost = 1```, instructing the buggy to return home</li><li>Currently turned off due to bug (see Reflections and Future Improvements section for details)</li></ul>
 
 
 
@@ -97,12 +113,8 @@ Source Files | Functions Defined
 
 
 
-
-
-
-
-
-
+<br/><br/><br/><br/>
+# Project Brief
 ## Challenge brief
 
 Your task is to develop an autonomous robot that can navigate a "mine" using a series of instructions coded in coloured cards and return to its starting position.  Your robot must be able to perform the following: 
