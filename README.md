@@ -60,7 +60,7 @@ We noticed that the clear channel light level always decreases as the buggy appr
 
 When the interrupt flag is raised, code in main is run to determine whether an increase or decrease has been detected. A decrease causes the ambient value to be updated, and an increase causes the wall detect flag to be set.
 
-![clear_channel_threshold](gifs/clear_channel_threshold.jpg)
+![clear_channel_threshold](gifs/clear_channel_threshold.png)
 
 ### Color Detection
 For more reliable color detection, RGB values are converted to HSV (hue, saturation, value). Though this requires slightly more computation compared to just using the RGB values, we believed that the benefits outweighed the extra computational complexity:
